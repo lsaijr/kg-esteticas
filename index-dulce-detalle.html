@@ -200,7 +200,7 @@ nav {
 
 /* ── FORM CARD ── */
 .form-card {
-  background: white; border-radius: 28px; padding: 36px 32px;
+  background: white; border-radius: 28px; padding: 32px 28px;
   box-shadow: 0 24px 64px rgba(30,20,16,.1), 0 2px 8px rgba(30,20,16,.06);
   border: 1px solid var(--border); position: relative;
 }
@@ -212,12 +212,37 @@ nav {
   font-weight: 700; color: var(--gold);
   font-family: 'DM Sans', sans-serif; letter-spacing: .04em;
 }
-.form-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
-.form-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
-.frow { margin-bottom: 16px; }
-.flabel { display: block; font-size: 12px; font-weight: 600; color: var(--mid); margin-bottom: 6px; letter-spacing: .03em; text-transform: uppercase; }
+
+/* ── STEPS ── */
+.steps-track { display: flex; align-items: center; margin-bottom: 20px; }
+.step-item { display: flex; flex-direction: column; align-items: center; position: relative; }
+.step-item:not(:last-child) { flex: 1; }
+.step-circle {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid var(--border); background: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  transition: all .35s; position: relative; z-index: 1; flex-shrink: 0;
+}
+.step-circle.active { border-color: var(--rose-deep); background: var(--rose-deep); color: white; }
+.step-circle.done { border-color: var(--green); background: var(--green); color: white; }
+.step-label { font-size: 10px; font-weight: 600; color: var(--muted); margin-top: 4px; white-space: nowrap; letter-spacing: .02em; transition: color .3s; }
+.step-label.active { color: var(--rose-deep); }
+.step-label.done { color: var(--green); }
+.step-connector { flex: 1; height: 2px; background: var(--border); margin: 0 6px; position: relative; top: -10px; transition: background .35s; }
+.step-connector.done { background: var(--green); }
+
+/* ── STEP PANELS ── */
+.step-panel { display: none; }
+.step-panel.active { display: block; animation: stepFadeIn .3s ease forwards; }
+@keyframes stepFadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+.form-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.form-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
+.frow { margin-bottom: 14px; }
+.flabel { display: block; font-size: 11px; font-weight: 700; color: var(--mid); margin-bottom: 6px; letter-spacing: .04em; text-transform: uppercase; }
 .req { color: var(--rose-deep); }
-select, input[type=text], textarea {
+select, input[type=text], input[type=tel], input[type=email], textarea {
   width: 100%; padding: 11px 14px;
   border: 1.5px solid var(--border); border-radius: 12px;
   font-family: 'DM Sans', sans-serif; font-size: 14px;
@@ -230,23 +255,67 @@ select:focus, input:focus, textarea:focus {
 }
 .select-wrap { position: relative; }
 .select-wrap::after { content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+textarea { resize: vertical; min-height: 78px; line-height: 1.6; }
 .frow-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.model-row { display: flex; gap: 8px; margin-bottom: 20px; }
-.model-chip {
-  flex: 1; padding: 8px 10px; border: 1.5px solid var(--border);
-  border-radius: 10px; background: white; cursor: pointer;
+
+/* Urgencia pills */
+.urgencia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.upill {
+  padding: 10px 8px; border: 1.5px solid var(--border); border-radius: 12px;
+  background: white; cursor: pointer; text-align: center;
   font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
+  color: var(--muted); transition: all .2s; user-select: none;
+}
+.upill:hover { border-color: var(--rose); color: var(--dark); background: var(--rose-lt); }
+.upill.sel { border-color: var(--rose-deep); background: var(--rose-lt); color: var(--rose-deep); box-shadow: 0 0 0 3px rgba(196,96,110,.12); }
+.upill .uicon { font-size: 16px; display: block; margin-bottom: 2px; }
+
+/* Presupuesto pills */
+.pres-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.ppill {
+  padding: 12px 8px; border: 1.5px solid var(--border); border-radius: 12px;
+  background: white; cursor: pointer; text-align: center;
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600;
+  color: var(--muted); transition: all .2s; user-select: none; line-height: 1.4;
+}
+.ppill:hover { border-color: var(--gold); background: var(--gold-lt); color: var(--dark); }
+.ppill.sel { border-color: var(--gold); background: var(--gold-lt); color: var(--dark); box-shadow: 0 0 0 3px rgba(201,150,90,.15); }
+.ppill .pamt { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 900; color: var(--dark); display: block; margin-bottom: 1px; }
+
+/* Model chips */
+.model-row { display: flex; gap: 8px; margin-bottom: 18px; }
+.model-chip {
+  flex: 1; padding: 8px 6px; border: 1.5px solid var(--border);
+  border-radius: 10px; background: white; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600;
   color: var(--muted); text-align: center; transition: all .2s;
 }
 .model-chip:hover { border-color: var(--rose); color: var(--dark); }
 .model-chip.sel { border-color: var(--rose-deep); background: var(--rose-lt); color: var(--rose-deep); }
-.ferr { display: none; font-size: 11px; font-weight: 600; color: #c0392b; margin-top: 5px; }
+
+.ferr { display: none; font-size: 11px; font-weight: 600; color: #c0392b; margin-top: 4px; }
 .ferr.show { display: block; }
-.btn-submit {
-  width: 100%; padding: 15px; background: var(--rose-deep);
+
+/* Step buttons */
+.btn-row { display: flex; gap: 10px; margin-top: 18px; }
+.btn-next {
+  flex: 1; padding: 14px; background: var(--rose-deep);
   color: white; border: none; border-radius: 14px;
-  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .25s; letter-spacing: .02em;
+}
+.btn-next:hover { background: var(--mid); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(196,96,110,.3); }
+.btn-back {
+  padding: 14px 18px; background: transparent;
+  color: var(--mid); border: 1.5px solid var(--border); border-radius: 14px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all .2s;
+}
+.btn-back:hover { border-color: var(--rose-deep); color: var(--rose-deep); }
+.btn-submit {
+  flex: 1; padding: 14px; background: var(--rose-deep);
+  color: white; border: none; border-radius: 14px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
   cursor: pointer; transition: all .25s; letter-spacing: .02em;
 }
 .btn-submit:hover { background: var(--mid); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(196,96,110,.3); }
@@ -557,57 +626,68 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
       </div>
     </div>
 
-    <!-- FORM -->
+    <!-- FORM 2 PASOS -->
     <div class="form-card" id="form-wrap">
-      <div class="form-title">¿Para quién es el regalo?</div>
-      <p class="form-sub">Completa los datos — entre más nos cuentes, mejor será la recomendación.</p>
 
-      <div class="frow-2">
-        <div class="frow">
-          <label class="flabel">Tu nombre <span class="req">*</span></label>
-          <input type="text" id="f-nombre" placeholder="Ej: María">
-          <div class="ferr" id="err-nombre">Escribe tu nombre</div>
+      <!-- Progress -->
+      <div class="steps-track">
+        <div class="step-item">
+          <div class="step-circle active" id="sc-1">1</div>
+          <div class="step-label active" id="sl-1">El regalo</div>
         </div>
-        <div class="frow">
-          <label class="flabel">¿Para quién? <span class="req">*</span></label>
-          <div class="select-wrap">
-            <select id="f-para">
-              <option value="">— Elige —</option>
-              <option>Mi pareja</option>
-              <option>Mi mamá</option>
-              <option>Mi papá</option>
-              <option>Una amiga</option>
-              <option>Un amigo</option>
-              <option>Mi jefa / jefe</option>
-              <option>Una compañera de trabajo</option>
-              <option>Mi hermana / hermano</option>
-              <option>Para mí</option>
-            </select>
-          </div>
-          <div class="ferr" id="err-para">Selecciona para quién</div>
+        <div class="step-connector" id="scon-1"></div>
+        <div class="step-item">
+          <div class="step-circle" id="sc-2">2</div>
+          <div class="step-label" id="sl-2">Tus datos</div>
         </div>
       </div>
 
-      <div class="frow-2">
-        <div class="frow">
-          <label class="flabel">Motivo <span class="req">*</span></label>
-          <div class="select-wrap">
-            <select id="f-motivo">
-              <option value="">— Elige —</option>
-              <option>Cumpleaños</option>
-              <option>Aniversario</option>
-              <option>Día de las Madres</option>
-              <option>San Valentín</option>
-              <option>Graduación</option>
-              <option>Nacimiento / Baby Shower</option>
-              <option>Boda / XV años</option>
-              <option>Sin motivo (solo porque sí)</option>
-              <option>Recuperación / Apoyo</option>
-              <option>Otro</option>
-            </select>
+      <!-- ── PASO 1 ── -->
+      <div class="step-panel active" id="step-1">
+        <div class="form-title">¿Para quién es el regalo?</div>
+        <p class="form-sub">Cuéntanos el contexto — entre más detalle, mejor la recomendación.</p>
+
+        <div class="frow-2">
+          <div class="frow">
+            <label class="flabel">¿Para quién? <span class="req">*</span></label>
+            <div class="select-wrap">
+              <select id="f-para">
+                <option value="">— Elige —</option>
+                <option>Mi pareja</option>
+                <option>Mi mamá</option>
+                <option>Mi papá</option>
+                <option>Una amiga</option>
+                <option>Un amigo</option>
+                <option>Mi jefa / jefe</option>
+                <option>Una compañera de trabajo</option>
+                <option>Mi hermana / hermano</option>
+                <option>Para mí</option>
+              </select>
+            </div>
+            <div class="ferr" id="err-para">Selecciona para quién</div>
           </div>
-          <div class="ferr" id="err-motivo">Selecciona el motivo</div>
+          <div class="frow">
+            <label class="flabel">Motivo <span class="req">*</span></label>
+            <div class="select-wrap">
+              <select id="f-motivo">
+                <option value="">— Elige —</option>
+                <option>Cumpleaños</option>
+                <option>Aniversario</option>
+                <option>Día de las Madres</option>
+                <option>San Valentín</option>
+                <option>Graduación</option>
+                <option>Nacimiento / Baby Shower</option>
+                <option>Boda / XV años</option>
+                <option>Sin motivo (solo porque sí)</option>
+                <option>Recuperación / Apoyo</option>
+                <option>Disculpa / Reconciliación</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="ferr" id="err-motivo">Selecciona el motivo</div>
+          </div>
         </div>
+
         <div class="frow">
           <label class="flabel">Tipo de regalo <span class="req">*</span></label>
           <div class="select-wrap">
@@ -623,39 +703,80 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
           </div>
           <div class="ferr" id="err-tipo">Selecciona el tipo</div>
         </div>
-      </div>
 
-      <div class="frow">
-        <label class="flabel">Rango de inversión <span class="req">*</span></label>
-        <div class="select-wrap">
-          <select id="f-pres">
-            <option value="">— Elige —</option>
-            <option value="hasta400">Hasta $400 MXN</option>
-            <option value="400-800">$400 – $800 MXN</option>
-            <option value="800-1500">$800 – $1,500 MXN</option>
-            <option value="mas1500">Más de $1,500 MXN</option>
-          </select>
+        <div class="frow">
+          <label class="flabel">¿Cuándo lo necesitas? <span class="req">*</span></label>
+          <div class="urgencia-grid" id="urgencia-grid">
+            <div class="upill" onclick="selUrgencia(this, 'Hoy mismo')"><span class="uicon">🔥</span>Hoy mismo</div>
+            <div class="upill" onclick="selUrgencia(this, 'Mañana')"><span class="uicon">📅</span>Mañana</div>
+            <div class="upill" onclick="selUrgencia(this, 'Esta semana')"><span class="uicon">🗓️</span>Esta semana</div>
+            <div class="upill" onclick="selUrgencia(this, 'Sin prisa')"><span class="uicon">😌</span>Sin prisa</div>
+          </div>
+          <div class="ferr" id="err-urgencia">Selecciona cuándo lo necesitas</div>
         </div>
-        <div class="ferr" id="err-pres">Selecciona tu rango</div>
-      </div>
 
-      <div class="frow">
-        <label class="flabel">Cuéntanos más <span class="req">*</span></label>
-        <textarea id="f-contexto" placeholder="Ej: Le encanta el café y el chocolate, es muy detallista, quiero que se sienta especial desde que abra la puerta..."></textarea>
-        <div class="ferr" id="err-contexto">Escribe algo para personalizar mejor</div>
-      </div>
+        <div class="frow">
+          <label class="flabel">Cuéntanos más <span class="req">*</span></label>
+          <textarea id="f-contexto" placeholder="Ej: Le encanta el café, es muy detallista, quiero que se sienta especial desde que abra la puerta..."></textarea>
+          <div class="ferr" id="err-contexto">Escribe algo para personalizar mejor</div>
+        </div>
 
-      <div class="frow" style="margin-bottom:4px">
-        <label class="flabel">Motor de IA</label>
-        <div class="model-row">
-          <button class="model-chip sel" id="m-claude" onclick="setModel('claude')">🤖 Claude</button>
-          <button class="model-chip" id="m-gemini" onclick="setModel('gemini')">✨ Gemini</button>
-          <button class="model-chip" id="m-groq" onclick="setModel('groq')">⚡ Llama</button>
+        <div class="btn-row">
+          <button class="btn-next" onclick="goToStep2()">Continuar → Mis datos</button>
         </div>
       </div>
 
-      <button class="btn-submit" onclick="enviar()">🎁 Recomendar el regalo perfecto</button>
-    </div>
+      <!-- ── PASO 2 ── -->
+      <div class="step-panel" id="step-2">
+        <div class="form-title">Casi listo 🎁</div>
+        <p class="form-sub">Define tu rango y cuéntanos quién eres — para personalizar la recomendación.</p>
+
+        <div class="frow">
+          <label class="flabel">Rango de inversión <span class="req">*</span></label>
+          <div class="pres-grid" id="pres-grid">
+            <div class="ppill" onclick="selPres(this, 'hasta400')"><span class="pamt">≤$400</span>Económico</div>
+            <div class="ppill" onclick="selPres(this, '400-800')"><span class="pamt">$400–800</span>Medio</div>
+            <div class="ppill" onclick="selPres(this, '800-1500')"><span class="pamt">$800–1.5k</span>Premium</div>
+            <div class="ppill" onclick="selPres(this, 'mas1500')"><span class="pamt">+$1,500</span>Sin límite</div>
+          </div>
+          <div class="ferr" id="err-pres">Selecciona un rango</div>
+        </div>
+
+        <div class="frow-2">
+          <div class="frow">
+            <label class="flabel">Tu nombre <span class="req">*</span></label>
+            <input type="text" id="f-nombre" placeholder="Ej: María">
+            <div class="ferr" id="err-nombre">Escribe tu nombre</div>
+          </div>
+          <div class="frow">
+            <label class="flabel">WhatsApp <span class="req">*</span></label>
+            <input type="tel" id="f-wa" placeholder="999 123 4567">
+            <div class="ferr" id="err-wa">Escribe tu WhatsApp</div>
+          </div>
+        </div>
+
+        <div class="frow">
+          <label class="flabel">Correo electrónico <span class="req">*</span></label>
+          <input type="email" id="f-email" placeholder="tu@correo.com">
+          <div class="ferr" id="err-email">Escribe un correo válido</div>
+        </div>
+
+        <div class="frow" style="margin-bottom:6px">
+          <label class="flabel">Motor de IA</label>
+          <div class="model-row">
+            <button class="model-chip sel" id="m-claude" onclick="setModel('claude')">🤖 Claude</button>
+            <button class="model-chip" id="m-gemini" onclick="setModel('gemini')">✨ Gemini</button>
+            <button class="model-chip" id="m-groq" onclick="setModel('groq')">⚡ Llama</button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-back" onclick="goToStep1()">← Atrás</button>
+          <button class="btn-submit" id="btn-submit" onclick="enviar()">🎁 Ver mi recomendación</button>
+        </div>
+      </div>
+
+    </div><!-- /form-wrap -->
 
     <!-- LOADER -->
     <div id="ai-loader" class="form-card" style="display:none">
@@ -674,7 +795,25 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
         </div>
       </div>
       <div id="result-body"></div>
-      <button class="btn-new" onclick="resetForm()">← Hacer otra consulta</button>
+
+      <!-- Mini pedido dentro del resultado -->
+      <div id="pedido-wrap" style="margin-top:20px;padding-top:18px;border-top:1px dashed var(--border)">
+        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--dark);margin-bottom:4px">¿Te convence? Coordina tu entrega</div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Dinos cuándo y dónde — te contactamos para confirmar.</p>
+        <div class="frow">
+          <input type="text" id="c-fecha" placeholder="¿Cuándo? Ej: mañana a las 10am, el sábado...">
+        </div>
+        <div class="frow">
+          <input type="text" id="c-dir" placeholder="Dirección de entrega — colonia, calle, referencias">
+        </div>
+        <div class="frow">
+          <textarea id="c-nota" placeholder="Mensaje para la tarjeta u otras instrucciones..." style="min-height:60px"></textarea>
+        </div>
+        <button class="btn-next" id="btn-pedido" onclick="pedido()" style="width:100%">💌 Solicitar mi pedido</button>
+        <div class="ferr" id="err-pedido" style="margin-top:8px"></div>
+      </div>
+
+      <button class="btn-new" onclick="resetForm()" style="margin-top:14px;width:100%">← Hacer otra consulta</button>
     </div>
   </div>
 </section>
@@ -828,42 +967,113 @@ function filterTabByName(cat) {
   renderProducts(cat);
 }
 
-// ── IA FORM ───────────────────────────────────────────────────
+// ── IA FORM — 2 PASOS ────────────────────────────────────────
 let selectedModel = 'claude';
+let selectedPres  = '';
+let selectedUrgencia = '';
 
+// ── Selección de urgencia ──
+function selUrgencia(el, val) {
+  document.querySelectorAll('#urgencia-grid .upill').forEach(p => p.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedUrgencia = val;
+}
+
+// ── Selección de presupuesto ──
+function selPres(el, val) {
+  document.querySelectorAll('#pres-grid .ppill').forEach(p => p.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedPres = val;
+}
+
+// ── Selector de modelo ──
 function setModel(m) {
   selectedModel = m;
   ['claude','gemini','groq'].forEach(x => document.getElementById('m-'+x).classList.toggle('sel', x===m));
 }
 
-function validate() {
-  const n     = document.getElementById('f-nombre').value.trim();
-  const para  = document.getElementById('f-para').value;
-  const motivo= document.getElementById('f-motivo').value;
-  const tipo  = document.getElementById('f-tipo').value;
-  const pres  = document.getElementById('f-pres').value;
-  const ctx   = document.getElementById('f-contexto').value.trim();
-  const show  = (id, v) => document.getElementById(id).classList.toggle('show', v);
-  show('err-nombre', !n); show('err-para', !para); show('err-motivo', !motivo);
-  show('err-tipo', !tipo); show('err-pres', !pres); show('err-contexto', !ctx);
-  return n && para && motivo && tipo && pres && ctx;
+// ── Mostrar / ocultar error ──
+function showErr(id, show) {
+  document.getElementById(id).classList.toggle('show', show);
 }
 
+// ── Actualizar indicadores de pasos ──
+function updateSteps(step) {
+  // Círculos
+  document.getElementById('sc-1').className = 'step-circle' + (step > 1 ? ' done' : ' active');
+  document.getElementById('sc-2').className = 'step-circle' + (step === 2 ? ' active' : '');
+  // Labels
+  document.getElementById('sl-1').className = 'step-label' + (step > 1 ? ' done' : ' active');
+  document.getElementById('sl-2').className = 'step-label' + (step === 2 ? ' active' : '');
+  // Connector
+  document.getElementById('scon-1').className = 'step-connector' + (step > 1 ? ' done' : '');
+  // Checkmark en paso 1 cuando done
+  document.getElementById('sc-1').textContent = step > 1 ? '✓' : '1';
+}
+
+// ── Ir al paso 2 ──
+function goToStep2() {
+  const para    = document.getElementById('f-para').value;
+  const motivo  = document.getElementById('f-motivo').value;
+  const tipo    = document.getElementById('f-tipo').value;
+  const ctx     = document.getElementById('f-contexto').value.trim();
+  showErr('err-para',      !para);
+  showErr('err-motivo',    !motivo);
+  showErr('err-tipo',      !tipo);
+  showErr('err-urgencia',  !selectedUrgencia);
+  showErr('err-contexto',  !ctx);
+  if (!para || !motivo || !tipo || !selectedUrgencia || !ctx) return;
+
+  document.getElementById('step-1').classList.remove('active');
+  document.getElementById('step-2').classList.add('active');
+  updateSteps(2);
+  document.getElementById('form-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Volver al paso 1 ──
+function goToStep1() {
+  document.getElementById('step-2').classList.remove('active');
+  document.getElementById('step-1').classList.add('active');
+  updateSteps(1);
+  document.getElementById('form-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Validar paso 2 ──
+function validateStep2() {
+  const n  = document.getElementById('f-nombre').value.trim();
+  const wa = document.getElementById('f-wa').value.trim();
+  const em = document.getElementById('f-email').value.trim();
+  showErr('err-pres',   !selectedPres);
+  showErr('err-nombre', !n);
+  showErr('err-wa',     !wa);
+  showErr('err-email',  !em || !em.includes('@'));
+  return selectedPres && n && wa && em && em.includes('@');
+}
+
+// ── Construir perfil para el prompt ──
 function buildPerfil() {
-  const presMap = { 'hasta400':'Hasta $400 MXN','400-800':'$400–$800 MXN','800-1500':'$800–$1,500 MXN','mas1500':'Más de $1,500 MXN' };
+  const presMap = {
+    'hasta400': 'Hasta $400 MXN',
+    '400-800':  '$400–$800 MXN',
+    '800-1500': '$800–$1,500 MXN',
+    'mas1500':  'Más de $1,500 MXN'
+  };
   return `Nombre: ${document.getElementById('f-nombre').value.trim()}
 Para quién: ${document.getElementById('f-para').value}
 Motivo: ${document.getElementById('f-motivo').value}
 Tipo de regalo: ${document.getElementById('f-tipo').value}
-Rango: ${presMap[document.getElementById('f-pres').value] || ''}
+Urgencia: ${selectedUrgencia}
+Rango de inversión: ${presMap[selectedPres] || ''}
 Contexto adicional: ${document.getElementById('f-contexto').value.trim()}`;
 }
 
+// ── Enviar a la IA ──
 async function enviar() {
-  if (!validate()) return;
-  document.getElementById('form-wrap').style.display  = 'none';
-  document.getElementById('ai-result').style.display  = 'none';
-  document.getElementById('ai-loader').style.display  = 'block';
+  if (!validateStep2()) return;
+
+  document.getElementById('form-wrap').style.display = 'none';
+  document.getElementById('ai-result').style.display = 'none';
+  document.getElementById('ai-loader').style.display = 'block';
   document.querySelector('.ai-inner').scrollIntoView({ behavior: 'smooth' });
 
   const msgs = ['Leyendo tu perfil...','Revisando el catálogo...','Personalizando la recomendación...','Casi listo 🎁'];
@@ -881,8 +1091,8 @@ async function enviar() {
     document.getElementById('ai-loader').style.display = 'none';
 
     if (data.error || !data.html) {
-      alert('Hubo un error. Intenta de nuevo.');
       document.getElementById('form-wrap').style.display = 'block';
+      alert('Hubo un error al generar la recomendación. Intenta de nuevo.');
       return;
     }
 
@@ -906,9 +1116,61 @@ async function enviar() {
   }
 }
 
+// ── Solicitar pedido ──
+async function pedido() {
+  const btn = document.getElementById('btn-pedido');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  const presMap = { 'hasta400':'Hasta $400','400-800':'$400–$800','800-1500':'$800–$1,500','mas1500':'+$1,500' };
+  try {
+    const res = await fetch('/dulce-detalle/cita', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nombre:       document.getElementById('f-nombre').value.trim(),
+        whatsapp:     document.getElementById('f-wa').value.trim(),
+        email:        document.getElementById('f-email').value.trim(),
+        para:         document.getElementById('f-para').value,
+        motivo:       document.getElementById('f-motivo').value,
+        tipo_regalo:  document.getElementById('f-tipo').value,
+        presupuesto:  presMap[selectedPres] || '',
+        fecha_entrega: document.getElementById('c-fecha').value.trim(),
+        direccion:    document.getElementById('c-dir').value.trim(),
+        notas:        document.getElementById('c-nota').value.trim()
+      })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      document.getElementById('pedido-wrap').innerHTML = `
+        <div style="text-align:center;padding:20px 0">
+          <div style="font-size:40px;margin-bottom:10px">🎉</div>
+          <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--dark);margin-bottom:8px">¡Solicitud enviada!</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7">El equipo de Dulce Detalle te contactará pronto al WhatsApp para coordinar todo 🌸</p>
+        </div>`;
+    } else {
+      showErr('err-pedido', true);
+      document.getElementById('err-pedido').textContent = '⚠️ ' + (data.error || 'Hubo un problema. Intenta de nuevo.');
+      btn.disabled = false;
+      btn.textContent = '💌 Solicitar mi pedido';
+    }
+  } catch(e) {
+    showErr('err-pedido', true);
+    document.getElementById('err-pedido').textContent = '⚠️ Error de conexión. Intenta de nuevo.';
+    btn.disabled = false;
+    btn.textContent = '💌 Solicitar mi pedido';
+  }
+}
+
+// ── Reset ──
 function resetForm() {
   document.getElementById('ai-result').style.display = 'none';
   document.getElementById('form-wrap').style.display = 'block';
+  // Volver al paso 1
+  document.getElementById('step-2').classList.remove('active');
+  document.getElementById('step-1').classList.add('active');
+  updateSteps(1);
+  selectedPres = '';
+  selectedUrgencia = '';
   document.getElementById('form-wrap').scrollIntoView({ behavior: 'smooth' });
 }
 
