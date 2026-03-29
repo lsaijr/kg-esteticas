@@ -654,6 +654,9 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
         🔧 <strong style="color:var(--dark)">Demo:</strong> Las preguntas del siguiente paso se generan dinámicamente según las áreas que selecciones aquí — cada paciente ve preguntas distintas según su perfil.
       </p>
     </div>
+  </div>
+  <div class="err" id="err-2">⚠️ Selecciona al menos un área.</div>
+</div>
 
 <!-- ═══ PASO 3 ═══ -->
 <div class="card" id="card-3" style="display:none">
@@ -665,8 +668,9 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
     <p style="font-size:12px;font-weight:600;color:var(--muted);line-height:1.6">
       🔧 <strong style="color:var(--dark)">Demo:</strong> Este paso muestra solo las secciones relevantes según las áreas elegidas anteriormente. Si seleccionaste rostro y cuerpo, solo verás preguntas de esas dos áreas.
     </p>
-  </div> style="display:none">
-    <div class="field">
+  </div>
+
+  <div id="det-rostro" style="display:none">
       <label class="flabel">¿Qué describe tu piel facial?</label>
       <div class="cgrid">
         <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Manchas / melasma</div>
