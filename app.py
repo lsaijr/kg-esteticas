@@ -3203,6 +3203,26 @@ def dulce_recomendar():
 
         user_msg = f'Por favor genera una recomendación personalizada para este cliente:\n\n{perfil}'
 
+        # ── Prompt diferenciado por modelo ───────────────────
+        if modelo == 'groq':
+            sys_prompt = DULCE_PROMPT_BASE + (
+                ' IMPORTANTE: sé muy específico y detallado — no te quedes en generalidades. '
+                'Integra orgánicamente los datos reales del perfil: para quién es, el motivo, y especialmente el contexto adicional que escribió el cliente. '
+                'Cada producto recomendado merece 2-3 oraciones: qué incluye, por qué encaja con este perfil específico y qué emoción o experiencia generará. '
+                'Evita frases hechas como "no dudes en contactarnos", "estamos a tu disposición", "sería un placer", "el mejor curso de acción". '
+                'Cierra con una sola oración natural invitando a coordinar la entrega, sin preguntas retóricas. '
+                'Máximo 450 palabras.'
+            )
+        elif modelo == 'gemini':
+            sys_prompt = DULCE_PROMPT_BASE + (
+                ' IMPORTANTE: sé concreto y personalizado — cada recomendación debe sentirse escrita para esta persona, no para cualquiera. '
+                'Menciona detalles reales del perfil del cliente en el texto de forma natural, especialmente lo que escribió en el contexto adicional. '
+                'No uses listas genéricas — cada producto debe tener al menos una frase que explique por qué encaja con este caso en particular. '
+                'Máximo 350 palabras. Cada frase debe aportar valor concreto — nada de relleno.'
+            )
+        else:
+            sys_prompt = DULCE_PROMPT_BASE + ' Máximo 300 palabras. Cada frase debe aportar valor concreto — nada de relleno.'
+
         if modelo == 'claude':
             resp = req.post(
                 'https://api.anthropic.com/v1/messages',
@@ -3214,7 +3234,7 @@ def dulce_recomendar():
                 json={
                     'model': 'claude-haiku-4-5-20251001',
                     'max_tokens': 900,
-                    'system': DULCE_PROMPT_BASE,
+                    'system': sys_prompt,
                     'messages': [{'role': 'user', 'content': user_msg}]
                 },
                 timeout=30
@@ -3224,9 +3244,11 @@ def dulce_recomendar():
 
         elif modelo == 'gemini':
             resp = req.post(
-                f'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}',
+                f'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={GEMINI_KEY}',
+                headers={'Content-Type': 'application/json'},
                 json={
-                    'contents': [{'parts': [{'text': DULCE_PROMPT_BASE + '\n\n' + user_msg}]}],
+                    'system_instruction': {'parts': [{'text': sys_prompt}]},
+                    'contents': [{'parts': [{'text': user_msg}]}],
                     'generationConfig': {'maxOutputTokens': 900, 'temperature': 0.7}
                 },
                 timeout=30
@@ -3239,10 +3261,10 @@ def dulce_recomendar():
                 'https://api.groq.com/openai/v1/chat/completions',
                 headers={'Authorization': f'Bearer {GROQ_KEY}', 'Content-Type': 'application/json'},
                 json={
-                    'model': 'llama3-70b-8192',
+                    'model': 'llama-3.3-70b-versatile',
                     'max_tokens': 900,
                     'messages': [
-                        {'role': 'system', 'content': DULCE_PROMPT_BASE},
+                        {'role': 'system', 'content': sys_prompt},
                         {'role': 'user', 'content': user_msg}
                     ]
                 },
