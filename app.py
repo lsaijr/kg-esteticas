@@ -196,7 +196,7 @@ def demo_cita():
 {'<h3 style="font-size:12px;color:#4299e1;text-transform:uppercase;letter-spacing:.1em;margin:20px 0 12px">✨ Evaluación generada por IA</h3><div style="background:#ebf8ff;border:1px solid #bee3f8;border-radius:8px;padding:16px 20px;font-size:14px;color:#2d3748;line-height:1.8">' + d.get('evaluacion_ia','') + '</div>' if d.get('evaluacion_ia') else ''}
 
 <div style="background:#f0f7ff;padding:14px 28px;border:1px solid #bee3f8;border-top:none;border-radius:0 0 8px 8px;text-align:center">
-  <p style="font-size:11px;color:#718096;margin:0">Evaluación IA · metodo.centrocarvajal.com/demo</p>
+  
 </div>
 
 </div>

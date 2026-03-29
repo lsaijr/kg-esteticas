@@ -803,7 +803,7 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
   </div>
 
   <div class="field">
-    <label class="flabel">¿Cuándo necesitas ver resultados?</label>
+    <label class="flabel">¿Cuándo necesitas ver resultados? <span class="req">*</span></label>
     <div class="rgrid c1">
       <label class="ri"><input type="radio" name="urgencia"><div class="rf">⚡ Tengo un evento próximo (este mes)<div class="dt"></div></div></label>
       <label class="ri"><input type="radio" name="urgencia"><div class="rf">📅 En los próximos 1–3 meses<div class="dt"></div></div></label>
@@ -812,12 +812,12 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
   </div>
 
   <div class="field">
-    <label class="flabel">Presupuesto aproximado mensual</label>
+    <label class="flabel">Presupuesto aproximado mensual <span class="req">*</span></label>
     <div class="rgrid c1">
-      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💛 Básico — hasta $100<div class="dt"></div></div></label>
-      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💛💛 Moderado — $100 a $300<div class="dt"></div></div></label>
-      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💛💛💛 Completo — $300 a $600<div class="dt"></div></div></label>
-      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💎 Premium — más de $600<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💛 Básico — hasta $1,500 MXN<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💛💛 Moderado — $1,500 a $5,000 MXN<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💛💛💛 Completo — $5,000 a $10,000 MXN<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💎 Premium — más de $10,000 MXN<div class="dt"></div></div></label>
     </div>
   </div>
 </div>
@@ -843,7 +843,7 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
     <input type="tel" id="f-tel" placeholder="+507 6000-0000">
   </div>
   <div class="field">
-    <label class="flabel">¿Cómo nos conociste?</label>
+    <label class="flabel">¿Cómo nos conociste? <span class="req">*</span></label>
     <div class="rgrid c1">
       <label class="ri"><input type="radio" name="ref"><div class="rf">📱 Instagram / redes sociales<div class="dt"></div></div></label>
       <label class="ri"><input type="radio" name="ref"><div class="rf">👥 Recomendación de amigo/a<div class="dt"></div></div></label>
@@ -906,8 +906,13 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
         <div style="width:42px;height:42px;border-radius:14px;background:var(--mint-lt);border:2.5px solid var(--mint);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:3px 3px 0 var(--dark)">📅</div>
         <div>
           <div style="font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--dark)">Agenda tu consulta</div>
-          <div style="font-size:12px;font-weight:600;color:var(--muted)">Sin costo · Sin compromiso</div>
+          <div style="font-size:12px;font-weight:600;color:var(--muted)">Selecciona fecha y horario preferido</div>
         </div>
+      </div>
+      <div style="margin-bottom:18px;background:white;border:2px dashed var(--peach);border-radius:12px;padding:10px 14px">
+        <p style="font-size:12px;font-weight:600;color:var(--muted);line-height:1.6">
+          🔧 <strong style="color:var(--dark)">Demo:</strong> Llena los datos de cita con información real — así verás exactamente el correo que recibirías cada vez que un paciente solicite una consulta desde tu formulario.
+        </p>
       </div>
 
       <div style="margin-bottom:16px">
@@ -998,10 +1003,35 @@ function validate(){
     if(areas.size===0){document.getElementById('err-2').classList.add('show');return false;}
     document.getElementById('err-2').classList.remove('show');
   }
+  if(step===4){
+    var urg=document.querySelector('input[name="urgencia"]:checked');
+    var pre=document.querySelector('input[name="presupuesto"]:checked');
+    if(!urg||!pre){
+      if(!document.getElementById('err-4')) {
+        var e=document.createElement('div');
+        e.id='err-4';e.className='err show';
+        e.textContent='⚠️ Por favor selecciona urgencia y presupuesto.';
+        document.getElementById('card-4').appendChild(e);
+      } else { document.getElementById('err-4').classList.add('show'); }
+      return false;
+    }
+    if(document.getElementById('err-4')) document.getElementById('err-4').classList.remove('show');
+  }
   if(step===5){
     var em=document.getElementById('f-email').value.trim();
     if(!em||!em.includes('@')){document.getElementById('err-5').classList.add('show');return false;}
     document.getElementById('err-5').classList.remove('show');
+    var ref=document.querySelector('input[name="ref"]:checked');
+    if(!ref){
+      if(!document.getElementById('err-5c')) {
+        var e=document.createElement('div');
+        e.id='err-5c';e.className='err show';
+        e.textContent='⚠️ Por favor indica cómo nos conociste.';
+        document.getElementById('err-5').parentNode.insertBefore(e, document.getElementById('err-5'));
+      } else { document.getElementById('err-5c').classList.add('show'); }
+      return false;
+    }
+    if(document.getElementById('err-5c')) document.getElementById('err-5c').classList.remove('show');
     var mdl=document.querySelector('input[name="ia-model"]:checked');
     if(!mdl){document.getElementById('err-5b').classList.add('show');return false;}
     document.getElementById('err-5b').classList.remove('show');
