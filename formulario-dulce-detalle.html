@@ -47,9 +47,11 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--dark);min-
 .flabel{display:block;font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px;letter-spacing:.02em}
 .req{color:var(--coral)}
 .nota{font-size:11px;font-weight:600;color:var(--muted);margin-top:8px}
-input[type=text],input[type=email],input[type=tel],textarea,select{width:100%;padding:12px 16px;border:2.5px solid var(--border);border-radius:14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;color:var(--dark);background:var(--bg);outline:none;transition:border-color .2s,box-shadow .2s}
+input[type=text],input[type=email],input[type=tel],textarea,select{width:100%;padding:12px 16px;border:2.5px solid var(--border);border-radius:14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;color:var(--dark);background:var(--bg);outline:none;transition:border-color .2s,box-shadow .2s;appearance:none;-webkit-appearance:none}
 input:focus,textarea:focus,select:focus{border-color:var(--rose);box-shadow:3px 3px 0 var(--rose)}
 textarea{resize:vertical;min-height:90px;line-height:1.6}
+.select-wrap{position:relative}
+.select-wrap::after{content:'▾';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--muted);pointer-events:none}
 .cgrid{display:grid;gap:10px}
 .c2{grid-template-columns:1fr 1fr}
 .c1{grid-template-columns:1fr}
@@ -121,22 +123,21 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
   </div>
 </div>
 
-<!-- Progress -->
+<!-- Progress — 3 pasos -->
 <div class="prog-wrap">
   <div class="prog-meta">
-    <span class="prog-lbl" id="plbl">Paso 1 de 4</span>
+    <span class="prog-lbl" id="plbl">Paso 1 de 3</span>
     <span class="prog-lbl" id="ptime" style="color:var(--muted)">~2 min</span>
   </div>
-  <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:25%"></div></div>
+  <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:33%"></div></div>
   <div class="dots">
     <div class="dot active" id="d1"></div>
     <div class="dot" id="d2"></div>
     <div class="dot" id="d3"></div>
-    <div class="dot" id="d4"></div>
   </div>
 </div>
 
-<!-- PASO 1 -->
+<!-- PASO 1 — El regalo (para quién + motivo + contexto + tipo + urgencia) -->
 <div class="card" id="card-1">
   <div class="card-deco" style="background:var(--rose-lt)">💝</div>
   <div class="s-badge">💝 El regalo</div>
@@ -144,55 +145,50 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
   <div class="s-sub">Cuéntame un poco para recomendarte algo que de verdad conecte.</div>
   <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#f9a8b8" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
 
+  <!-- Para quién — select -->
   <div class="field">
-    <label class="flabel">¿Para quién es el regalo? <span class="req">*</span></label>
-    <div class="cgrid c2" id="para-grid">
-      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>💑 Mi pareja</div>
-      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>👩 Mi mamá</div>
-      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>👨 Mi papá</div>
-      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>👫 Un amigo / amiga</div>
-      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>💼 Compañero / jefe</div>
-      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>🎁 Sorpresa general</div>
+    <label class="flabel" for="sel-para">¿Para quién es el regalo? <span class="req">*</span></label>
+    <div class="select-wrap">
+      <select id="sel-para">
+        <option value="">— Elige una opción —</option>
+        <option>💑 Mi pareja</option>
+        <option>👩 Mi mamá</option>
+        <option>👨 Mi papá</option>
+        <option>👫 Un amigo / amiga</option>
+        <option>💼 Compañero / jefe</option>
+        <option>🎁 Sorpresa general</option>
+      </select>
     </div>
     <div class="err" id="err-para">⚠️ Selecciona para quién es el regalo.</div>
   </div>
 
+  <!-- Motivo — select (sin "Solo porque sí", con "Disculpas") -->
   <div class="field">
-    <label class="flabel">¿Cuál es el motivo? <span class="req">*</span></label>
-    <div class="cgrid c2" id="motivo-grid">
-      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>🎂 Cumpleaños</div>
-      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>💑 Aniversario</div>
-      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>🙏 Agradecimiento</div>
-      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>💔 Reconciliación</div>
-      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>🎓 Graduación</div>
-      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>🌸 Solo porque sí</div>
-      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>🤒 Pronto te mejoras</div>
-      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>💼 Regalo corporativo</div>
+    <label class="flabel" for="sel-motivo">¿Cuál es el motivo? <span class="req">*</span></label>
+    <div class="select-wrap">
+      <select id="sel-motivo">
+        <option value="">— Elige una opción —</option>
+        <option>🎂 Cumpleaños</option>
+        <option>💑 Aniversario</option>
+        <option>🙏 Agradecimiento</option>
+        <option>💐 Disculpas</option>
+        <option>💔 Reconciliación</option>
+        <option>🎓 Graduación</option>
+        <option>🤒 Pronto te mejoras</option>
+        <option>💼 Regalo corporativo</option>
+      </select>
     </div>
     <div class="err" id="err-motivo">⚠️ Selecciona el motivo.</div>
   </div>
 
+  <!-- Cuéntame más — OBLIGATORIO -->
   <div class="field">
-    <label class="flabel">Cuéntame más <span style="font-weight:500;color:var(--muted)">(opcional — aquí está la magia ✨)</span></label>
+    <label class="flabel">Cuéntame más <span class="req">*</span> <span style="font-weight:500;color:var(--muted)">— aquí está la magia ✨</span></label>
     <textarea id="f-contexto" placeholder="Dime qué quieres transmitir con este regalo... entre más detalle me des, mejor será mi recomendación 🌸&#10;&#10;Ej: &quot;es para mi mamá, cumple 50 años y quiero algo especial que la haga llorar de emoción&quot;"></textarea>
-    <div class="demo-note" style="margin-top:8px">
-      <p>🔧 <strong style="color:var(--dark)">Demo:</strong> Este campo es el diferenciador clave — la IA lee el contexto emocional y ajusta su tono exactamente a lo que escribiste. Inténtalo con algo real y verás la diferencia.</p>
-    </div>
+    <div class="err" id="err-contexto">⚠️ Cuéntame un poco más para poder recomendarte algo especial.</div>
   </div>
 
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="goTo(2)">Siguiente →</button>
-  </div>
-</div>
-
-<!-- PASO 2 -->
-<div class="card" id="card-2" style="display:none">
-  <div class="card-deco" style="background:var(--gold-lt)">🎀</div>
-  <div class="s-badge">🎀 El detalle</div>
-  <div class="s-title">¿Qué tipo de regalo tienes en mente?</div>
-  <div class="s-sub">Puedes elegir una categoría o dejarlo en mis manos.</div>
-  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#f6c654" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
-
+  <!-- Tipo de regalo -->
   <div class="field">
     <label class="flabel">¿Qué categoría prefieres? <span class="req">*</span></label>
     <div class="cgrid c1" id="tipo-grid">
@@ -206,6 +202,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
     <div class="err" id="err-tipo">⚠️ Selecciona una categoría.</div>
   </div>
 
+  <!-- Urgencia -->
   <div class="field">
     <label class="flabel">¿Cuándo lo necesitas? <span class="req">*</span></label>
     <div class="cgrid c2" id="cuando-grid">
@@ -218,18 +215,17 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-sec" onclick="goTo(1)">← Atrás</button>
-    <button class="btn btn-primary" onclick="goTo(3)">Siguiente →</button>
+    <button class="btn btn-primary" onclick="goTo(2)">Siguiente →</button>
   </div>
 </div>
 
-<!-- PASO 3 -->
-<div class="card" id="card-3" style="display:none">
-  <div class="card-deco" style="background:var(--lav-lt)">💛</div>
+<!-- PASO 2 — Presupuesto -->
+<div class="card" id="card-2" style="display:none">
+  <div class="card-deco" style="background:var(--gold-lt)">💛</div>
   <div class="s-badge">💛 El detalle fino</div>
   <div class="s-title">¿Cuánto quieres invertir?</div>
   <div class="s-sub">Tenemos opciones para cada momento — desde un detalle sencillo hasta algo que quita el aliento.</div>
-  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#e9d5f5" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#f6c654" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
 
   <div class="field">
     <div class="cgrid c2" id="pres-grid">
@@ -250,16 +246,16 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-sec" onclick="goTo(2)">← Atrás</button>
-    <button class="btn btn-primary" onclick="goTo(4)">Siguiente →</button>
+    <button class="btn btn-sec" onclick="goTo(1)">← Atrás</button>
+    <button class="btn btn-primary" onclick="goTo(3)">Siguiente →</button>
   </div>
 </div>
 
-<!-- PASO 4 -->
-<div class="card" id="card-4" style="display:none">
+<!-- PASO 3 — Datos del cliente -->
+<div class="card" id="card-3" style="display:none">
   <div class="card-deco" style="background:var(--mint-lt)">📬</div>
   <div class="s-badge">📬 Último paso</div>
-  <div class="s-title">¿A dónde enviamos tu recomendación?</div>
+  <div class="s-title">Ingresa tus datos</div>
   <div class="s-sub">En segundos recibirás tu guía personalizada.</div>
   <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#9ae6b4" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
 
@@ -292,8 +288,16 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-sec" onclick="goTo(3)">← Atrás</button>
+    <button class="btn btn-sec" onclick="goTo(2)">← Atrás</button>
     <button class="btn btn-primary" id="btn-send" onclick="enviar()">🎁 Ver mi recomendación</button>
+  </div>
+
+  <!-- Error de IA (sin alert) -->
+  <div id="err-ia" style="display:none;margin-top:16px;text-align:center;padding:16px;background:#fff5f5;border:2px solid #fed7d7;border-radius:14px">
+    <div style="font-size:28px;margin-bottom:8px">⚠️</div>
+    <div style="font-family:'Caveat',cursive;font-size:18px;font-weight:700;color:var(--dark)">Ocurrió un error</div>
+    <p style="font-size:13px;font-weight:500;color:var(--muted);margin-top:6px;line-height:1.7">No se pudo generar la recomendación.<br>Verifica tu conexión e intenta de nuevo.</p>
+    <button class="btn btn-primary" style="margin-top:14px;flex:none;width:auto;padding:10px 24px;font-size:13px" onclick="resetIA()">Intentar de nuevo</button>
   </div>
 </div>
 
@@ -358,10 +362,10 @@ function goTo(step){
 }
 
 function updateProgress(){
-  document.getElementById('pfill').style.width=(currentStep/4*100)+'%';
-  document.getElementById('plbl').textContent='Paso '+currentStep+' de 4';
-  ['~2 min','~1.5 min','~1 min','~30 seg'].forEach((t,i)=>{if(i===currentStep-1)document.getElementById('ptime').textContent=t});
-  for(let i=1;i<=4;i++){
+  document.getElementById('pfill').style.width=(currentStep/3*100)+'%';
+  document.getElementById('plbl').textContent='Paso '+currentStep+' de 3';
+  ['~2 min','~1 min','~30 seg'].forEach((t,i)=>{if(i===currentStep-1)document.getElementById('ptime').textContent=t});
+  for(let i=1;i<=3;i++){
     const d=document.getElementById('d'+i);
     d.className='dot'+(i<currentStep?' done':i===currentStep?' active':'');
   }
@@ -369,15 +373,20 @@ function updateProgress(){
 
 function validate(step){
   if(step===1){
-    const p=document.querySelector('#para-grid .ci.sel'),m=document.querySelector('#motivo-grid .ci.sel');
-    showErr('err-para',!p);showErr('err-motivo',!m);return p&&m;
+    const para=document.getElementById('sel-para').value;
+    const motivo=document.getElementById('sel-motivo').value;
+    const contexto=document.getElementById('f-contexto').value.trim();
+    const tipo=document.querySelector('#tipo-grid .ci.sel');
+    const cuando=document.querySelector('#cuando-grid .ci.sel');
+    showErr('err-para',!para);
+    showErr('err-motivo',!motivo);
+    showErr('err-contexto',!contexto);
+    showErr('err-tipo',!tipo);
+    showErr('err-cuando',!cuando);
+    return para&&motivo&&contexto&&tipo&&cuando;
   }
-  if(step===2){
-    const t=document.querySelector('#tipo-grid .ci.sel'),c=document.querySelector('#cuando-grid .ci.sel');
-    showErr('err-tipo',!t);showErr('err-cuando',!c);return t&&c;
-  }
-  if(step===3){showErr('err-pres',!selectedPres);return!!selectedPres;}
-  if(step===4){
+  if(step===2){showErr('err-pres',!selectedPres);return!!selectedPres;}
+  if(step===3){
     const n=document.getElementById('f-nombre').value.trim(),w=document.getElementById('f-wa').value.trim(),e=document.getElementById('f-email').value.trim();
     showErr('err-nombre',!n);showErr('err-wa',!w);showErr('err-email',!e||!e.includes('@'));
     return n&&w&&e&&e.includes('@');
@@ -403,17 +412,25 @@ function setTheme(t){
 function buildPerfil(){
   const presMap={'hasta400':'Hasta $400 MXN','400-800':'$400–$800 MXN','800-1500':'$800–$1,500 MXN','mas1500':'Más de $1,500 MXN'};
   return `Nombre: ${document.getElementById('f-nombre').value.trim()}
-Para quién: ${document.querySelector('#para-grid .ci.sel')?.textContent.trim()||''}
-Motivo: ${document.querySelector('#motivo-grid .ci.sel')?.textContent.trim()||''}
-Contexto adicional: ${document.getElementById('f-contexto').value.trim()||'(sin contexto adicional)'}
+Para quién: ${document.getElementById('sel-para').value}
+Motivo: ${document.getElementById('sel-motivo').value}
+Contexto adicional: ${document.getElementById('f-contexto').value.trim()}
 Tipo de regalo: ${document.querySelector('#tipo-grid .ci.sel')?.textContent.trim()||''}
 Urgencia: ${document.querySelector('#cuando-grid .ci.sel')?.textContent.trim()||''}
 Rango de inversión: ${presMap[selectedPres]||''}`;
 }
 
+function resetIA(){
+  document.getElementById('err-ia').style.display='none';
+  document.getElementById('card-3').style.display='block';
+  document.getElementById('btn-send').disabled=false;
+  document.getElementById('btn-send').textContent='🎁 Ver mi recomendación';
+}
+
 async function enviar(){
-  if(!validate(4))return;
-  document.getElementById('card-4').style.display='none';
+  if(!validate(3))return;
+  document.getElementById('card-3').style.display='none';
+  document.getElementById('err-ia').style.display='none';
   document.getElementById('loader').style.display='block';
   window.scrollTo({top:0,behavior:'smooth'});
   const msgs=['Leyendo tu perfil...','Revisando el catálogo...','Personalizando la recomendación...','Casi listo 🎁'];
@@ -424,9 +441,17 @@ async function enviar(){
     const data=await res.json();
     clearInterval(lt);
     document.getElementById('loader').style.display='none';
-    if(data.error){alert('Error: '+data.error);document.getElementById('card-4').style.display='block';return;}
+    if(data.error||!data.html){
+      document.getElementById('card-3').style.display='block';
+      document.getElementById('err-ia').style.display='block';
+      return;
+    }
     document.getElementById('res-nombre').textContent=document.getElementById('f-nombre').value.trim();
-    document.getElementById('res-body').innerHTML=data.html||data.texto||'';
+    let html=data.html;
+    html=html.replace(/```html?|```/g,'').trim();
+    html=html.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+    html=html.replace(/\*(.+?)\*/g,'<em>$1</em>');
+    document.getElementById('res-body').innerHTML=html;
     const badges={claude:'🤖 Claude · Anthropic',gemini:'✨ Gemini · Google',groq:'⚡ Llama · Groq'};
     const colors={claude:'background:#ebf8ff;border-color:#90cdf4;color:#2b6cb0',gemini:'background:#f0fff4;border-color:#9ae6b4;color:#276749',groq:'background:#faf5ff;border-color:#d6bcfa;color:#553c9a'};
     document.getElementById('res-badge').innerHTML=`<span class="modelo-badge" style="${colors[selectedModel]}">${badges[selectedModel]}</span>`;
@@ -435,8 +460,9 @@ async function enviar(){
   }catch(e){
     clearInterval(lt);
     document.getElementById('loader').style.display='none';
-    document.getElementById('card-4').style.display='block';
-    alert('Error de conexión. Intenta de nuevo.');
+    document.getElementById('card-3').style.display='block';
+    document.getElementById('err-ia').style.display='block';
+    console.error(e);
   }
 }
 
@@ -452,8 +478,8 @@ async function pedido(){
       fecha_entrega:document.getElementById('c-fecha').value.trim(),
       direccion:document.getElementById('c-dir').value.trim(),
       notas:document.getElementById('c-nota').value.trim(),
-      para:document.querySelector('#para-grid .ci.sel')?.textContent.trim()||'',
-      motivo:document.querySelector('#motivo-grid .ci.sel')?.textContent.trim()||'',
+      para:document.getElementById('sel-para').value,
+      motivo:document.getElementById('sel-motivo').value,
       tipo_regalo:document.querySelector('#tipo-grid .ci.sel')?.textContent.trim()||'',
       presupuesto:presMap[selectedPres]||''
     })});
