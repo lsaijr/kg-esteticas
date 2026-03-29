@@ -3187,6 +3187,12 @@ DULCE_PROMPT_BASE = (
 
 @app.route('/dulce-detalle')
 def dulce_detalle():
+    with open(os.path.join(os.path.dirname(__file__), 'index-dulce-detalle.html'), encoding='utf-8') as f:
+        return f.read()
+
+
+@app.route('/dulce-detalle/demo')
+def dulce_detalle_demo():
     with open(os.path.join(os.path.dirname(__file__), 'formulario-dulce-detalle.html'), encoding='utf-8') as f:
         return f.read()
 
