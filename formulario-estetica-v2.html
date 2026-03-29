@@ -649,9 +649,11 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
       <div class="ci" onclick="toggleArea(this,'capilar')"><div class="cb"></div>💇 Capilar — caída, densidad, cuero cabelludo</div>
     </div>
     <p class="nota">👆 Máximo 2 áreas</p>
-  </div>
-  <div class="err" id="err-2">⚠️ Selecciona al menos un área.</div>
-</div>
+    <div style="margin-top:14px;background:white;border:2px dashed var(--blue);border-radius:12px;padding:10px 14px">
+      <p style="font-size:12px;font-weight:600;color:var(--muted);line-height:1.6">
+        🔧 <strong style="color:var(--dark)">Demo:</strong> Las preguntas del siguiente paso se generan dinámicamente según las áreas que selecciones aquí — cada paciente ve preguntas distintas según su perfil.
+      </p>
+    </div>
 
 <!-- ═══ PASO 3 ═══ -->
 <div class="card" id="card-3" style="display:none">
@@ -659,8 +661,11 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
   <div class="s-title">Cuéntanos más</div>
   <div class="s-sub">Detalles específicos para recomendarte mejor.</div>
   <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#9ae6b4" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
-
-  <div id="det-rostro" style="display:none">
+  <div style="margin-bottom:18px;background:white;border:2px dashed var(--mint);border-radius:12px;padding:10px 14px">
+    <p style="font-size:12px;font-weight:600;color:var(--muted);line-height:1.6">
+      🔧 <strong style="color:var(--dark)">Demo:</strong> Este paso muestra solo las secciones relevantes según las áreas elegidas anteriormente. Si seleccionaste rostro y cuerpo, solo verás preguntas de esas dos áreas.
+    </p>
+  </div> style="display:none">
     <div class="field">
       <label class="flabel">¿Qué describe tu piel facial?</label>
       <div class="cgrid">
@@ -822,6 +827,11 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
   <div class="field">
     <label class="flabel">Correo electrónico <span class="req">*</span></label>
     <input type="email" id="f-email" placeholder="tu@correo.com">
+    <div style="margin-top:10px;background:white;border:2px dashed var(--peach);border-radius:12px;padding:10px 14px">
+      <p style="font-size:12px;font-weight:600;color:var(--muted);line-height:1.6">
+        🔧 <strong style="color:var(--dark)">Demo:</strong> Coloca tu correo real — ahí recibirás la evaluación generada por IA exactamente como la vería un paciente de tu clínica, junto con el resumen completo del perfil que llegaría a tu bandeja de entrada.
+      </p>
+    </div>
   </div>
   <div class="field">
     <label class="flabel">WhatsApp</label>
@@ -1096,6 +1106,7 @@ function buildPrompt(d){
 
 // Horario toggle
 var horarioSel = '';
+var evaluacionIA = ''; // guarda el HTML generado por la IA
 function toggleHorario(el){
   document.querySelectorAll('#horarios-grid .ci').forEach(function(c){
     c.classList.remove('on');
@@ -1138,7 +1149,8 @@ async function enviarCita(){
     referido:    getRadioText('ref'),
     fecha:       fecha,
     horario:     horarioSel,
-    nota:        nota
+    nota:        nota,
+    evaluacion_ia: evaluacionIA
   };
   try {
     var r = await fetch('/demo/cita',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
@@ -1198,6 +1210,7 @@ async function submitForm(){
       var badge = '<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;background:var(--blue-lt);border:2px solid var(--blue);border-radius:50px;padding:4px 12px;color:var(--accent)">'+modelNames[modelo]+'</span>';
       document.getElementById('res-badge').innerHTML = badge;
       result.html = result.html.replace(/```html?|```/g,'').trim();
+      evaluacionIA = result.html;
       document.getElementById('res-body').innerHTML = result.html;
       document.getElementById('res-loading').style.display='none';
       document.getElementById('res-content').style.display='block';
