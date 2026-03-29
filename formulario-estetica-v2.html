@@ -594,15 +594,29 @@ body.tema-elegante .yn-btn { border-radius: 3px !important; }
 body.tema-elegante .yn-btn.on { box-shadow: none !important; }
 body.tema-elegante .doodle-divider { display: none !important; }
 
-/* Oscuro */
-body.tema-oscuro .card { border-color: var(--border) !important; box-shadow: 0 0 0 1px #222 !important; }
-body.tema-oscuro .card::before { background: #2a2020 !important; border-color: #333 !important; }
-body.tema-oscuro input, body.tema-oscuro textarea { background: #111 !important; color: var(--dark) !important; border-color: var(--border) !important; }
-body.tema-oscuro input::placeholder, body.tema-oscuro textarea::placeholder { color: #444 !important; }
-body.tema-oscuro .ci { background: #1a1a1a !important; }
-body.tema-oscuro .rf { background: #1a1a1a !important; }
-body.tema-oscuro .logo-wrap { background: #1a1a1a !important; }
-body.tema-oscuro .prog-bar { background: #222 !important; }
+/* Azul corporativo */
+body.tema-oscuro {
+  --bg:#f0f7ff; --white:#ffffff; --dark:#0d2d4f; --muted:#4a7fa5;
+  --border:#b3d9f5; --pink:#38bdf8; --pink-lt:#e0f4fe;
+  --blue:#0ea5e9; --blue-lt:#e0f4fe; --mint:#06b6d4; --mint-lt:#ecfeff;
+  --peach:#38bdf8; --peach-lt:#e0f4fe; --lavender:#7dd3fc; --lav-lt:#e0f4fe;
+  --accent:#0284c7;
+}
+body.tema-oscuro .card {
+  border: 1.5px solid var(--border) !important;
+  box-shadow: 0 2px 16px rgba(2,132,199,.1) !important;
+  border-radius: 6px !important;
+}
+body.tema-oscuro .card::before { background: #e0f4fe !important; border-color: var(--border) !important; }
+body.tema-oscuro .blob-bg path { fill-opacity: .15 !important; }
+body.tema-oscuro .ci { border-radius: 6px !important; }
+body.tema-oscuro .ci.on { box-shadow: 2px 2px 0 var(--accent) !important; }
+body.tema-oscuro .rf { border-radius: 6px !important; }
+body.tema-oscuro .btn { border-radius: 6px !important; }
+body.tema-oscuro .logo-wrap { border-radius: 6px !important; box-shadow: 2px 2px 0 var(--accent) !important; }
+body.tema-oscuro .prog-bar { border-radius: 3px !important; }
+body.tema-oscuro .yn-btn { border-radius: 6px !important; }
+body.tema-oscuro .s-badge { border-radius: 6px !important; }
 
 /* ── Theme switcher ── */
 .theme-switcher {
@@ -632,7 +646,7 @@ body.tema-oscuro .prog-bar { background: #222 !important; }
 .theme-dot.active { border-color: var(--dark); transform: scale(1.1); }
 .theme-dot-doodle { background: linear-gradient(135deg, #fbb6ce, #90cdf4); }
 .theme-dot-elegante { background: linear-gradient(135deg, #c9a96e, #e8e4de); }
-.theme-dot-oscuro { background: linear-gradient(135deg, #1a1a1a, #7eb8d4); }
+.theme-dot-oscuro { background: linear-gradient(135deg, #0284c7, #38bdf8); }
 .theme-label {
   font-size: 10px;
   font-weight: 700;
@@ -656,7 +670,7 @@ body.tema-oscuro .prog-bar { background: #222 !important; }
   <span class="theme-label">Tema</span>
   <div class="theme-dot theme-dot-doodle active" onclick="setTema('doodle')" title="Doodle — colorido"></div>
   <div class="theme-dot theme-dot-elegante" onclick="setTema('elegante')" title="Elegante — minimalista"></div>
-  <div class="theme-dot theme-dot-oscuro" onclick="setTema('oscuro')" title="Oscuro — moderno"></div>
+  <div class="theme-dot theme-dot-oscuro" onclick="setTema('oscuro')" title="Azul — corporativo"></div>
 </div>
 
 <!-- Background blobs -->
