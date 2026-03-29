@@ -54,7 +54,7 @@ body {
 /* ── Header ── */
 .header {
   width: 100%;
-  max-width: 540px;
+  max-width: 720px;
   padding: 32px 24px 0;
   text-align: center;
   position: relative;
@@ -90,7 +90,7 @@ body {
 /* ── Progress ── */
 .prog-wrap {
   width: 100%;
-  max-width: 540px;
+  max-width: 720px;
   padding: 22px 24px 0;
   position: relative;
   z-index: 1;
@@ -147,7 +147,7 @@ body {
 /* ── Card ── */
 .card {
   width: calc(100% - 48px);
-  max-width: 540px;
+  max-width: 720px;
   background: white;
   border: 2.5px solid var(--dark);
   border-radius: 24px;
@@ -439,7 +439,7 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
 /* Nav */
 .nav {
   width: calc(100% - 48px);
-  max-width: 540px;
+  max-width: 720px;
   display: flex;
   gap: 12px;
   margin-top: 16px;
@@ -522,6 +522,12 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
 @keyframes spin { to{transform:rotate(360deg)} }
 
 /* ── Mobile ── */
+@media(min-width:768px){
+  .card { width: 720px; }
+  .nav  { width: 720px; }
+  .rgrid { grid-template-columns: 1fr 1fr 1fr; }
+  .cgrid { grid-template-columns: 1fr 1fr 1fr; }
+}
 @media(max-width:400px){
   .card { width:calc(100% - 32px); padding:24px 18px; }
   .nav  { width:calc(100% - 32px); }
