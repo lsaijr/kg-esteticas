@@ -82,10 +82,13 @@ def demo_recomendar():
         )
         if modelo == 'groq':
             sys_prompt = base_prompt + (
-                ' IMPORTANTE: sé muy detallada y personalizada. '
-                'Integra datos específicos del perfil: edad, nivel de estrés, actividad física, historial de tratamientos previos. '
-                'Cada tratamiento merece 2-3 oraciones — qué hace, por qué encaja con este perfil y qué resultado concreto y realista puede esperar. '
-                'Máximo 450 palabras. Que al leerlo sienta que fue escrito para ella o él, no para cualquier persona.'
+                ' IMPORTANTE: sé detallada y muy personalizada, pero mantén un tono cercano y natural — nada de lenguaje corporativo ni frases de manual. '
+                'Integra datos reales del perfil de forma orgánica en el texto: edad, nivel de estrés, actividad física, historial de tratamientos. '
+                'No menciones el presupuesto bajo ningún concepto — ni directa ni indirectamente. Nunca uses frases como "considerando tu presupuesto", "dentro de tus posibilidades", "limitaciones económicas" o similares. '
+                'Evita completamente frases hechas como "¿te gustaría explorar estas opciones?", "no dudes en contactarnos", "estamos a tu disposición", "el mejor curso de acción". '
+                'Cada tratamiento merece 2-3 oraciones — qué hace, por qué encaja específicamente con este perfil y qué resultado concreto puede esperar esta persona. '
+                'Cierra con una sola oración natural invitando a agendar, sin preguntas retóricas. '
+                'Máximo 450 palabras.'
             )
         else:
             sys_prompt = base_prompt + ' Máximo 300 palabras. Cada frase debe aportar valor concreto — nada de relleno.'
