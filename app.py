@@ -46,7 +46,6 @@ admin_tokens = set()  # tokens de sesión activos
 
 @app.route('/', methods=['GET'])
 def index():
-    # Pantalla de entrada: elige formulario o subir .docx
     with open(os.path.join(os.path.dirname(__file__), 'index.html'), encoding='utf-8') as f:
         return f.read()
 
