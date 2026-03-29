@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dulce Detalle — Encuentra el regalo perfecto</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#fff8f9;--white:#ffffff;--dark:#2d2020;--muted:#9a7070;
+  --border:#f9c6d0;--rose:#f9a8b8;--rose-lt:#fff0f3;--coral:#f87185;
+  --gold:#f6c654;--gold-lt:#fffbec;--cream:#fdf3dc;--mint:#9ae6b4;
+  --mint-lt:#f0fff4;--peach:#fbd38d;--lav:#e9d5f5;--lav-lt:#faf5ff;
+  --accent:#e05c72;--r:18px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 80px;position:relative;overflow-x:hidden}
+.blob-bg{position:fixed;pointer-events:none;z-index:0}
+.blob-tl{top:-60px;left:-60px;width:280px;opacity:.45}
+.blob-tr{top:-40px;right:-50px;width:220px;opacity:.38}
+.blob-bl{bottom:20px;left:-40px;width:200px;opacity:.32}
+.blob-br{bottom:-30px;right:-60px;width:260px;opacity:.42}
+.theme-bar{position:fixed;top:14px;left:14px;display:flex;gap:8px;z-index:100;background:white;border:2px solid var(--dark);border-radius:50px;padding:6px 10px;box-shadow:3px 3px 0 var(--dark)}
+.theme-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--dark);cursor:pointer;transition:transform .15s}
+.theme-dot:hover{transform:scale(1.25)}
+.theme-dot.active{box-shadow:0 0 0 2px white,0 0 0 4px var(--dark)}
+.header{width:100%;max-width:680px;padding:32px 20px 0;text-align:center;position:relative;z-index:1}
+.logo-wrap{display:inline-flex;align-items:center;gap:10px;background:white;border:2.5px solid var(--dark);border-radius:50px;padding:8px 22px;box-shadow:4px 4px 0 var(--dark)}
+.logo{font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--dark)}
+.tagline{font-family:'Caveat',cursive;font-size:16px;color:var(--muted);margin-top:10px;font-weight:500}
+.prog-wrap{width:100%;max-width:680px;padding:20px 20px 0;position:relative;z-index:1}
+.prog-meta{display:flex;justify-content:space-between;margin-bottom:10px}
+.prog-lbl{font-family:'Caveat',cursive;font-size:15px;font-weight:600;color:var(--dark)}
+.prog-bar{width:100%;height:10px;background:white;border:2px solid var(--dark);border-radius:50px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--rose) 0%,var(--gold) 100%);border-radius:50px;transition:width .4s ease}
+.dots{display:flex;justify-content:center;gap:8px;margin-top:10px}
+.dot{width:12px;height:12px;border-radius:50%;background:white;border:2.5px solid var(--dark);transition:all .3s}
+.dot.done{background:var(--rose)}
+.dot.active{background:var(--gold);box-shadow:0 0 0 3px var(--gold-lt);transform:scale(1.2)}
+.card{width:100%;max-width:680px;background:white;border:2.5px solid var(--dark);border-radius:24px;padding:28px 24px;margin:18px 20px 0;position:relative;z-index:1;box-shadow:5px 5px 0 var(--dark)}
+.card-deco{position:absolute;top:-1px;right:20px;width:50px;height:50px;border:2.5px solid var(--dark);border-top:none;border-radius:0 0 16px 16px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.s-badge{display:inline-block;background:var(--rose-lt);border:2px solid var(--rose);border-radius:50px;padding:4px 14px;font-size:12px;font-weight:700;color:var(--accent);margin-bottom:12px;letter-spacing:.04em}
+.s-title{font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.s-sub{font-size:13px;font-weight:500;color:var(--muted);margin-bottom:16px}
+.doodle-divider{display:block;margin:0 0 18px}
+.field{margin-bottom:18px}
+.flabel{display:block;font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px;letter-spacing:.02em}
+.req{color:var(--coral)}
+.nota{font-size:11px;font-weight:600;color:var(--muted);margin-top:8px}
+input[type=text],input[type=email],input[type=tel],textarea,select{width:100%;padding:12px 16px;border:2.5px solid var(--border);border-radius:14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;color:var(--dark);background:var(--bg);outline:none;transition:border-color .2s,box-shadow .2s}
+input:focus,textarea:focus,select:focus{border-color:var(--rose);box-shadow:3px 3px 0 var(--rose)}
+textarea{resize:vertical;min-height:90px;line-height:1.6}
+.cgrid{display:grid;gap:10px}
+.c2{grid-template-columns:1fr 1fr}
+.c1{grid-template-columns:1fr}
+.ci{display:flex;align-items:center;gap:10px;padding:12px 14px;border:2.5px solid var(--border);border-radius:14px;cursor:pointer;font-size:13px;font-weight:600;color:var(--dark);background:white;transition:all .2s;user-select:none}
+.ci:hover{border-color:var(--rose);background:var(--rose-lt);transform:translateY(-1px)}
+.ci.sel{border-color:var(--accent);background:var(--rose-lt);box-shadow:3px 3px 0 var(--accent);transform:translateY(-1px)}
+.cb{width:18px;height:18px;flex-shrink:0;border:2.5px solid var(--border);border-radius:6px;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.ci.sel .cb{background:var(--accent);border-color:var(--accent)}
+.ci.sel .cb::after{content:'✓';font-size:11px;color:white;font-weight:800}
+.ppill{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 12px;border:2.5px solid var(--border);border-radius:16px;cursor:pointer;font-size:12px;font-weight:700;color:var(--muted);background:white;transition:all .2s;text-align:center;user-select:none}
+.ppill:hover{border-color:var(--gold);background:var(--gold-lt);transform:translateY(-2px)}
+.ppill.sel{border-color:var(--gold);background:var(--gold-lt);box-shadow:3px 3px 0 var(--dark);color:var(--dark);transform:translateY(-2px)}
+.ppill .pamt{font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--dark)}
+.ppill .picon{font-size:18px}
+.err{display:none;color:#e53e3e;font-size:12px;font-weight:700;margin-top:8px;padding:8px 12px;background:#fff5f5;border:2px solid #fed7d7;border-radius:10px}
+.err.show{display:block}
+.btn-row{display:flex;gap:12px;margin-top:24px}
+.btn{flex:1;padding:14px 20px;border:2.5px solid var(--dark);border-radius:14px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:4px 4px 0 var(--dark)}
+.btn:active{transform:translateY(2px);box-shadow:2px 2px 0 var(--dark)}
+.btn-primary{background:var(--accent);color:white}
+.btn-primary:hover{background:#c44d62}
+.btn-sec{background:white;color:var(--dark)}
+.btn-sec:hover{background:var(--rose-lt)}
+.demo-note{background:white;border:2px dashed var(--rose);border-radius:12px;padding:10px 14px}
+.demo-note p{font-size:12px;font-weight:600;color:var(--muted);line-height:1.6}
+.model-grid{display:flex;gap:10px;flex-wrap:wrap}
+.model-btn{flex:1;min-width:90px;padding:10px 14px;border:2.5px solid var(--border);border-radius:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;background:white;color:var(--muted);text-align:center;transition:all .2s}
+.model-btn:hover{border-color:var(--rose);color:var(--dark)}
+.model-btn.sel{border-color:var(--accent);background:var(--rose-lt);color:var(--accent);box-shadow:3px 3px 0 var(--accent)}
+.res-card{background:white;border:2.5px solid var(--dark);border-radius:24px;padding:28px 24px;box-shadow:5px 5px 0 var(--dark)}
+#res-body p{margin-bottom:12px;font-size:14px;line-height:1.9}
+#res-body strong{color:var(--accent)}
+#res-body ul{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:10px;margin:16px 0}
+#res-body li{background:var(--rose-lt);border:2px solid var(--rose);border-radius:14px;padding:12px 16px;font-size:13px;line-height:1.7}
+#res-body li::before{content:'🎁 '}
+#res-body li strong{display:block;font-size:14px;color:var(--dark);margin-bottom:3px}
+.modelo-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:50px;font-size:11px;font-weight:700;border:2px solid var(--dark);margin-bottom:16px}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:500px){.c2{grid-template-columns:1fr}.card{padding:22px 16px;margin:14px 12px 0}#res-wrap{margin:14px 12px 0}}
+</style>
+</head>
+<body>
+
+<!-- Blobs -->
+<svg class="blob-bg blob-tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="#f9a8b8" d="M44.3,-76.1C56.6,-69.3,65.4,-55.8,71.8,-41.4C78.2,-27,82.2,-11.5,80.5,3.3C78.8,18.1,71.4,32.2,62,44.4C52.6,56.6,41.2,66.9,27.7,73.5C14.2,80.1,-1.4,83,-17.1,80.4C-32.8,77.8,-48.6,69.7,-59.8,57.8C-71,45.9,-77.6,30.2,-79.5,13.9C-81.4,-2.4,-78.6,-19.3,-71,-33.5C-63.4,-47.7,-51,-59.2,-37.3,-65.7C-23.6,-72.2,-8.6,-73.7,6,-77.3C20.6,-80.9,32,-82.9,44.3,-76.1Z" transform="translate(100 100)"/></svg>
+<svg class="blob-bg blob-tr" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="#f6c654" d="M39.5,-67.2C50.9,-60.5,59.8,-50,66.4,-37.7C73,-25.4,77.3,-11.2,76.8,2.8C76.3,16.8,71,30.5,63.1,42.8C55.2,55.1,44.7,65.9,31.8,72.1C18.9,78.3,3.5,79.9,-12.2,77.9C-27.9,75.9,-43.9,70.3,-56.3,60.3C-68.7,50.3,-77.5,35.9,-80.5,20.3C-83.5,4.7,-80.7,-12.1,-73.8,-26.4C-66.9,-40.7,-55.9,-52.5,-43,-59.2C-30.1,-65.9,-15.1,-67.5,-0.7,-66.5C13.7,-65.5,28.1,-73.9,39.5,-67.2Z" transform="translate(100 100)"/></svg>
+<svg class="blob-bg blob-bl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="#e9d5f5" d="M42,-72.4C53.6,-65.2,61.4,-52.2,67.2,-38.4C73,-24.6,76.8,-9.9,75.6,4.5C74.4,18.9,68.2,33,59.5,45.1C50.8,57.2,39.6,67.3,26.3,73.1C13,78.9,-2.4,80.4,-16.8,76.5C-31.2,72.6,-44.6,63.3,-55.7,51.5C-66.8,39.7,-75.6,25.4,-78.2,9.8C-80.8,-5.8,-77.2,-22.7,-69.2,-36.8C-61.2,-50.9,-48.8,-62.2,-35.3,-68.8C-21.8,-75.4,-7.2,-77.3,6,-80.4C19.2,-83.5,30.4,-79.6,42,-72.4Z" transform="translate(100 100)"/></svg>
+<svg class="blob-bg blob-br" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="#9ae6b4" d="M42.7,-72.5C54.9,-66.3,63.9,-53.2,70.1,-38.9C76.3,-24.6,79.7,-9.1,77.8,5.7C75.9,20.5,68.7,34.6,59.1,46.5C49.5,58.4,37.5,68.1,23.6,73.2C9.7,78.3,-6.1,78.8,-21.2,74.7C-36.3,70.6,-50.7,61.9,-60.2,49.8C-69.7,37.7,-74.3,22.2,-75.7,5.9C-77.1,-10.4,-75.3,-27.5,-67.3,-40.8C-59.3,-54.1,-45.1,-63.6,-30.9,-69.7C-16.7,-75.8,-2.5,-78.5,11.7,-78.4C25.9,-78.3,30.5,-78.7,42.7,-72.5Z" transform="translate(100 100)"/></svg>
+
+<!-- Theme -->
+<div class="theme-bar">
+  <div class="theme-dot active" style="background:#f9a8b8" onclick="setTheme('rose')" title="Rosa"></div>
+  <div class="theme-dot" style="background:#f6c654" onclick="setTheme('gold')" title="Dorado"></div>
+  <div class="theme-dot" style="background:#e9d5f5" onclick="setTheme('lav')" title="Lavanda"></div>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo-wrap">
+    <span>🌸</span>
+    <div class="logo">dulce detalle</div>
+    <span>🎁</span>
+  </div>
+  <div class="tagline">✨ Encuentra el regalo perfecto en 2 minutos</div>
+  <div class="demo-note" style="margin-top:12px;max-width:500px;margin-left:auto;margin-right:auto">
+    <p>💡 <strong style="color:var(--dark)">Modo demo</strong> — Responde con datos reales para ver cómo funciona con tus clientes.<br>
+    <span>🎨 Los círculos de arriba cambian los colores del formulario al tono de tu marca.</span></p>
+  </div>
+</div>
+
+<!-- Progress -->
+<div class="prog-wrap">
+  <div class="prog-meta">
+    <span class="prog-lbl" id="plbl">Paso 1 de 4</span>
+    <span class="prog-lbl" id="ptime" style="color:var(--muted)">~2 min</span>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:25%"></div></div>
+  <div class="dots">
+    <div class="dot active" id="d1"></div>
+    <div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div>
+    <div class="dot" id="d4"></div>
+  </div>
+</div>
+
+<!-- PASO 1 -->
+<div class="card" id="card-1">
+  <div class="card-deco" style="background:var(--rose-lt)">💝</div>
+  <div class="s-badge">💝 El regalo</div>
+  <div class="s-title">¿Para quién es la sorpresa?</div>
+  <div class="s-sub">Cuéntame un poco para recomendarte algo que de verdad conecte.</div>
+  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#f9a8b8" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+
+  <div class="field">
+    <label class="flabel">¿Para quién es el regalo? <span class="req">*</span></label>
+    <div class="cgrid c2" id="para-grid">
+      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>💑 Mi pareja</div>
+      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>👩 Mi mamá</div>
+      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>👨 Mi papá</div>
+      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>👫 Un amigo / amiga</div>
+      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>💼 Compañero / jefe</div>
+      <div class="ci" onclick="selectOne(this,'para-grid')"><div class="cb"></div>🎁 Sorpresa general</div>
+    </div>
+    <div class="err" id="err-para">⚠️ Selecciona para quién es el regalo.</div>
+  </div>
+
+  <div class="field">
+    <label class="flabel">¿Cuál es el motivo? <span class="req">*</span></label>
+    <div class="cgrid c2" id="motivo-grid">
+      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>🎂 Cumpleaños</div>
+      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>💑 Aniversario</div>
+      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>🙏 Agradecimiento</div>
+      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>💔 Reconciliación</div>
+      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>🎓 Graduación</div>
+      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>🌸 Solo porque sí</div>
+      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>🤒 Pronto te mejoras</div>
+      <div class="ci" onclick="selectOne(this,'motivo-grid')"><div class="cb"></div>💼 Regalo corporativo</div>
+    </div>
+    <div class="err" id="err-motivo">⚠️ Selecciona el motivo.</div>
+  </div>
+
+  <div class="field">
+    <label class="flabel">Cuéntame más <span style="font-weight:500;color:var(--muted)">(opcional — aquí está la magia ✨)</span></label>
+    <textarea id="f-contexto" placeholder="Dime qué quieres transmitir con este regalo... entre más detalle me des, mejor será mi recomendación 🌸&#10;&#10;Ej: &quot;es para mi mamá, cumple 50 años y quiero algo especial que la haga llorar de emoción&quot;"></textarea>
+    <div class="demo-note" style="margin-top:8px">
+      <p>🔧 <strong style="color:var(--dark)">Demo:</strong> Este campo es el diferenciador clave — la IA lee el contexto emocional y ajusta su tono exactamente a lo que escribiste. Inténtalo con algo real y verás la diferencia.</p>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="goTo(2)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- PASO 2 -->
+<div class="card" id="card-2" style="display:none">
+  <div class="card-deco" style="background:var(--gold-lt)">🎀</div>
+  <div class="s-badge">🎀 El detalle</div>
+  <div class="s-title">¿Qué tipo de regalo tienes en mente?</div>
+  <div class="s-sub">Puedes elegir una categoría o dejarlo en mis manos.</div>
+  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#f6c654" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+
+  <div class="field">
+    <label class="flabel">¿Qué categoría prefieres? <span class="req">*</span></label>
+    <div class="cgrid c1" id="tipo-grid">
+      <div class="ci" onclick="selectOne(this,'tipo-grid')"><div class="cb"></div>🥐 Desayuno sorpresa</div>
+      <div class="ci" onclick="selectOne(this,'tipo-grid')"><div class="cb"></div>🌹 Flores y arreglos florales</div>
+      <div class="ci" onclick="selectOne(this,'tipo-grid')"><div class="cb"></div>🍷 Bebidas, cervezas y botellas</div>
+      <div class="ci" onclick="selectOne(this,'tipo-grid')"><div class="cb"></div>🧀 Charcutería — quesos y carnes frías</div>
+      <div class="ci" onclick="selectOne(this,'tipo-grid')"><div class="cb"></div>🍓 Arreglos frutales</div>
+      <div class="ci" onclick="selectOne(this,'tipo-grid')"><div class="cb"></div>✨ Sorpréndeme — tú recomiéndame</div>
+    </div>
+    <div class="err" id="err-tipo">⚠️ Selecciona una categoría.</div>
+  </div>
+
+  <div class="field">
+    <label class="flabel">¿Cuándo lo necesitas? <span class="req">*</span></label>
+    <div class="cgrid c2" id="cuando-grid">
+      <div class="ci" onclick="selectOne(this,'cuando-grid')"><div class="cb"></div>⚡ Hoy mismo</div>
+      <div class="ci" onclick="selectOne(this,'cuando-grid')"><div class="cb"></div>📅 Mañana</div>
+      <div class="ci" onclick="selectOne(this,'cuando-grid')"><div class="cb"></div>🗓️ Esta semana</div>
+      <div class="ci" onclick="selectOne(this,'cuando-grid')"><div class="cb"></div>🕐 Sin prisa</div>
+    </div>
+    <div class="err" id="err-cuando">⚠️ Indica cuándo lo necesitas.</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-sec" onclick="goTo(1)">← Atrás</button>
+    <button class="btn btn-primary" onclick="goTo(3)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- PASO 3 -->
+<div class="card" id="card-3" style="display:none">
+  <div class="card-deco" style="background:var(--lav-lt)">💛</div>
+  <div class="s-badge">💛 El detalle fino</div>
+  <div class="s-title">¿Cuánto quieres invertir?</div>
+  <div class="s-sub">Tenemos opciones para cada momento — desde un detalle sencillo hasta algo que quita el aliento.</div>
+  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#e9d5f5" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+
+  <div class="field">
+    <div class="cgrid c2" id="pres-grid">
+      <div class="ppill" onclick="selectPres(this,'hasta400')">
+        <span class="picon">💛</span><span class="pamt">Hasta $400</span><span>Detalle sencillo y lindo</span>
+      </div>
+      <div class="ppill" onclick="selectPres(this,'400-800')">
+        <span class="picon">💛💛</span><span class="pamt">$400–$800</span><span>Un regalo que impresiona</span>
+      </div>
+      <div class="ppill" onclick="selectPres(this,'800-1500')">
+        <span class="picon">💛💛💛</span><span class="pamt">$800–$1,500</span><span>Algo especial de verdad</span>
+      </div>
+      <div class="ppill" onclick="selectPres(this,'mas1500')">
+        <span class="picon">💎</span><span class="pamt">+$1,500</span><span>Que se quede en el corazón</span>
+      </div>
+    </div>
+    <div class="err" id="err-pres">⚠️ Selecciona un rango.</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-sec" onclick="goTo(2)">← Atrás</button>
+    <button class="btn btn-primary" onclick="goTo(4)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- PASO 4 -->
+<div class="card" id="card-4" style="display:none">
+  <div class="card-deco" style="background:var(--mint-lt)">📬</div>
+  <div class="s-badge">📬 Último paso</div>
+  <div class="s-title">¿A dónde enviamos tu recomendación?</div>
+  <div class="s-sub">En segundos recibirás tu guía personalizada.</div>
+  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#9ae6b4" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+
+  <div class="field">
+    <label class="flabel">Nombre completo <span class="req">*</span></label>
+    <input type="text" id="f-nombre" placeholder="Tu nombre">
+    <div class="err" id="err-nombre">⚠️ Escribe tu nombre.</div>
+  </div>
+  <div class="field">
+    <label class="flabel">WhatsApp <span class="req">*</span></label>
+    <input type="tel" id="f-wa" placeholder="999 123 4567 — para coordinar la entrega">
+    <div class="err" id="err-wa">⚠️ Escribe tu WhatsApp.</div>
+  </div>
+  <div class="field">
+    <label class="flabel">Correo electrónico <span class="req">*</span></label>
+    <input type="email" id="f-email" placeholder="tu@correo.com">
+    <div class="demo-note" style="margin-top:8px">
+      <p>🔧 <strong style="color:var(--dark)">Demo:</strong> Pon tu correo real — recibirás la recomendación exactamente como la vería tu cliente, más el resumen de pedido que llegaría a tu bandeja.</p>
+    </div>
+    <div class="err" id="err-email">⚠️ Escribe un correo válido.</div>
+  </div>
+
+  <div class="field">
+    <label class="flabel">Motor de IA</label>
+    <div class="model-grid">
+      <button class="model-btn sel" id="m-claude" onclick="setModel('claude')">🤖 Claude</button>
+      <button class="model-btn" id="m-gemini" onclick="setModel('gemini')">✨ Gemini</button>
+      <button class="model-btn" id="m-groq" onclick="setModel('groq')">⚡ Llama · Groq</button>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-sec" onclick="goTo(3)">← Atrás</button>
+    <button class="btn btn-primary" id="btn-send" onclick="enviar()">🎁 Ver mi recomendación</button>
+  </div>
+</div>
+
+<!-- Loader -->
+<div id="loader" style="display:none;width:100%;max-width:680px;margin:18px 20px 0;position:relative;z-index:1">
+  <div style="background:white;border:2.5px solid var(--dark);border-radius:24px;padding:40px 24px;text-align:center;box-shadow:5px 5px 0 var(--dark)">
+    <div style="display:flex;justify-content:center;gap:10px;margin-bottom:20px">
+      <div style="width:14px;height:14px;border-radius:50%;background:var(--rose);border:2px solid var(--dark);animation:pulse 1s ease 0s infinite"></div>
+      <div style="width:14px;height:14px;border-radius:50%;background:var(--gold);border:2px solid var(--dark);animation:pulse 1s ease .2s infinite"></div>
+      <div style="width:14px;height:14px;border-radius:50%;background:var(--lav);border:2px solid var(--dark);animation:pulse 1s ease .4s infinite"></div>
+    </div>
+    <div style="font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--dark)" id="loader-txt">Preparando tu recomendación...</div>
+    <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:6px">Un momento — la IA está revisando el catálogo 🎁</div>
+  </div>
+</div>
+
+<!-- Results -->
+<div id="res-wrap" style="display:none;width:100%;max-width:680px;margin:18px 20px 0;position:relative;z-index:1">
+  <div class="res-card">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:20px;border-bottom:2.5px dashed var(--border)">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--gold));border:2.5px solid var(--dark);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:3px 3px 0 var(--dark)">🎁</div>
+      <div>
+        <div style="font-family:'Caveat',cursive;font-size:24px;font-weight:700;line-height:1.2;color:var(--dark)" id="res-nombre">Tu recomendación</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:3px;letter-spacing:.04em;text-transform:uppercase">Regalo personalizado · Dulce Detalle</div>
+      </div>
+    </div>
+    <div id="res-badge" style="margin-bottom:16px"></div>
+    <div id="res-body"></div>
+
+    <svg style="margin:28px 0;display:block" width="100%" height="14" viewBox="0 0 300 14" preserveAspectRatio="none"><path d="M2 7 Q25 2 50 7 Q75 12 100 7 Q125 2 150 7 Q175 12 200 7 Q225 2 250 7 Q275 12 298 7" stroke="#f9c6d0" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+
+    <div id="cita-wrap">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <div style="width:42px;height:42px;border-radius:14px;background:var(--gold-lt);border:2.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:3px 3px 0 var(--dark)">📅</div>
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--dark)">¿Quieres hacer tu pedido?</div>
+          <div style="font-size:12px;font-weight:600;color:var(--muted)">Cuéntanos cuándo y dónde — te contactamos para coordinar</div>
+        </div>
+      </div>
+      <div class="demo-note" style="margin-bottom:18px">
+        <p>🔧 <strong style="color:var(--dark)">Demo:</strong> Estos datos llegan directo al negocio — verás el correo exacto que recibirías tú como dueña cada vez que alguien solicite un pedido.</p>
+      </div>
+      <div class="field"><label class="flabel">¿Cuándo necesitas el regalo?</label><input type="text" id="c-fecha" placeholder="Ej: mañana a las 10am, el sábado por la tarde..."></div>
+      <div class="field"><label class="flabel">Dirección de entrega</label><input type="text" id="c-dir" placeholder="Colonia, calle, referencias..."></div>
+      <div class="field"><label class="flabel">¿Algo más que agregar?</label><textarea id="c-nota" placeholder="Mensaje para la tarjeta, instrucciones especiales..." style="min-height:70px"></textarea></div>
+      <button class="btn btn-primary" style="width:100%;flex:none" onclick="pedido()" id="btn-cita">💌 Solicitar mi pedido</button>
+      <div class="err" id="err-cita" style="margin-top:10px"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentStep=1, selectedModel='claude', selectedPres='';
+
+function goTo(step){
+  if(step>currentStep&&!validate(currentStep))return;
+  document.getElementById('card-'+currentStep).style.display='none';
+  currentStep=step;
+  document.getElementById('card-'+step).style.display='block';
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateProgress(){
+  document.getElementById('pfill').style.width=(currentStep/4*100)+'%';
+  document.getElementById('plbl').textContent='Paso '+currentStep+' de 4';
+  ['~2 min','~1.5 min','~1 min','~30 seg'].forEach((t,i)=>{if(i===currentStep-1)document.getElementById('ptime').textContent=t});
+  for(let i=1;i<=4;i++){
+    const d=document.getElementById('d'+i);
+    d.className='dot'+(i<currentStep?' done':i===currentStep?' active':'');
+  }
+}
+
+function validate(step){
+  if(step===1){
+    const p=document.querySelector('#para-grid .ci.sel'),m=document.querySelector('#motivo-grid .ci.sel');
+    showErr('err-para',!p);showErr('err-motivo',!m);return p&&m;
+  }
+  if(step===2){
+    const t=document.querySelector('#tipo-grid .ci.sel'),c=document.querySelector('#cuando-grid .ci.sel');
+    showErr('err-tipo',!t);showErr('err-cuando',!c);return t&&c;
+  }
+  if(step===3){showErr('err-pres',!selectedPres);return!!selectedPres;}
+  if(step===4){
+    const n=document.getElementById('f-nombre').value.trim(),w=document.getElementById('f-wa').value.trim(),e=document.getElementById('f-email').value.trim();
+    showErr('err-nombre',!n);showErr('err-wa',!w);showErr('err-email',!e||!e.includes('@'));
+    return n&&w&&e&&e.includes('@');
+  }
+  return true;
+}
+
+function showErr(id,show){document.getElementById(id).classList.toggle('show',show);}
+function selectOne(el,gid){document.querySelectorAll('#'+gid+' .ci').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');}
+function selectPres(el,val){document.querySelectorAll('#pres-grid .ppill').forEach(p=>p.classList.remove('sel'));el.classList.add('sel');selectedPres=val;}
+function setModel(m){selectedModel=m;['claude','gemini','groq'].forEach(x=>document.getElementById('m-'+x).classList.toggle('sel',x===m));}
+
+function setTheme(t){
+  const themes={
+    rose:{'--accent':'#e05c72','--rose':'#f9a8b8','--rose-lt':'#fff0f3','--border':'#f9c6d0','--bg':'#fff8f9'},
+    gold:{'--accent':'#d97706','--rose':'#f6c654','--rose-lt':'#fffbec','--border':'#fde68a','--bg':'#fffdf5'},
+    lav:{'--accent':'#7c3aed','--rose':'#c4b5fd','--rose-lt':'#faf5ff','--border':'#ddd6fe','--bg':'#fdfaff'}
+  };
+  Object.entries(themes[t]).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
+  document.querySelectorAll('.theme-dot').forEach((d,i)=>d.classList.toggle('active',['rose','gold','lav'][i]===t));
+}
+
+function buildPerfil(){
+  const presMap={'hasta400':'Hasta $400 MXN','400-800':'$400–$800 MXN','800-1500':'$800–$1,500 MXN','mas1500':'Más de $1,500 MXN'};
+  return `Nombre: ${document.getElementById('f-nombre').value.trim()}
+Para quién: ${document.querySelector('#para-grid .ci.sel')?.textContent.trim()||''}
+Motivo: ${document.querySelector('#motivo-grid .ci.sel')?.textContent.trim()||''}
+Contexto adicional: ${document.getElementById('f-contexto').value.trim()||'(sin contexto adicional)'}
+Tipo de regalo: ${document.querySelector('#tipo-grid .ci.sel')?.textContent.trim()||''}
+Urgencia: ${document.querySelector('#cuando-grid .ci.sel')?.textContent.trim()||''}
+Rango de inversión: ${presMap[selectedPres]||''}`;
+}
+
+async function enviar(){
+  if(!validate(4))return;
+  document.getElementById('card-4').style.display='none';
+  document.getElementById('loader').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  const msgs=['Leyendo tu perfil...','Revisando el catálogo...','Personalizando la recomendación...','Casi listo 🎁'];
+  let li=0;
+  const lt=setInterval(()=>{document.getElementById('loader-txt').textContent=msgs[li++%msgs.length];},1800);
+  try{
+    const res=await fetch('/dulce-detalle/recomendar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({perfil:buildPerfil(),modelo:selectedModel})});
+    const data=await res.json();
+    clearInterval(lt);
+    document.getElementById('loader').style.display='none';
+    if(data.error){alert('Error: '+data.error);document.getElementById('card-4').style.display='block';return;}
+    document.getElementById('res-nombre').textContent=document.getElementById('f-nombre').value.trim();
+    document.getElementById('res-body').innerHTML=data.html||data.texto||'';
+    const badges={claude:'🤖 Claude · Anthropic',gemini:'✨ Gemini · Google',groq:'⚡ Llama · Groq'};
+    const colors={claude:'background:#ebf8ff;border-color:#90cdf4;color:#2b6cb0',gemini:'background:#f0fff4;border-color:#9ae6b4;color:#276749',groq:'background:#faf5ff;border-color:#d6bcfa;color:#553c9a'};
+    document.getElementById('res-badge').innerHTML=`<span class="modelo-badge" style="${colors[selectedModel]}">${badges[selectedModel]}</span>`;
+    document.getElementById('res-wrap').style.display='block';
+    setTimeout(()=>document.getElementById('res-wrap').scrollIntoView({behavior:'smooth'}),100);
+  }catch(e){
+    clearInterval(lt);
+    document.getElementById('loader').style.display='none';
+    document.getElementById('card-4').style.display='block';
+    alert('Error de conexión. Intenta de nuevo.');
+  }
+}
+
+async function pedido(){
+  document.getElementById('btn-cita').disabled=true;
+  document.getElementById('btn-cita').textContent='Enviando...';
+  const presMap={'hasta400':'Hasta $400','400-800':'$400–$800','800-1500':'$800–$1,500','mas1500':'+$1,500'};
+  try{
+    const res=await fetch('/dulce-detalle/cita',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      nombre:document.getElementById('f-nombre').value.trim(),
+      whatsapp:document.getElementById('f-wa').value.trim(),
+      email:document.getElementById('f-email').value.trim(),
+      fecha_entrega:document.getElementById('c-fecha').value.trim(),
+      direccion:document.getElementById('c-dir').value.trim(),
+      notas:document.getElementById('c-nota').value.trim(),
+      para:document.querySelector('#para-grid .ci.sel')?.textContent.trim()||'',
+      motivo:document.querySelector('#motivo-grid .ci.sel')?.textContent.trim()||'',
+      tipo_regalo:document.querySelector('#tipo-grid .ci.sel')?.textContent.trim()||'',
+      presupuesto:presMap[selectedPres]||''
+    })});
+    const data=await res.json();
+    if(data.ok){
+      document.getElementById('cita-wrap').innerHTML=`<div style="text-align:center;padding:24px 0"><div style="font-size:44px;margin-bottom:10px">🎉</div><div style="font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--dark)">¡Solicitud enviada!</div><div style="font-size:14px;font-weight:500;color:var(--muted);margin-top:8px;line-height:1.7">El equipo de Dulce Detalle se pondrá en contacto contigo pronto para coordinar todo 🌸</div></div>`;
+    }else{
+      document.getElementById('err-cita').classList.add('show');
+      document.getElementById('err-cita').textContent='⚠️ '+(data.error||'Hubo un problema al enviar.');
+      document.getElementById('btn-cita').disabled=false;
+      document.getElementById('btn-cita').textContent='💌 Solicitar mi pedido';
+    }
+  }catch(e){
+    document.getElementById('err-cita').classList.add('show');
+    document.getElementById('err-cita').textContent='⚠️ Error de conexión. Intenta de nuevo.';
+    document.getElementById('btn-cita').disabled=false;
+    document.getElementById('btn-cita').textContent='💌 Solicitar mi pedido';
+  }
+}
+</script>
+</body>
+</html>
