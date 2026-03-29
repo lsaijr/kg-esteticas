@@ -537,9 +537,127 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
   .cgrid { grid-template-columns:1fr; }
   .s-title { font-size:26px; }
 }
+
+/* ══ TEMAS ══════════════════════════════════════════════════ */
+body.tema-doodle {
+  --bg:#f0f7ff; --white:#ffffff; --dark:#2d3748; --muted:#718096;
+  --border:#bee3f8; --pink:#fbb6ce; --pink-lt:#fff0f6;
+  --blue:#90cdf4; --blue-lt:#ebf8ff; --mint:#9ae6b4; --mint-lt:#f0fff4;
+  --peach:#fbd38d; --peach-lt:#fffaf0; --lavender:#d6bcfa; --lav-lt:#faf5ff;
+  --accent:#4299e1;
+}
+body.tema-elegante {
+  --bg:#faf8f5; --white:#ffffff; --dark:#1a1a18; --muted:#8a8880;
+  --border:#e8e4de; --pink:#c9a96e; --pink-lt:#fdf8f0;
+  --blue:#c9a96e; --blue-lt:#fdf8f0; --mint:#b5c4b1; --mint-lt:#f5f8f4;
+  --peach:#d4b896; --peach-lt:#fdf6ee; --lavender:#c9a96e; --lav-lt:#fdf8f0;
+  --accent:#b8975a;
+}
+body.tema-oscuro {
+  --bg:#0f0f0f; --white:#1a1a1a; --dark:#f0ede8; --muted:#888;
+  --border:#2a2a2a; --pink:#e8b4b8; --pink-lt:#1f1518;
+  --blue:#7eb8d4; --blue-lt:#111c22; --mint:#7ec8a0; --mint-lt:#111f17;
+  --peach:#d4a574; --peach-lt:#1f1811; --lavender:#a89bc8; --lav-lt:#16131f;
+  --accent:#7eb8d4;
+}
+
+/* Elegante — override borders y sombras */
+body.tema-elegante .card {
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,.06) !important;
+  border-radius: 4px !important;
+}
+body.tema-elegante .card::before { display: none !important; }
+body.tema-elegante .logo-wrap {
+  border: 1px solid var(--border) !important;
+  box-shadow: none !important;
+  border-radius: 3px !important;
+}
+body.tema-elegante .logo { font-family: 'Nunito', sans-serif !important; font-weight: 300 !important; letter-spacing: .2em !important; font-size: 16px !important; text-transform: uppercase !important; }
+body.tema-elegante .logo-dot { display: none !important; }
+body.tema-elegante .s-title { font-family: 'Nunito', sans-serif !important; font-weight: 300 !important; font-size: 22px !important; letter-spacing: .05em !important; }
+body.tema-elegante .s-badge { border-radius: 3px !important; font-weight: 400 !important; letter-spacing: .1em !important; }
+body.tema-elegante .ci { border-radius: 3px !important; box-shadow: none !important; }
+body.tema-elegante .ci.on { box-shadow: none !important; transform: none !important; border-width: 1.5px !important; }
+body.tema-elegante .rf { border-radius: 3px !important; box-shadow: none !important; }
+body.tema-elegante .ri input:checked + .rf { box-shadow: none !important; transform: none !important; }
+body.tema-elegante .btn { border-radius: 3px !important; box-shadow: none !important; font-weight: 500 !important; letter-spacing: .15em !important; text-transform: uppercase !important; font-size: 11px !important; }
+body.tema-elegante .btn-next { box-shadow: none !important; }
+body.tema-elegante .btn-next:hover { transform: none !important; box-shadow: none !important; background: var(--muted) !important; }
+body.tema-elegante .prog-bar { border-radius: 0 !important; border: none !important; height: 2px !important; }
+body.tema-elegante .prog-fill { border-radius: 0 !important; }
+body.tema-elegante .dot { border-radius: 0 !important; width: 8px !important; height: 8px !important; }
+body.tema-elegante .tagline { font-family: 'Nunito', sans-serif !important; font-weight: 300 !important; letter-spacing: .1em !important; font-size: 12px !important; text-transform: uppercase !important; }
+body.tema-elegante .blob-bg { display: none !important; }
+body.tema-elegante input, body.tema-elegante textarea { border-radius: 3px !important; }
+body.tema-elegante .yn-btn { border-radius: 3px !important; }
+body.tema-elegante .yn-btn.on { box-shadow: none !important; }
+body.tema-elegante .doodle-divider { display: none !important; }
+
+/* Oscuro */
+body.tema-oscuro .card { border-color: var(--border) !important; box-shadow: 0 0 0 1px #222 !important; }
+body.tema-oscuro .card::before { background: #2a2020 !important; border-color: #333 !important; }
+body.tema-oscuro input, body.tema-oscuro textarea { background: #111 !important; color: var(--dark) !important; border-color: var(--border) !important; }
+body.tema-oscuro input::placeholder, body.tema-oscuro textarea::placeholder { color: #444 !important; }
+body.tema-oscuro .ci { background: #1a1a1a !important; }
+body.tema-oscuro .rf { background: #1a1a1a !important; }
+body.tema-oscuro .logo-wrap { background: #1a1a1a !important; }
+body.tema-oscuro .prog-bar { background: #222 !important; }
+
+/* ── Theme switcher ── */
+.theme-switcher {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(8px);
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  padding: 6px 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+.theme-dot {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all .2s;
+  position: relative;
+}
+.theme-dot:hover { transform: scale(1.15); }
+.theme-dot.active { border-color: var(--dark); transform: scale(1.1); }
+.theme-dot-doodle { background: linear-gradient(135deg, #fbb6ce, #90cdf4); }
+.theme-dot-elegante { background: linear-gradient(135deg, #c9a96e, #e8e4de); }
+.theme-dot-oscuro { background: linear-gradient(135deg, #1a1a1a, #7eb8d4); }
+.theme-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+@media(max-width:600px){
+  .theme-switcher { top: 10px; left: 10px; padding: 5px 8px; }
+  .theme-dot { width: 16px; height: 16px; }
+  .theme-label { display: none; }
+}
+
 </style>
 </head>
-<body>
+<body class="tema-doodle">
+
+<!-- Theme switcher -->
+<div class="theme-switcher">
+  <span class="theme-label">Tema</span>
+  <div class="theme-dot theme-dot-doodle active" onclick="setTema('doodle')" title="Doodle — colorido"></div>
+  <div class="theme-dot theme-dot-elegante" onclick="setTema('elegante')" title="Elegante — minimalista"></div>
+  <div class="theme-dot theme-dot-oscuro" onclick="setTema('oscuro')" title="Oscuro — moderno"></div>
+</div>
 
 <!-- Background blobs -->
 <svg class="blob-bg blob-tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -563,9 +681,10 @@ textarea::placeholder { color: #cbd5e0; font-weight: 500; }
     <div class="logo-dot" style="background:var(--mint)"></div>
   </div>
   <div class="tagline">✨ Tu evaluación personalizada en 3 minutos</div>
-  <div style="margin-top:10px;background:white;border:2px dashed var(--peach);border-radius:14px;padding:10px 16px;max-width:400px;margin-left:auto;margin-right:auto">
+  <div style="margin-top:10px;background:white;border:2px dashed var(--peach);border-radius:14px;padding:10px 16px;max-width:500px;margin-left:auto;margin-right:auto">
     <p style="font-size:12px;font-weight:700;color:var(--dark);line-height:1.6;text-align:center">
-      💡 <strong>Modo demo</strong> — Para recibir una evaluación precisa y personalizada, te recomendamos responder con tus datos reales.
+      💡 <strong>Modo demo</strong> — Responde con datos reales para recibir una evaluación precisa.<br>
+      <span style="font-weight:500;color:var(--muted)">🎨 Usa los círculos de colores (arriba izquierda) para ver cómo el diseño se adapta a la identidad de tu clínica.</span>
     </p>
   </div>
 </div>
@@ -1270,6 +1389,22 @@ async function submitForm(){
     console.error(e);
   }
 }
+
+// ── Theme switcher ────────────────────────────────────────
+function setTema(tema) {
+  document.body.className = document.body.className
+    .replace(/tema-\w+/g, '').trim() + ' tema-' + tema;
+  document.querySelectorAll('.theme-dot').forEach(function(d) {
+    d.classList.toggle('active', d.classList.contains('theme-dot-' + tema));
+  });
+  try { localStorage.setItem('kg-tema', tema); } catch(e){}
+}
+(function(){
+  try {
+    var saved = localStorage.getItem('kg-tema');
+    if(saved) setTema(saved);
+  } catch(e){}
+})();
 
 updateUI();
 </script>
