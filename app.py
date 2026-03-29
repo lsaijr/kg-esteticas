@@ -72,7 +72,8 @@ def demo_recomendar():
             'EVITA absolutamente: frases genéricas como "¡Hola!", exclamaciones excesivas, emojis en el texto, frases vacías como "es un placer atenderte", lenguaje clínico frío, o recomendaciones que podrían ser para cualquier persona. '
             'BUSCA: oraciones que demuestren que leíste el perfil específico del cliente — menciona su situación real, sus áreas de interés, su nivel de estrés o actividad física cuando sea relevante. Que cada frase aporte algo concreto. '
             'Responde SIEMPRE en HTML simple usando solo estas etiquetas: <p>, <strong>, <ul>, <li>. '
-            'NO uses markdown, NO uses encabezados, NO uses tablas. '
+            'NO uses markdown, NO uses asteriscos (**), NO uses encabezados, NO uses tablas. '
+            'Para resaltar el nombre de un tratamiento usa ÚNICAMENTE la etiqueta HTML <strong>, nunca asteriscos. '
             'Estructura: '
             '1. Abre mencionando el nombre del cliente y una observación específica sobre su perfil que demuestre que lo leíste — algo como reconocer su preocupación principal o su situación particular. '
             '2. Explica brevemente por qué los tratamientos que vas a recomendar tienen sentido para SU caso específico, en lenguaje claro sin tecnicismos. '
@@ -215,9 +216,58 @@ def demo_cita():
 
         print(f'[demo/cita] resend status={r.status_code} body={r.text[:200]}')
 
-        if r.status_code == 200:
-            return jsonify({'ok': True})
-        return jsonify({'ok': False, 'detail': r.text}), 500
+        if r.status_code != 200:
+            return jsonify({'ok': False, 'detail': r.text}), 500
+
+        # ── Correo al paciente ────────────────────────────────
+        email_paciente = d.get('email', '').strip()
+        if email_paciente and d.get('evaluacion_ia'):
+            cuerpo_paciente = f"""
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;color:#2d3748">
+
+<div style="background:linear-gradient(135deg,#fbb6ce,#d6bcfa);padding:28px;border-radius:8px 8px 0 0;text-align:center">
+  <h2 style="margin:0;font-size:22px;color:#2d3748">Tu evaluación personalizada ✨</h2>
+  <p style="margin:8px 0 0;font-size:14px;color:#4a5568">Hola {nombre}, aquí está tu evaluación estética</p>
+</div>
+
+<div style="background:#ffffff;padding:24px 28px;border:1px solid #bee3f8;border-top:none">
+
+  <h3 style="font-size:12px;color:#4299e1;text-transform:uppercase;letter-spacing:.1em;margin:0 0 16px">✨ Recomendaciones para ti</h3>
+  <div style="background:#ebf8ff;border:1px solid #bee3f8;border-radius:8px;padding:16px 20px;font-size:14px;color:#2d3748;line-height:1.8;margin-bottom:24px">
+    {d.get('evaluacion_ia','')}
+  </div>
+
+  <h3 style="font-size:12px;color:#4299e1;text-transform:uppercase;letter-spacing:.1em;margin:0 0 12px">📅 Tu cita solicitada</h3>
+  <table style="font-size:14px;border-collapse:collapse;width:100%;margin-bottom:8px">
+    <tr><td style="padding:5px 0;color:#718096;width:140px">Fecha</td><td style="padding:5px 0"><strong>{d.get('fecha','')}</strong></td></tr>
+    <tr><td style="padding:5px 0;color:#718096">Horario</td><td style="padding:5px 0"><strong>{d.get('horario','')}</strong></td></tr>
+    {f'<tr><td style="padding:5px 0;color:#718096">Nota</td><td style="padding:5px 0">{d.get("nota","")}</td></tr>' if d.get('nota') else ''}
+  </table>
+
+  <p style="font-size:13px;color:#718096;margin-top:20px;line-height:1.7">
+    Nos pondremos en contacto contigo pronto para confirmar tu cita. Si tienes alguna pregunta, no dudes en escribirnos.
+  </p>
+
+</div>
+
+<div style="background:#f0f7ff;padding:14px 28px;border:1px solid #bee3f8;border-top:none;border-radius:0 0 8px 8px;text-align:center">
+  <p style="font-size:11px;color:#718096;margin:0">Tu Estética · Evaluación personalizada con IA</p>
+</div>
+
+</div>
+"""
+            resend_paciente = {
+                'from':    f'Tu Estética <{MAIL_FROM}>',
+                'to':      [email_paciente],
+                'subject': f'{nombre}, aquí está tu evaluación estética personalizada ✨',
+                'html':    cuerpo_paciente
+            }
+            rp = req.post('https://api.resend.com/emails',
+                headers={'Authorization': f'Bearer {RESEND_KEY}', 'Content-Type': 'application/json'},
+                json=resend_paciente, timeout=15)
+            print(f'[demo/cita] paciente email status={rp.status_code}')
+
+        return jsonify({'ok': True})
 
     except Exception as e:
         print(f'[demo/cita] error: {e}')
