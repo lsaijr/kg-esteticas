@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Centro Carvajal — Generar Plan</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#f4f5ef;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.box{background:#fff;border-radius:14px;padding:44px 40px;max-width:460px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.08);text-align:center}
+.logo{width:48px;height:48px;margin:0 auto 16px}
+h2{font-family:Georgia,serif;color:#2d3a2e;font-size:1.7rem;font-weight:400;margin-bottom:6px}
+.sub{color:#7a8a6a;font-size:13px;margin-bottom:28px}
+.zone{border:2px dashed #d4dcc0;border-radius:10px;padding:44px 20px;cursor:pointer;margin-bottom:18px;transition:all .2s;background:#f9faf6}
+.zone:hover{border-color:#b8935a;background:#fdf8f2}
+.zone-icon{font-size:38px;margin-bottom:12px}
+.zone h3{color:#2d3a2e;font-size:1.05rem;margin-bottom:4px;font-family:Georgia,serif}
+.zone span{font-size:12px;color:#9aaa8a}
+#fname{margin-top:10px;font-size:13px;color:#b8935a;font-weight:600;min-height:18px}
+#fi{display:none}
+.btn{width:100%;padding:15px;background:#2d3a2e;color:#f5efe8;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit;letter-spacing:.04em;transition:all .2s}
+.btn:hover:not(:disabled){background:#1a2a1b}
+.btn:disabled{background:#aaa;cursor:not-allowed}
+.btn.gold{background:#b8935a}.btn.gold:hover:not(:disabled){background:#a07840}
+
+/* Progress */
+#progress{display:none;margin-top:24px;text-align:left}
+.steps{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.step{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:8px;font-size:13px;color:#888;background:#f9f9f9;border:1px solid #eee;transition:all .3s}
+.step.active{background:#f0f7e8;border-color:#b8d89a;color:#2d6a2d;font-weight:500}
+.step.done{background:#e8f5e9;border-color:#81c784;color:#2e7d32}
+.step.error{background:#fdecea;border-color:#e57373;color:#c62828}
+.step-icon{font-size:18px;width:26px;text-align:center;flex-shrink:0}
+.pbar-wrap{height:5px;background:#e0e0e0;border-radius:3px;overflow:hidden;margin-bottom:8px}
+.pbar{height:100%;background:linear-gradient(90deg,#b8935a,#d4aa72);border-radius:3px;width:0%;transition:width .6s ease}
+.timer{font-size:11px;color:#bbb;text-align:center}
+
+/* Result */
+#result{display:none;margin-top:20px}
+.result-title{color:#2e7d32;font-weight:600;font-size:15px;margin-bottom:14px}
+.btn-plan{display:block;padding:14px;background:#b8935a;color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:500;margin-bottom:10px;text-align:center;transition:background .2s}
+.btn-plan:hover{background:#a07840}
+.copy-wrap{display:none}
+.missing{background:#fffbf0;border:1px solid #e8d89a;border-radius:6px;padding:12px 14px;margin:10px 0;text-align:left}
+.missing h5{font-size:11px;color:#8a7030;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.missing li{font-size:12px;color:#6a5a20;padding:2px 0;list-style:none;display:flex;align-items:center;gap:6px}
+.missing li::before{content:'○';color:#c4a840}
+.btn-new{width:100%;padding:11px;background:transparent;color:#2d3a2e;border:1px solid #d4dcc0;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;margin-top:6px;transition:background .2s}
+.btn-new:hover{background:#f4f5ef}
+</style>
+</head>
+<body>
+<div class="box">
+  <svg class="logo" viewBox="0 0 48 48" fill="none">
+    <circle cx="24" cy="24" r="22" stroke="#b8935a" stroke-width="1.5"/>
+    <text x="24" y="29" text-anchor="middle" fill="#b8935a" font-family="Georgia,serif" font-size="14" font-weight="600">CC</text>
+  </svg>
+  <h2>Centro Carvajal</h2>
+  <p class="sub">Sube el cuestionario Word para generar el plan personalizado</p>
+
+  <div class="zone" onclick="document.getElementById('fi').click()">
+    <div class="zone-icon">📋</div>
+    <h3>Haz clic para seleccionar</h3>
+    <span>Solo .docx · máx 10 MB</span>
+    <div id="fname"></div>
+  </div>
+  <input type="file" id="fi" accept=".docx">
+  <button class="btn" id="btn" disabled onclick="iniciar()">Generar Plan con IA</button>
+
+  <!-- Progress -->
+  <div id="progress">
+    <div class="steps">
+      <div class="step" id="s1"><span class="step-icon">📄</span><span>Leyendo cuestionario</span></div>
+      <div class="step" id="s2"><span class="step-icon">🧠</span><span>Generando plan con IA...</span></div>
+      <div class="step" id="s3"><span class="step-icon">💾</span><span>Guardando plan</span></div>
+      <div class="step" id="s4"><span class="step-icon">📧</span><span>Enviando correo</span></div>
+    </div>
+    <div class="pbar-wrap"><div class="pbar" id="pbar"></div></div>
+    <div class="timer" id="timer">Esto toma entre 1 y 2 minutos...</div>
+  </div>
+
+  <!-- Result -->
+  <div id="result">
+    <p class="result-title">✅ Plan generado correctamente</p>
+    <a id="planLink" href="#" target="_blank" class="btn-plan">👁 Ver Plan en el navegador</a>
+    <a id="downloadBtn" href="#" download class="btn-plan" style="background:#2d3a2e;margin-top:8px">⬇ Descargar Plan (.html)</a>
+    <div class="copy-wrap">
+      <input class="copy-input" id="copyInput" readonly>
+    </div>
+    <div class="missing" id="missingBox" style="display:none">
+      <h5>Campos sin datos en el cuestionario</h5>
+      <ul id="missingList"></ul>
+    </div>
+    <button class="btn-new" onclick="resetear()">← Generar otro plan</button>
+  </div>
+</div>
+
+<script>
+const fi    = document.getElementById('fi');
+const btn   = document.getElementById('btn');
+const fname = document.getElementById('fname');
+let jobId   = null;
+let poll    = null;
+let secs    = 0;
+let ticker  = null;
+
+fi.addEventListener('change', function() {
+  if (this.files && this.files[0]) {
+    fname.textContent = '📎 ' + this.files[0].name;
+    btn.disabled = false;
+    btn.classList.add('gold');
+  }
+});
+
+async function iniciar() {
+  if (!fi.files || !fi.files[0]) return;
+  btn.disabled = true;
+  document.getElementById('progress').style.display = 'block';
+  setStep(1, 'active');
+  setPbar(10);
+  secs = 0;
+
+  ticker = setInterval(() => {
+    secs++;
+    document.getElementById('timer').textContent = `⏱ ${secs}s transcurridos...`;
+  }, 1000);
+
+  const fd = new FormData();
+  fd.append('docx', fi.files[0]);
+
+  try {
+    const r    = await fetch('/upload', { method:'POST', body:fd });
+    const data = await r.json();
+    if (data.error) throw new Error(data.error);
+    if (!data.jobId) throw new Error('No se obtuvo jobId');
+
+    jobId = data.jobId;
+    setStep(1, 'done');
+    setStep(2, 'active');
+    setPbar(25);
+    poll = setInterval(checkStatus, 4000);
+  } catch(e) {
+    clearInterval(ticker);
+    setStep(1, 'error');
+    alert('Error: ' + e.message);
+    btn.disabled = false;
+    btn.classList.add('gold');
+  }
+}
+
+async function checkStatus() {
+  try {
+    const r    = await fetch('/status?job=' + jobId);
+    const data = await r.json();
+
+    if (data.status === 'working') {
+      const cur = parseInt(document.getElementById('pbar').style.width) || 25;
+      setPbar(Math.min(88, cur + 5));
+      return;
+    }
+
+    if (data.status === 'done') {
+      clearInterval(poll);
+      clearInterval(ticker);
+      setStep(2, 'done');
+      setStep(3, 'done');
+      setStep(4, 'done');
+      setPbar(100);
+
+      setTimeout(() => {
+        document.getElementById('progress').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('planLink').href = data.html_url;
+        document.getElementById('copyInput').value = data.html_url;
+        // Botón descargar: fuerza descarga del HTML
+        const dl = document.getElementById('downloadBtn');
+        dl.href = data.html_url;
+        // Nombre sugerido para la descarga
+        const nombreArchivo = data.html_name || ('Plan_' + (data.nombre || 'Carvajal') + '.html');
+        dl.setAttribute('download', nombreArchivo);
+
+        if (data.faltantes && data.faltantes.length > 0) {
+          const box  = document.getElementById('missingBox');
+          const list = document.getElementById('missingList');
+          list.innerHTML = data.faltantes.map(f => `<li>${f}</li>`).join('');
+          box.style.display = 'block';
+        }
+      }, 500);
+      return;
+    }
+
+    if (data.status === 'error') {
+      clearInterval(poll);
+      clearInterval(ticker);
+      setStep(2, 'error');
+      alert('Error: ' + (data.msg || 'Error desconocido'));
+      btn.disabled = false;
+      btn.classList.add('gold');
+    }
+  } catch(e) { console.error('Polling error:', e); }
+}
+
+
+function setStep(n, state) {
+  const el = document.getElementById('s' + n);
+  el.classList.remove('active','done','error');
+  if (state) el.classList.add(state);
+}
+
+function setPbar(pct) {
+  document.getElementById('pbar').style.width = pct + '%';
+}
+
+function resetear() {
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('progress').style.display = 'none';
+  fname.textContent = '';
+  fi.value = '';
+  btn.disabled = true;
+  btn.classList.remove('gold');
+  [1,2,3,4].forEach(n => setStep(n, null));
+  setPbar(0);
+  jobId = null;
+  document.getElementById('missingBox').style.display = 'none';
+  document.getElementById('timer').textContent = 'Esto toma entre 1 y 2 minutos...';
+}
+</script>
+</body>
+</html>

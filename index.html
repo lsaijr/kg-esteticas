@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centro Carvajal — Método</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#f4f5ef;--warm-white:#fafbf6;--gold:#8fa832;--gold-light:#adc93e;--dark:#2d3a2e;--text:#2d3a2e;--muted:#7a8a6a;--border:#d4dcc0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+
+header{text-align:center;margin-bottom:48px}
+header img{height:72px;width:auto;display:block;margin:0 auto 16px}
+header h1{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,4vw,36px);font-weight:300;color:var(--dark);line-height:1.2}
+header p{margin-top:10px;font-size:13px;color:var(--muted);font-weight:300}
+
+.selector{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:680px;margin-bottom:32px}
+@media(max-width:520px){.selector{grid-template-columns:1fr}}
+
+.option-card{background:var(--warm-white);border:1px solid var(--border);border-radius:4px;padding:36px 28px;cursor:pointer;transition:border-color .2s,box-shadow .2s;text-align:center;user-select:none}
+.option-card:hover{border-color:var(--gold);box-shadow:0 4px 20px rgba(143,168,50,.1)}
+.option-card.active{border-color:var(--gold);box-shadow:0 4px 20px rgba(143,168,50,.12)}
+.option-icon{width:48px;height:48px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(143,168,50,.08);border:1px solid rgba(143,168,50,.2)}
+.option-icon svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.option-card h2{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--dark);margin-bottom:8px}
+.option-card p{font-size:12px;color:var(--muted);font-weight:300;line-height:1.6}
+
+.panel{display:none;width:100%;max-width:480px}
+.panel.active{display:block}
+
+.box{background:var(--warm-white);border:1px solid var(--border);border-radius:4px;padding:40px 36px;box-shadow:0 8px 40px rgba(45,58,46,.07)}
+@media(max-width:480px){.box{padding:28px 20px}}
+
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:24px;background:none;border:none;font-family:inherit;letter-spacing:.06em;transition:color .2s;padding:0}
+.back-btn:hover{color:var(--gold)}
+.back-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5}
+
+.panel-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--dark);margin-bottom:6px}
+.panel-sub{font-size:13px;color:var(--muted);font-weight:300;margin-bottom:28px}
+.divider{width:32px;height:1px;background:var(--gold);margin-bottom:28px}
+
+.zone{border:2px dashed var(--border);border-radius:4px;padding:40px 20px;cursor:pointer;transition:all .2s;background:#f9faf6;text-align:center}
+.zone:hover{border-color:var(--gold);background:rgba(143,168,50,.04)}
+.zone.has-file{border-color:var(--gold);border-style:solid;background:rgba(143,168,50,.04)}
+.zone-icon{font-size:32px;margin-bottom:10px}
+.zone h3{font-family:'Cormorant Garamond',serif;color:var(--dark);font-size:16px;font-weight:400;margin-bottom:4px}
+.zone span{font-size:12px;color:var(--muted)}
+#fname{margin-top:10px;font-size:13px;color:var(--gold);font-weight:500;min-height:18px}
+
+.file-actions{display:none;margin-top:12px;align-items:center;justify-content:space-between;gap:12px}
+.file-actions.visible{display:flex}
+.file-name-display{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.remove-btn{font-size:11px;color:#b94040;cursor:pointer;background:none;border:none;font-family:inherit;letter-spacing:.06em;white-space:nowrap;padding:0;transition:color .2s}
+.remove-btn:hover{color:#8b2020}
+
+.btn{width:100%;padding:14px;border:none;border-radius:2px;font-size:11px;cursor:pointer;font-family:inherit;letter-spacing:.2em;text-transform:uppercase;font-weight:500;transition:all .2s;margin-top:16px}
+.model-btn{flex:1;padding:13px;border:none;border-radius:2px;font-size:11px;cursor:pointer;font-family:inherit;letter-spacing:.15em;text-transform:uppercase;font-weight:500;transition:all .2s}
+.btn-primary{background:var(--dark);color:#f5efe8}
+.btn-primary:hover:not(:disabled){background:#1a2a1b}
+.btn-primary:disabled{background:#aaa;cursor:not-allowed}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-gold:hover:not(:disabled){background:var(--dark)}
+
+#progress{display:none;margin-top:24px}
+.progress-card{background:#f9faf6;border:1px solid var(--border);border-radius:4px;padding:20px;text-align:center}
+.pbar-wrap{height:3px;background:#e4e9d8;border-radius:2px;overflow:hidden;margin-bottom:20px}
+.pbar{height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width .8s ease}
+.steps{display:flex;justify-content:space-between;align-items:flex-start;gap:4px;margin-bottom:20px;position:relative}
+.steps::before{content:'';position:absolute;top:14px;left:14px;right:14px;height:1px;background:var(--border);z-index:0}
+.step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;z-index:1}
+.step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--warm-white);display:flex;align-items:center;justify-content:center;transition:all .35s;flex-shrink:0}
+.step-dot svg{width:12px;height:12px;stroke:var(--border);fill:none;stroke-width:2;transition:all .35s}
+.step-label{font-size:10px;color:var(--muted);letter-spacing:.04em;text-align:center;line-height:1.3;font-weight:400;transition:all .35s}
+.step.active .step-dot{border-color:var(--gold);background:var(--gold)}
+.step.active .step-dot svg{stroke:#fff}
+.step.active .step-label{color:var(--gold);font-weight:500}
+.step.done .step-dot{border-color:var(--gold);background:var(--gold)}
+.step.done .step-dot svg{stroke:#fff}
+.step.done .step-label{color:var(--muted)}
+.step.error .step-dot{border-color:#e57373;background:#fee2e2}
+.step.error .step-dot svg{stroke:#c62828}
+.step.error .step-label{color:#c62828}
+.progress-status{font-size:12px;color:var(--muted);margin-bottom:6px;min-height:18px;transition:all .3s;font-weight:300}
+.progress-status strong{color:var(--dark);font-weight:500}
+.timer{font-size:11px;color:#b0b8a0;letter-spacing:.04em}
+
+#result{display:none;margin-top:20px}
+.result-title{color:#2e7d32;font-weight:500;font-size:14px;margin-bottom:14px}
+.btn-plan{display:block;padding:13px;background:var(--gold);color:#fff;border-radius:2px;text-decoration:none;font-size:12px;font-weight:500;margin-bottom:10px;text-align:center;letter-spacing:.1em;text-transform:uppercase;transition:background .2s}
+.btn-plan:hover{background:var(--dark)}
+.copy-wrap{position:relative;margin:8px 0}
+.copy-input{width:100%;padding:9px 36px 9px 10px;border:1px solid var(--border);border-radius:2px;font-size:11px;color:var(--muted);background:#f9f6f0;cursor:pointer}
+.copy-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--gold)}
+.missing{background:#fffbf0;border:1px solid #e8d89a;border-radius:2px;padding:12px 14px;margin:10px 0;text-align:left}
+.missing h5{font-size:10px;color:#8a7030;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600}
+.missing li{font-size:12px;color:#6a5a20;padding:2px 0;list-style:none;display:flex;align-items:center;gap:6px}
+.missing li::before{content:'○';color:#c4a840}
+.btn-new{width:100%;padding:10px;background:transparent;color:var(--dark);border:1px solid var(--border);border-radius:2px;font-size:11px;cursor:pointer;font-family:inherit;margin-top:6px;letter-spacing:.1em;text-transform:uppercase;transition:background .2s}
+.btn-new:hover{background:var(--cream)}
+
+.link-form{text-align:center;margin-top:16px}
+.link-form a{font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+.link-form a:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://centrocarvajal.com/wp-content/uploads/2023/05/logo-carvajal-300x147.jpg" alt="Centro Carvajal">
+  <h1>Método Carvajal</h1>
+  <p>Sistema de planes personalizados con inteligencia artificial</p>
+</header>
+
+<!-- SELECTOR -->
+<div class="selector" id="selector">
+  <div class="option-card" onclick="showPanel('panel-form')">
+    <div class="option-icon">
+      <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </div>
+    <h2>Llenar formulario</h2>
+    <p>El paciente completa el cuestionario directamente en línea paso a paso.</p>
+  </div>
+  <div class="option-card" onclick="showPanel('panel-docx')">
+    <div class="option-icon">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><polyline points="9 15 12 18 15 15"/></svg>
+    </div>
+    <h2>Subir respuestas</h2>
+    <p>Carga un cuestionario ya completado en formato Word (.docx).</p>
+  </div>
+</div>
+
+<!-- PANEL FORMULARIO -->
+<div class="panel" id="panel-form">
+  <div class="box">
+    <button class="back-btn" onclick="showSelector()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Volver
+    </button>
+    <div class="panel-title">Formulario en línea</div>
+    <div class="panel-sub">Redirigiendo al cuestionario completo del paciente.</div>
+    <div class="divider"></div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px">El formulario guía al paciente por 11 pasos con todas las preguntas necesarias para generar su plan personalizado. Al finalizar, el plan se genera automáticamente y se envía por correo.</p>
+    <a href="/formulario" class="btn btn-gold" style="display:block;text-align:center;text-decoration:none;padding:14px;border-radius:2px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500">Abrir formulario</a>
+  </div>
+</div>
+
+<!-- PANEL DOCX -->
+<div class="panel" id="panel-docx">
+  <div class="box">
+    <button class="back-btn" onclick="showSelector()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Volver
+    </button>
+    <div class="panel-title">Subir cuestionario Word</div>
+    <div class="panel-sub">Carga el archivo .docx con las respuestas del paciente.</div>
+    <div class="divider"></div>
+
+    <div class="zone" id="zone" onclick="triggerFile()">
+      <div class="zone-icon">📋</div>
+      <h3>Haz clic para seleccionar</h3>
+      <span>Solo .docx · máx 10 MB</span>
+      <div id="fname"></div>
+    </div>
+    <input type="file" id="fi" accept=".docx" style="display:none">
+
+    <div class="file-actions" id="file-actions">
+      <span class="file-name-display" id="file-name-display"></span>
+      <button class="remove-btn" onclick="removeFile()">✕ Quitar archivo</button>
+    </div>
+
+    <div id="model-btns" style="display:none;flex-direction:row;gap:6px;margin-top:16px;width:100%">
+      <button id="btn-claude" onclick="iniciar('claude')" style="flex:1;background:var(--dark);color:#f5efe8;padding:12px 4px;border-radius:2px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;cursor:pointer;border:none;transition:all .2s;font-family:inherit">✦ Claude</button>
+      <button id="btn-gemini" onclick="iniciar('gemini')" style="flex:1;background:#1a73e8;color:#fff;padding:12px 4px;border-radius:2px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;cursor:pointer;border:none;transition:all .2s;font-family:inherit">◆ Gemini</button>
+      <button id="btn-groq" onclick="iniciar('groq')" style="flex:1;background:#f55036;color:#fff;padding:12px 4px;border-radius:2px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;cursor:pointer;border:none;transition:all .2s;font-family:inherit">▲ Groq</button>
+    </div>
+    <input type="hidden" id="modelo-sel" value="claude">
+
+    <div id="progress">
+      <div class="progress-card">
+        <div class="pbar-wrap"><div class="pbar" id="pbar"></div></div>
+        <div class="steps">
+          <div class="step" id="s1">
+            <div class="step-dot"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+            <span class="step-label">Leyendo<br>cuestionario</span>
+          </div>
+          <div class="step" id="s2">
+            <div class="step-dot"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg></div>
+            <span class="step-label">Generando<br>con IA</span>
+          </div>
+          <div class="step" id="s3">
+            <div class="step-dot"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg></div>
+            <span class="step-label">Guardando<br>plan</span>
+          </div>
+          <div class="step" id="s4">
+            <div class="step-dot"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <span class="step-label">Enviando<br>correo</span>
+          </div>
+        </div>
+        <div class="progress-status" id="progress-status">Iniciando...</div>
+        <div class="timer" id="timer">⏱ 0s</div>
+      </div>
+    </div>
+
+    <div id="result">
+      <p class="result-title">✅ Plan generado correctamente</p>
+      <a id="planLink" href="#" target="_blank" class="btn-plan">Ver plan completo</a>
+      <div class="copy-wrap">
+        <input class="copy-input" id="copyInput" readonly onclick="copiar()" title="Clic para copiar">
+        <button class="copy-btn" onclick="copiar()" title="Copiar">📋</button>
+      </div>
+      <div class="missing" id="missingBox" style="display:none">
+        <h5>Campos sin datos en el cuestionario</h5>
+        <ul id="missingList"></ul>
+      </div>
+      <button class="btn-new" onclick="resetDocx()">← Subir otro archivo</button>
+    </div>
+
+    <div class="link-form">
+      <a href="/formulario">¿Prefiere usar el formulario en línea?</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Navegación entre pantallas ──
+function showPanel(id) {
+  document.getElementById('selector').style.display = 'none';
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function showSelector() {
+  document.getElementById('selector').style.display = 'grid';
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  resetDocxUI();
+}
+
+// ── Manejo del archivo .docx ──
+const fi    = document.getElementById('fi');
+const btnUp = document.getElementById('btn-upload'); // puede ser null si se usan botones de modelo
+
+function triggerFile() {
+  // Solo abre el selector si no hay archivo ya cargado
+  if (!fi.files || !fi.files[0]) fi.click();
+}
+
+fi.addEventListener('change', function() {
+  if (this.files && this.files[0]) {
+    const name = this.files[0].name;
+    // Mostrar nombre en zona
+    document.getElementById('fname').textContent = '📎 ' + name;
+    document.getElementById('zone').classList.add('has-file');
+    // Mostrar barra de acciones con nombre y botón quitar
+    document.getElementById('file-name-display').textContent = name;
+    document.getElementById('file-actions').classList.add('visible');
+    // Mostrar botones de modelo
+    const mb = document.getElementById('model-btns');
+    mb.style.display = 'flex';
+    mb.style.flexDirection = 'row';
+  }
+});
+
+function removeFile() {
+  fi.value = '';
+  document.getElementById('fname').textContent = '';
+  document.getElementById('zone').classList.remove('has-file');
+  document.getElementById('file-actions').classList.remove('visible');
+  document.getElementById('file-name-display').textContent = '';
+  document.getElementById('model-btns').style.display = 'none';
+  document.querySelectorAll('#model-btns .btn').forEach(b => { b.disabled = false; b.style.opacity = '1'; });
+}
+
+// ── Upload y polling ──
+let jobId = null;
+let poll  = null;
+let secs  = 0;
+let ticker = null;
+
+async function iniciar(modelo) {
+  if (!fi.files || !fi.files[0]) return;
+  modelo = modelo || 'claude';
+  document.getElementById('modelo-sel').value = modelo;
+  // Disable both buttons
+  document.querySelectorAll('#model-btns .btn').forEach(b => { b.disabled = true; b.style.opacity = '.5'; });
+  document.getElementById('progress').style.display = 'block';
+  setStep(1, 'active');
+  setPbar(10);
+  secs = 0;
+  ticker = setInterval(() => {
+    secs++;
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    const timeStr = m > 0 ? m + 'min ' + String(s).padStart(2,'0') + 's' : s + 's';
+    document.getElementById('timer').textContent = '⏱ ' + timeStr + ' transcurridos...';
+  }, 1000);
+
+  const fd = new FormData();
+  fd.append('docx', fi.files[0]);
+  fd.append('modelo', modelo);
+
+  try {
+    const r    = await fetch('/upload', {method:'POST', body:fd});
+    const data = await r.json();
+    if (data.error) throw new Error(data.error);
+    if (!data.jobId) throw new Error('No se obtuvo jobId');
+
+    jobId = data.jobId;
+    setStep(1, 'done');
+    setStep(2, 'active');
+    setPbar(25);
+    poll = setInterval(checkStatus, 4000);
+  } catch(e) {
+    clearInterval(ticker);
+    setStep(1, 'error');
+    alert('Error: ' + e.message);
+    btnUp.disabled = false;
+  }
+}
+
+async function checkStatus() {
+  try {
+    const r    = await fetch('/status?job=' + jobId);
+    const data = await r.json();
+
+    if (data.status === 'working') {
+      if (data.pct) setPbar(data.pct);
+      if (data.msg) {
+        const st = document.getElementById('progress-status');
+        if (st) {
+          if (data.msg.includes('1/3')) {
+            st.innerHTML = '<strong>Sección 1 / 3</strong> — Portada, diagnóstico y rutina';
+            setStep(2, 'active');
+          } else if (data.msg.includes('2/3')) {
+            st.innerHTML = '<strong>Sección 2 / 3</strong> — Nutrición, ejercicio y bienestar mental';
+          } else if (data.msg.includes('3/3')) {
+            st.innerHTML = '<strong>Sección 3 / 3</strong> — Sueño, tratamientos y compromiso';
+          } else {
+            st.textContent = data.msg;
+          }
+        }
+      }
+      return;
+    }
+
+    if (data.status === 'done') {
+      clearInterval(poll);
+      clearInterval(ticker);
+      setStep(2, 'done');
+      setStep(3, 'done');
+      setStep(4, 'done');
+      setPbar(100);
+      const st = document.getElementById('progress-status');
+      if (st) st.innerHTML = '<strong>Plan generado</strong> — listo para revisar';
+      setTimeout(() => {
+        document.getElementById('progress').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('planLink').href = data.html_url;
+        document.getElementById('copyInput').value = data.html_url;
+        if (data.faltantes && data.faltantes.length > 0) {
+          const box  = document.getElementById('missingBox');
+          const list = document.getElementById('missingList');
+          list.innerHTML = data.faltantes.map(f => '<li>' + f + '</li>').join('');
+          box.style.display = 'block';
+        }
+      }, 500);
+      return;
+    }
+
+    if (data.status === 'error') {
+      clearInterval(poll);
+      clearInterval(ticker);
+      setStep(2, 'error');
+      alert('Error: ' + (data.msg || 'Error desconocido'));
+      if(btnUp) btnUp.disabled = false;
+      document.querySelectorAll('#model-btns .btn').forEach(b=>{b.disabled=false;b.style.opacity='1';});
+    }
+  } catch(e) { console.error('Polling error:', e); }
+}
+
+function copiar() {
+  const input = document.getElementById('copyInput');
+  input.select();
+  navigator.clipboard.writeText(input.value).then(() => {
+    document.querySelector('.copy-btn').textContent = '✅';
+    setTimeout(() => { document.querySelector('.copy-btn').textContent = '📋'; }, 2000);
+  });
+}
+
+function setStep(n, state) {
+  const el = document.getElementById('s' + n);
+  if (!el) return;
+  el.classList.remove('active','done','error');
+  if (state) el.classList.add(state);
+}
+function setPbar(pct) {
+  document.getElementById('pbar').style.width = pct + '%';
+}
+
+function resetDocxUI() {
+  removeFile();
+  document.getElementById('progress').style.display = 'none';
+  document.getElementById('result').style.display = 'none';
+  [1,2,3,4].forEach(n => setStep(n, null));
+  setPbar(0);
+  jobId = null;
+  document.getElementById('missingBox').style.display = 'none';
+  document.getElementById('timer').textContent = 'Esto toma entre 1 y 2 minutos...';
+}
+
+function resetDocx() {
+  resetDocxUI();
+  document.getElementById('progress').style.display = 'none';
+  document.getElementById('result').style.display = 'none';
+}
+</script>
+</body>
+</html>

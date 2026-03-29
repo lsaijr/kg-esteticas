@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación Estética — Centro Bella</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #f0f7ff;
+  --white:    #ffffff;
+  --dark:     #2d3748;
+  --muted:    #718096;
+  --border:   #bee3f8;
+  --pink:     #fbb6ce;
+  --pink-lt:  #fff0f6;
+  --blue:     #90cdf4;
+  --blue-lt:  #ebf8ff;
+  --mint:     #9ae6b4;
+  --mint-lt:  #f0fff4;
+  --peach:    #fbd38d;
+  --peach-lt: #fffaf0;
+  --lavender: #d6bcfa;
+  --lav-lt:   #faf5ff;
+  --accent:   #4299e1;
+  --r:        16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 80px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Background doodle blobs ── */
+.blob-bg {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+}
+.blob-tl { top: -60px; left: -60px; width: 280px; opacity: .55; }
+.blob-tr { top: -40px; right: -50px; width: 220px; opacity: .45; }
+.blob-bl { bottom: 20px; left: -40px; width: 200px; opacity: .4; }
+.blob-br { bottom: -30px; right: -60px; width: 260px; opacity: .5; }
+
+/* ── Header ── */
+.header {
+  width: 100%;
+  max-width: 540px;
+  padding: 32px 24px 0;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border: 2.5px solid var(--dark);
+  border-radius: 50px;
+  padding: 8px 20px;
+  box-shadow: 4px 4px 0 var(--dark);
+}
+.logo {
+  font-family: 'Caveat', cursive;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: .02em;
+}
+.logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--pink); border: 2px solid var(--dark); }
+
+.tagline {
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  color: var(--muted);
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* ── Progress ── */
+.prog-wrap {
+  width: 100%;
+  max-width: 540px;
+  padding: 22px 24px 0;
+  position: relative;
+  z-index: 1;
+}
+.prog-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.prog-lbl {
+  font-family: 'Caveat', cursive;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--dark);
+}
+.prog-bar {
+  width: 100%;
+  height: 10px;
+  background: white;
+  border: 2px solid var(--dark);
+  border-radius: 50px;
+  overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink) 0%, var(--blue) 100%);
+  border-radius: 50px;
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+}
+.dots {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 0 4px;
+}
+.dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: white;
+  border: 2.5px solid var(--border);
+  transition: all .3s;
+}
+.dot.active {
+  background: var(--accent);
+  border-color: var(--dark);
+  transform: scale(1.3);
+  box-shadow: 0 0 0 3px rgba(66,153,225,.2);
+}
+.dot.done {
+  background: var(--mint);
+  border-color: var(--dark);
+}
+
+/* ── Card ── */
+.card {
+  width: calc(100% - 48px);
+  max-width: 540px;
+  background: white;
+  border: 2.5px solid var(--dark);
+  border-radius: 24px;
+  margin-top: 20px;
+  padding: 32px 28px;
+  box-shadow: 6px 6px 0 var(--dark);
+  animation: popIn .4s cubic-bezier(.34,1.56,.64,1) both;
+  position: relative;
+  z-index: 1;
+}
+@keyframes popIn {
+  from { opacity:0; transform:translateY(16px) scale(.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* Card accent blob top-right */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -12px; right: 20px;
+  width: 40px; height: 40px;
+  background: var(--peach);
+  border: 2px solid var(--dark);
+  border-radius: 50% 50% 50% 20%;
+  transform: rotate(20deg);
+}
+
+.s-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blue-lt);
+  border: 2px solid var(--blue);
+  border-radius: 50px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
+  letter-spacing: .03em;
+}
+.s-title {
+  font-family: 'Caveat', cursive;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--dark);
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.s-sub {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.doodle-divider {
+  margin-bottom: 24px;
+}
+
+/* ── Fields ── */
+.field { margin-bottom: 22px; }
+.flabel {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 10px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.req { color: #e53e3e; }
+
+input[type=text],input[type=email],input[type=tel],input[type=date] {
+  width: 100%;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--dark);
+  background: var(--bg);
+  border: 2.5px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  outline: none;
+  transition: all .2s;
+  -webkit-appearance: none;
+}
+input:focus { border-color: var(--accent); background: white; box-shadow: 0 0 0 3px rgba(66,153,225,.15); }
+input::placeholder { color: #cbd5e0; font-weight: 500; }
+
+/* Radio pills */
+.rgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.rgrid.c1 { grid-template-columns: 1fr; }
+.rgrid.c3 { grid-template-columns: 1fr 1fr; } /* 2 cols on mobile for gender */
+
+.ri { position: relative; cursor: pointer; }
+.ri input { position: absolute; opacity:0; width:0; height:0; }
+.rf {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 2.5px solid var(--border);
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dark);
+  background: white;
+  transition: all .2s;
+  line-height: 1.3;
+  cursor: pointer;
+}
+.ri input:checked + .rf {
+  border-color: var(--accent);
+  background: var(--blue-lt);
+  box-shadow: 3px 3px 0 var(--accent);
+  transform: translateY(-1px);
+}
+.rf .em { font-size: 18px; flex-shrink: 0; }
+.rf .dt {
+  width: 16px; height: 16px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-left: auto;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.ri input:checked + .rf .dt {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.ri input:checked + .rf .dt::after {
+  content: '';
+  width: 6px; height: 6px;
+  background: white;
+  border-radius: 50%;
+}
+
+/* Checkboxes */
+.cgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cgrid.c1 { grid-template-columns: 1fr; }
+.ci {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 2.5px solid var(--border);
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  background: white;
+  user-select: none;
+  line-height: 1.3;
+  color: var(--dark);
+}
+.ci.on {
+  border-color: var(--accent);
+  background: var(--blue-lt);
+  box-shadow: 3px 3px 0 var(--accent);
+  transform: translateY(-1px);
+}
+.cb {
+  width: 18px; height: 18px;
+  border: 2.5px solid var(--border);
+  border-radius: 6px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+  background: white;
+}
+.ci.on .cb { background: var(--accent); border-color: var(--accent); }
+.ci.on .cb::after {
+  content: '';
+  width: 9px; height: 6px;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(-45deg) translateY(-1px);
+  display: block;
+}
+
+/* YN */
+.yn-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 2px dashed var(--border);
+}
+.yn-row:first-child { border-top: 2px dashed var(--border); }
+.yn-lbl { font-size: 14px; font-weight: 600; flex: 1; padding-right: 16px; line-height: 1.4; color: var(--dark); }
+.yn-btns { display: flex; gap: 8px; flex-shrink: 0; }
+.yn-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border: 2.5px solid var(--border);
+  border-radius: 50px;
+  background: white;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .2s;
+}
+.yn-btn.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  box-shadow: 2px 2px 0 var(--dark);
+}
+
+/* Range */
+.rv {
+  text-align: center;
+  font-family: 'Caveat', cursive;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+  line-height: 1;
+}
+.rlabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-top: 8px;
+}
+input[type=range] {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 8px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  outline: none;
+  padding: 0;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2.5px solid var(--dark);
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--dark);
+}
+
+/* Conditional */
+.cond { display: none; margin-top: 14px; }
+.cond.show { display: block; }
+
+/* Textarea */
+textarea {
+  width: 100%;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+  background: var(--bg);
+  border: 2.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  outline: none;
+  resize: none;
+  min-height: 85px;
+  transition: all .2s;
+  line-height: 1.6;
+}
+textarea:focus { border-color: var(--accent); background: white; box-shadow: 0 0 0 3px rgba(66,153,225,.15); }
+textarea::placeholder { color: #cbd5e0; font-weight: 500; }
+
+/* Nota */
+.nota {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Error */
+.err { font-size: 13px; font-weight: 700; color: #e53e3e; margin-top: 10px; display: none; }
+.err.show { display: block; }
+
+/* Nav */
+.nav {
+  width: calc(100% - 48px);
+  max-width: 540px;
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  position: relative;
+  z-index: 1;
+}
+.btn {
+  flex: 1;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 16px 20px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all .2s;
+  border: 2.5px solid var(--dark);
+  letter-spacing: .02em;
+}
+.btn-back {
+  background: white;
+  color: var(--dark);
+  flex: 0 0 auto;
+  padding: 16px 20px;
+  box-shadow: 3px 3px 0 var(--dark);
+}
+.btn-back:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 var(--dark); }
+.btn-next {
+  background: var(--dark);
+  color: white;
+  box-shadow: 4px 4px 0 var(--accent);
+}
+.btn-next:hover { transform: translateY(-2px); box-shadow: 5px 5px 0 var(--accent); }
+.btn-submit {
+  background: linear-gradient(135deg, var(--pink) 0%, var(--lavender) 100%);
+  color: var(--dark);
+  box-shadow: 4px 4px 0 var(--dark);
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 5px 5px 0 var(--dark); }
+
+/* ── AI Result styles ── */
+#res-body p { margin-bottom: 14px; font-weight: 500; line-height: 1.8; }
+#res-body p:last-child { margin-bottom: 0; }
+#res-body strong { font-weight: 800; color: var(--dark); }
+#res-body ul { list-style: none; padding: 0; margin: 14px 0; }
+#res-body ul li {
+  display: block;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  background: var(--blue-lt);
+  border: 2.5px solid var(--blue);
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.7;
+  box-shadow: 3px 3px 0 var(--blue);
+  position: relative;
+  padding-left: 44px;
+}
+#res-body ul li::before {
+  content: '✨';
+  font-size: 16px;
+  position: absolute;
+  left: 14px;
+  top: 16px;
+}
+#res-body ul li strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+
+/* Cita btn hover */
+#cita-btn:hover { transform: translateY(-2px) !important; box-shadow: 5px 5px 0 var(--dark) !important; }
+
+/* ── Pulse animation ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
+@keyframes pulse { 0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1)} }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ── Mobile ── */
+@media(max-width:400px){
+  .card { width:calc(100% - 32px); padding:24px 18px; }
+  .nav  { width:calc(100% - 32px); }
+  .prog-wrap { padding:18px 16px 0; }
+  .header { padding:24px 16px 0; }
+  .rgrid { grid-template-columns:1fr; }
+  .cgrid { grid-template-columns:1fr; }
+  .s-title { font-size:26px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background blobs -->
+<svg class="blob-bg blob-tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="#fbb6ce" d="M44.7,-76.4C57.5,-69.8,67.5,-57.2,74.8,-43.1C82.1,-29,86.7,-14.5,84.9,-1C83.1,12.5,74.9,25,65.4,35.7C55.9,46.4,45.2,55.3,32.8,62.1C20.4,68.9,6.3,73.6,-7.4,72.9C-21,72.2,-34.2,66,-44.5,57.2C-54.8,48.4,-62.3,37,-67.8,24.2C-73.3,11.5,-76.8,-2.6,-73.8,-15.3C-70.8,-28,-61.3,-39.4,-50,-47.7C-38.7,-56,-24.3,-61.2,-9.7,-64.6C4.9,-68,31.9,-83,44.7,-76.4Z" transform="translate(100 100)"/>
+</svg>
+<svg class="blob-bg blob-tr" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="#90cdf4" d="M47.7,-73C60.9,-66.5,69.7,-51.4,75.4,-35.7C81.2,-20,83.9,-3.7,80.8,11.2C77.7,26.1,68.8,39.6,57.9,50.9C47,62.2,34.2,71.3,19.7,75.8C5.2,80.3,-11,80.2,-25.4,75.1C-39.8,70,-52.4,59.9,-60.7,47.2C-69,34.5,-73,19.2,-73.7,3.5C-74.4,-12.2,-71.8,-28.4,-63.3,-41.1C-54.8,-53.8,-40.4,-63,-26.1,-69.1C-11.8,-75.2,2.4,-78.2,16.5,-77C30.6,-75.8,34.5,-79.5,47.7,-73Z" transform="translate(100 100)"/>
+</svg>
+<svg class="blob-bg blob-bl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="#9ae6b4" d="M39.5,-65.3C50.9,-59.8,59.8,-48.5,66.4,-35.8C73,-23.1,77.3,-9,75.8,4.4C74.3,17.8,67,30.5,57.8,41.8C48.6,53.1,37.5,63,24.5,68.9C11.5,74.8,-3.4,76.7,-17.5,73.2C-31.6,69.7,-44.9,60.8,-54.8,49.1C-64.7,37.4,-71.2,22.9,-72.8,7.8C-74.4,-7.3,-71.2,-23,-63.5,-35.9C-55.8,-48.8,-43.7,-58.9,-30.7,-64C-17.7,-69.1,-3.8,-69.2,8.7,-68.5C21.2,-67.8,28.1,-70.8,39.5,-65.3Z" transform="translate(100 100)"/>
+</svg>
+<svg class="blob-bg blob-br" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="#d6bcfa" d="M42.7,-72.5C54.9,-66.3,63.9,-53.2,70.1,-38.9C76.3,-24.6,79.7,-9.1,77.8,5.7C75.9,20.5,68.7,34.6,59.1,46.5C49.5,58.4,37.5,68.1,23.6,73.2C9.7,78.3,-6.1,78.8,-21.2,74.7C-36.3,70.6,-50.7,61.9,-60.2,49.8C-69.7,37.7,-74.3,22.2,-75.7,5.9C-77.1,-10.4,-75.3,-27.5,-67.3,-40.8C-59.3,-54.1,-45.1,-63.6,-30.9,-69.7C-16.7,-75.8,-2.5,-78.5,11.7,-78.4C25.9,-78.3,30.5,-78.7,42.7,-72.5Z" transform="translate(100 100)"/>
+</svg>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-dot"></div>
+    <div class="logo">Centro Bella</div>
+    <div class="logo-dot" style="background:var(--mint)"></div>
+  </div>
+  <div class="tagline">✨ Tu evaluación personalizada en 3 minutos</div>
+</div>
+
+<!-- Progress -->
+<div class="prog-wrap">
+  <div class="prog-meta">
+    <span class="prog-lbl" id="plbl">Paso 1 de 5</span>
+    <span class="prog-lbl" id="ptime" style="color:var(--muted)">~3 min</span>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:20%"></div></div>
+  <div class="dots">
+    <div class="dot" id="d1"></div>
+    <div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div>
+    <div class="dot" id="d4"></div>
+    <div class="dot" id="d5"></div>
+  </div>
+</div>
+
+<!-- ═══ PASO 1 ═══ -->
+<div class="card" id="card-1" style="display:none">
+  <div class="s-badge">👋 Empecemos</div>
+  <div class="s-title">Cuéntanos sobre ti</div>
+  <div class="s-sub">Información básica para personalizar tu evaluación.</div>
+  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#fbb6ce" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+
+  <div class="field">
+    <label class="flabel">Nombre completo <span class="req">*</span></label>
+    <input type="text" id="f-nombre" placeholder="Tu nombre y apellidos">
+  </div>
+
+  <div class="field">
+    <label class="flabel">¿En qué rango de edad estás? <span class="req">*</span></label>
+    <div class="rgrid">
+      <label class="ri"><input type="radio" name="edad" value="18-25"><div class="rf"><span class="em">🌱</span>18–25 años<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="edad" value="26-35"><div class="rf"><span class="em">✨</span>26–35 años<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="edad" value="36-45"><div class="rf"><span class="em">🌿</span>36–45 años<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="edad" value="46-55"><div class="rf"><span class="em">🌸</span>46–55 años<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="edad" value="55+"><div class="rf"><span class="em">💎</span>55+ años<div class="dt"></div></div></label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="flabel">Género <span class="req">*</span></label>
+    <div class="rgrid">
+      <label class="ri"><input type="radio" name="genero" value="mujer" onchange="onGenero('mujer')">
+        <div class="rf" style="justify-content:center;flex-direction:column;gap:6px;padding:16px;text-align:center">
+          <span style="font-size:28px">♀️</span><span>Mujer</span><div class="dt" style="margin:0 auto"></div>
+        </div>
+      </label>
+      <label class="ri"><input type="radio" name="genero" value="hombre" onchange="onGenero('hombre')">
+        <div class="rf" style="justify-content:center;flex-direction:column;gap:6px;padding:16px;text-align:center">
+          <span style="font-size:28px">♂️</span><span>Hombre</span><div class="dt" style="margin:0 auto"></div>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <div class="cond" id="cond-mujer">
+    <div style="background:var(--pink-lt);border:2px dashed var(--pink);border-radius:16px;padding:4px 12px">
+      <div class="yn-row" style="border:none!important">
+        <span class="yn-lbl">¿Estás embarazada o en lactancia?</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="ynClick(this)">Sí</button>
+          <button class="yn-btn" onclick="ynClick(this)">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="err" id="err-1">⚠️ Por favor completa todos los campos.</div>
+</div>
+
+<!-- ═══ PASO 2 ═══ -->
+<div class="card" id="card-2" style="display:none">
+  <div class="s-badge">🎯 Tus metas</div>
+  <div class="s-title">¿Qué quieres mejorar?</div>
+  <div class="s-sub">Selecciona hasta 2 áreas prioritarias.</div>
+  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#90cdf4" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+
+  <div class="field">
+    <div class="cgrid c1" id="areas-grid">
+      <div class="ci" onclick="toggleArea(this,'rostro')"><div class="cb"></div>🧴 Rostro — manchas, arrugas, poros, flacidez</div>
+      <div class="ci" onclick="toggleArea(this,'cuerpo')"><div class="cb"></div>💪 Cuerpo — grasa localizada, celulitis, flacidez</div>
+      <div class="ci" onclick="toggleArea(this,'piel')"><div class="cb"></div>✨ Piel — hidratación, textura, luminosidad</div>
+      <div class="ci" onclick="toggleArea(this,'vello')"><div class="cb"></div>🪒 Depilación — reducción o eliminación de vello</div>
+      <div class="ci" onclick="toggleArea(this,'capilar')"><div class="cb"></div>💇 Capilar — caída, densidad, cuero cabelludo</div>
+    </div>
+    <p class="nota">👆 Máximo 2 áreas</p>
+  </div>
+  <div class="err" id="err-2">⚠️ Selecciona al menos un área.</div>
+</div>
+
+<!-- ═══ PASO 3 ═══ -->
+<div class="card" id="card-3" style="display:none">
+  <div class="s-badge">🔍 Más detalles</div>
+  <div class="s-title">Cuéntanos más</div>
+  <div class="s-sub">Detalles específicos para recomendarte mejor.</div>
+  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#9ae6b4" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+
+  <div id="det-rostro" style="display:none">
+    <div class="field">
+      <label class="flabel">¿Qué describe tu piel facial?</label>
+      <div class="cgrid">
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Manchas / melasma</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Arrugas / líneas</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Poros dilatados</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Flacidez facial</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Acné / cicatrices</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Ojeras / bolsas</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Piel opaca / sin brillo</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Piel sensible / rojeces</div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="flabel">Tono de piel</label>
+      <div class="rgrid">
+        <label class="ri"><input type="radio" name="tono"><div class="rf">☀️ Muy clara<div class="dt"></div></div></label>
+        <label class="ri"><input type="radio" name="tono"><div class="rf">🌤️ Clara<div class="dt"></div></div></label>
+        <label class="ri"><input type="radio" name="tono"><div class="rf">🌿 Morena clara<div class="dt"></div></div></label>
+        <label class="ri"><input type="radio" name="tono"><div class="rf">🌑 Morena oscura<div class="dt"></div></div></label>
+      </div>
+    </div>
+  </div>
+  <div id="det-cuerpo" style="display:none">
+    <div class="field">
+      <label class="flabel">¿Qué zona corporal te preocupa?</label>
+      <div class="cgrid">
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Abdomen</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Piernas / muslos</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Brazos</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Glúteos / caderas</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Espalda / flancos</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Cuerpo en general</div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="flabel">¿Qué quieres mejorar?</label>
+      <div class="cgrid c1">
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Reducir grasa localizada</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Mejorar celulitis</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Tonificar y reafirmar</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Mejorar contorno corporal</div>
+      </div>
+    </div>
+  </div>
+  <div id="det-vello" style="display:none">
+    <div class="field">
+      <label class="flabel">¿En qué zonas?</label>
+      <div class="cgrid">
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Rostro</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Axilas</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Piernas</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Zona brasileña</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Brazos</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Cuerpo completo</div>
+      </div>
+    </div>
+  </div>
+  <div id="det-piel" style="display:none">
+    <div class="field">
+      <label class="flabel">¿Qué te preocupa de tu piel?</label>
+      <div class="cgrid c1">
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Hidratación y luminosidad</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Textura irregular</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Manchas en cuerpo</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Piel sensible / reactiva</div>
+      </div>
+    </div>
+  </div>
+  <div id="det-capilar" style="display:none">
+    <div class="field">
+      <label class="flabel">¿Tu situación capilar?</label>
+      <div class="cgrid c1">
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Caída excesiva de cabello</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Cabello sin volumen / densidad</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Cuero cabelludo graso o con caspa</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Entradas / alopecia localizada</div>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label class="flabel">Tu mayor preocupación <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted)">(opcional)</span></label>
+    <textarea id="f-prioridad" placeholder="Cuéntanos con tus palabras qué te gustaría mejorar..."></textarea>
+  </div>
+</div>
+
+<!-- ═══ PASO 4 ═══ -->
+<div class="card" id="card-4" style="display:none">
+  <div class="s-badge">💡 Tus hábitos</div>
+  <div class="s-title">Un poco sobre ti</div>
+  <div class="s-sub">Nos ayuda a darte recomendaciones más precisas.</div>
+  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#d6bcfa" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+
+  <div class="field">
+    <div style="background:var(--lav-lt);border:2.5px dashed var(--lavender);border-radius:16px;padding:4px 14px">
+      <div class="yn-row" style="border:none!important;border-bottom:2px dashed var(--lavender)!important">
+        <span class="yn-lbl">¿Has tenido tratamientos estéticos antes?</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="ynClick(this);showCond('cond-trat',true)">Sí</button>
+          <button class="yn-btn" onclick="ynClick(this);showCond('cond-trat',false)">No</button>
+        </div>
+      </div>
+    </div>
+    <div class="cond" id="cond-trat">
+      <div class="cgrid c1" style="margin-top:12px">
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Botox / toxina botulínica</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Rellenos dérmicos</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Radiofrecuencia</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Depilación láser / IPL</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Peeling / limpieza facial</div>
+        <div class="ci" onclick="toggleCheck(this)"><div class="cb"></div>Reducción de grasa</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="flabel">Actividad física</label>
+    <div class="rgrid c1">
+      <label class="ri"><input type="radio" name="ejercicio"><div class="rf">😴 No hago ejercicio regularmente<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="ejercicio"><div class="rf">🚶 1–2 veces por semana<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="ejercicio"><div class="rf">🏃 3 o más veces por semana<div class="dt"></div></div></label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="flabel">Nivel de estrés diario</label>
+    <div class="rv" id="estres-v">5</div>
+    <input type="range" min="1" max="10" value="5" oninput="document.getElementById('estres-v').textContent=this.value">
+    <div class="rlabels"><span>😌 Tranquilo/a</span><span>😰 Muy estresado/a</span></div>
+  </div>
+
+  <div class="field">
+    <label class="flabel">¿Cuándo necesitas ver resultados?</label>
+    <div class="rgrid c1">
+      <label class="ri"><input type="radio" name="urgencia"><div class="rf">⚡ Tengo un evento próximo (este mes)<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="urgencia"><div class="rf">📅 En los próximos 1–3 meses<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="urgencia"><div class="rf">🎯 Transformación a largo plazo<div class="dt"></div></div></label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="flabel">Presupuesto aproximado mensual</label>
+    <div class="rgrid c1">
+      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💛 Básico — hasta $100<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💛💛 Moderado — $100 a $300<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💛💛💛 Completo — $300 a $600<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="presupuesto"><div class="rf">💎 Premium — más de $600<div class="dt"></div></div></label>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PASO 5 ═══ -->
+<div class="card" id="card-5" style="display:none">
+  <div class="s-badge">📬 Último paso</div>
+  <div class="s-title">¡Casi listo!</div>
+  <div class="s-sub">¿Dónde enviamos tu evaluación personalizada?</div>
+  <svg class="doodle-divider" width="80" height="14" viewBox="0 0 80 14"><path d="M2 7 Q10 2 20 7 Q30 12 40 7 Q50 2 60 7 Q70 12 78 7" stroke="#fbd38d" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+
+  <div class="field">
+    <label class="flabel">Correo electrónico <span class="req">*</span></label>
+    <input type="email" id="f-email" placeholder="tu@correo.com">
+  </div>
+  <div class="field">
+    <label class="flabel">WhatsApp</label>
+    <input type="tel" id="f-tel" placeholder="+507 6000-0000">
+  </div>
+  <div class="field">
+    <label class="flabel">¿Cómo nos conociste?</label>
+    <div class="rgrid c1">
+      <label class="ri"><input type="radio" name="ref"><div class="rf">📱 Instagram / redes sociales<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="ref"><div class="rf">👥 Recomendación de amigo/a<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="ref"><div class="rf">🔍 Google / búsqueda web<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="ref"><div class="rf">📍 Pasé por aquí<div class="dt"></div></div></label>
+    </div>
+  </div>
+  <div class="field">
+    <label class="flabel">Generar evaluación con <span class="req">*</span></label>
+    <div class="rgrid c1">
+      <label class="ri"><input type="radio" name="ia-model" value="claude"><div class="rf"><span class="em">✦</span>Claude — Anthropic<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="ia-model" value="gemini"><div class="rf"><span class="em">◆</span>Gemini — Google<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="ia-model" value="groq"><div class="rf"><span class="em">▲</span>Llama — Groq<div class="dt"></div></div></label>
+    </div>
+  </div>
+  <p class="nota" style="margin-top:16px">🔒 Al enviar aceptas que procesemos tus datos para generar tu evaluación. No compartimos tu información con terceros.</p>
+  <div class="err" id="err-5">⚠️ Por favor ingresa un correo electrónico válido.</div>
+  <div class="err" id="err-5b">⚠️ Por favor selecciona un modelo de IA.</div>
+</div>
+
+<!-- ═══ RESULTS ═══ -->
+<div class="card" id="card-success" style="display:none">
+
+  <!-- Loading -->
+  <div id="res-loading" style="text-align:center;padding:24px 0">
+    <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--lavender));border:2.5px solid var(--dark);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;box-shadow:4px 4px 0 var(--dark)">✨</div>
+    <div style="font-family:'Caveat',cursive;font-size:26px;font-weight:700;margin-bottom:10px;color:var(--dark)">Analizando tu perfil...</div>
+    <p style="font-size:14px;font-weight:600;color:var(--muted)" id="loading-msg">Preparando tu evaluación personalizada</p>
+    <div style="margin-top:20px;display:flex;justify-content:center;gap:8px">
+      <div style="width:10px;height:10px;border-radius:50%;background:var(--pink);border:2px solid var(--dark);animation:pulse 1.2s ease infinite"></div>
+      <div style="width:10px;height:10px;border-radius:50%;background:var(--blue);border:2px solid var(--dark);animation:pulse 1.2s ease .2s infinite"></div>
+      <div style="width:10px;height:10px;border-radius:50%;background:var(--mint);border:2px solid var(--dark);animation:pulse 1.2s ease .4s infinite"></div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="res-content" style="display:none">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:20px;border-bottom:2.5px dashed var(--border)">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--lavender));border:2.5px solid var(--dark);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:3px 3px 0 var(--dark)">💆</div>
+      <div>
+        <div style="font-family:'Caveat',cursive;font-size:24px;font-weight:700;line-height:1.2;color:var(--dark)" id="res-nombre">Tu evaluación</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:3px;letter-spacing:.04em;text-transform:uppercase">Evaluación personalizada</div>
+      </div>
+    </div>
+
+    <!-- Badge modelo -->
+    <div id="res-badge" style="margin-bottom:16px"></div>
+
+    <!-- AI Text -->
+    <div id="res-body" style="font-size:14px;font-weight:500;line-height:1.9;color:var(--dark)"></div>
+
+    <!-- Divider doodle -->
+    <svg style="margin:28px 0;display:block" width="100%" height="14" viewBox="0 0 300 14" preserveAspectRatio="none"><path d="M2 7 Q25 2 50 7 Q75 12 100 7 Q125 2 150 7 Q175 12 200 7 Q225 2 250 7 Q275 12 298 7" stroke="#bee3f8" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+
+    <!-- Cita form -->
+    <div id="cita-wrap">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <div style="width:42px;height:42px;border-radius:14px;background:var(--mint-lt);border:2.5px solid var(--mint);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:3px 3px 0 var(--dark)">📅</div>
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--dark)">Agenda tu consulta</div>
+          <div style="font-size:12px;font-weight:600;color:var(--muted)">Sin costo · Sin compromiso</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <label class="flabel">Fecha preferida</label>
+        <input type="date" id="cita-fecha">
+      </div>
+
+      <div style="margin-bottom:16px">
+        <label class="flabel">Horario preferido</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="horarios-grid">
+          <div class="ci" onclick="toggleHorario(this)" data-h="Mañana (8am–12pm)"><div class="cb"></div>🌅 Mañana</div>
+          <div class="ci" onclick="toggleHorario(this)" data-h="Tarde (12pm–5pm)"><div class="cb"></div>☀️ Tarde</div>
+          <div class="ci" onclick="toggleHorario(this)" data-h="Noche (5pm–8pm)"><div class="cb"></div>🌙 Noche</div>
+          <div class="ci" onclick="toggleHorario(this)" data-h="Cualquier horario"><div class="cb"></div>✅ Cualquier hora</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px">
+        <label class="flabel">Nota <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted)">(opcional)</span></label>
+        <textarea id="cita-nota" placeholder="¿Algo que quieras que sepamos antes de tu cita?"></textarea>
+      </div>
+
+      <div id="cita-err" style="font-size:13px;font-weight:700;color:#e53e3e;margin-bottom:12px;display:none">⚠️ Por favor selecciona una fecha y horario.</div>
+
+      <button onclick="enviarCita()" id="cita-btn"
+        style="width:100%;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;padding:16px;border-radius:16px;cursor:pointer;border:2.5px solid var(--dark);background:linear-gradient(135deg,var(--mint),var(--blue));color:var(--dark);box-shadow:4px 4px 0 var(--dark);transition:all .2s;letter-spacing:.02em">
+        Solicitar cita ✨
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top:28px;text-align:center">
+      <svg width="60" height="12" viewBox="0 0 60 12"><path d="M2 6 Q10 1 20 6 Q30 11 40 6 Q50 1 58 6" stroke="#fbb6ce" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <p style="font-size:12px;font-weight:600;color:var(--muted);margin-top:8px">Centro Bella · Estética Personalizada 💕</p>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div id="res-error" style="display:none;text-align:center;padding:10px 0">
+    <div style="font-size:40px;margin-bottom:16px">😕</div>
+    <div style="font-family:'Caveat',cursive;font-size:22px;font-weight:700;margin-bottom:10px">Algo salió mal</div>
+    <p style="font-size:14px;font-weight:500;color:var(--muted);line-height:1.7">Ocurrió un error al generar tu evaluación.<br>Por favor intenta nuevamente.</p>
+    <button onclick="location.reload()" style="margin-top:16px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:12px 28px;border:2.5px solid var(--dark);border-radius:50px;background:white;cursor:pointer;box-shadow:3px 3px 0 var(--dark)">Intentar de nuevo</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="nav-btns">
+  <button class="btn btn-back" id="btn-back" onclick="goBack()" style="display:none">← Atrás</button>
+  <button class="btn btn-next" id="btn-next" onclick="goNext()">Continuar →</button>
+</div>
+
+<script>
+let step = 1;
+const TOTAL = 5;
+const areas = new Set();
+
+function updateUI() {
+  document.getElementById('pfill').style.width = (step/TOTAL*100)+'%';
+  document.getElementById('plbl').textContent = 'Paso '+step+' de '+TOTAL;
+  var times = ['~3 min','~2 min','~2 min','~1 min','~30 seg'];
+  document.getElementById('ptime').textContent = times[step-1]||'';
+  for(var i=1;i<=TOTAL;i++){
+    var d=document.getElementById('d'+i);
+    d.className='dot'+(i<step?' done':i===step?' active':'');
+  }
+  for(var i=1;i<=TOTAL;i++){
+    document.getElementById('card-'+i).style.display=i===step?'block':'none';
+  }
+  document.getElementById('card-success').style.display='none';
+  document.getElementById('nav-btns').style.display='flex';
+  document.getElementById('btn-back').style.display=step>1?'block':'none';
+  var btn=document.getElementById('btn-next');
+  if(step===TOTAL){btn.textContent='Ver mi evaluación ✨';btn.className='btn btn-submit';}
+  else{btn.textContent='Continuar →';btn.className='btn btn-next';}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function validate(){
+  if(step===1){
+    var n=document.getElementById('f-nombre').value.trim();
+    var e=document.querySelector('input[name="edad"]:checked');
+    var g=document.querySelector('input[name="genero"]:checked');
+    if(!n||!e||!g){document.getElementById('err-1').classList.add('show');return false;}
+    document.getElementById('err-1').classList.remove('show');
+  }
+  if(step===2){
+    if(areas.size===0){document.getElementById('err-2').classList.add('show');return false;}
+    document.getElementById('err-2').classList.remove('show');
+  }
+  if(step===5){
+    var em=document.getElementById('f-email').value.trim();
+    if(!em||!em.includes('@')){document.getElementById('err-5').classList.add('show');return false;}
+    document.getElementById('err-5').classList.remove('show');
+    var mdl=document.querySelector('input[name="ia-model"]:checked');
+    if(!mdl){document.getElementById('err-5b').classList.add('show');return false;}
+    document.getElementById('err-5b').classList.remove('show');
+  }
+  return true;
+}
+
+function goNext(){
+  if(!validate())return;
+  if(step===TOTAL){submitForm();return;}
+  if(step===2)buildStep3();
+  step++;
+  updateUI();
+}
+
+function goBack(){
+  if(step<=1)return;
+  step--;
+  updateUI();
+}
+
+function buildStep3(){
+  ['rostro','cuerpo','vello','piel','capilar'].forEach(function(a){
+    document.getElementById('det-'+a).style.display=areas.has(a)?'block':'none';
+  });
+}
+
+function onGenero(v){
+  document.getElementById('cond-mujer').classList.toggle('show',v==='mujer');
+}
+
+function ynClick(btn){
+  btn.closest('.yn-btns').querySelectorAll('.yn-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+}
+
+function showCond(id,show){
+  document.getElementById(id).classList.toggle('show',show);
+}
+
+function toggleCheck(el){el.classList.toggle('on');}
+
+function toggleArea(el,area){
+  if(el.classList.contains('on')){
+    el.classList.remove('on');
+    areas.delete(area);
+  } else {
+    if(areas.size>=2){
+      var first=document.querySelector('#areas-grid .ci.on');
+      if(first){first.classList.remove('on');areas.delete(first.dataset.a);}
+    }
+    el.classList.add('on');
+    el.dataset.a=area;
+    areas.add(area);
+  }
+}
+
+function getRadioText(name){
+  var el=document.querySelector('input[name="'+name+'"]:checked');
+  if(!el) return 'No especificado';
+  var rf=el.closest('.rf');
+  return rf ? rf.textContent.trim() : 'No especificado';
+}
+
+function collectData(){
+  var nombre   = document.getElementById('f-nombre').value.trim();
+  var edad     = (document.querySelector('input[name="edad"]:checked')||{value:'No especificada'}).value;
+  var genero   = (document.querySelector('input[name="genero"]:checked')||{value:'No especificado'}).value;
+  var embarazo = document.querySelector('#cond-mujer .yn-btn.on') ? document.querySelector('#cond-mujer .yn-btn.on').textContent.trim() : 'N/A';
+  var areasArr = Array.from(areas);
+  var ejercicio   = getRadioText('ejercicio');
+  var urgencia    = getRadioText('urgencia');
+  var presupuesto = getRadioText('presupuesto');
+  var estres   = document.getElementById('estres-v') ? document.getElementById('estres-v').textContent : '5';
+  var prioridad= document.getElementById('f-prioridad') ? document.getElementById('f-prioridad').value.trim() : '';
+  var trat_prev= Array.from(document.querySelectorAll('#cond-trat .ci.on')).map(function(el){return el.textContent.trim();});
+  var piel_checks=Array.from(document.querySelectorAll('#det-rostro .ci.on')).map(function(el){return el.textContent.trim();});
+  var tono     = getRadioText('tono');
+  var cuerpo_zona=Array.from(document.querySelectorAll('#det-cuerpo .cgrid .ci.on')).map(function(el){return el.textContent.trim();});
+  var cuerpo_obj =Array.from(document.querySelectorAll('#det-cuerpo .cgrid.c1 .ci.on')).map(function(el){return el.textContent.trim();});
+  var vello_zonas=Array.from(document.querySelectorAll('#det-vello .ci.on')).map(function(el){return el.textContent.trim();});
+  var capilar    =Array.from(document.querySelectorAll('#det-capilar .ci.on')).map(function(el){return el.textContent.trim();});
+  return {nombre,edad,genero,embarazo,areas:areasArr,ejercicio,urgencia,presupuesto,estres,prioridad,
+          trat_prev,piel_checks,tono,cuerpo_zona,cuerpo_obj,vello_zonas,capilar};
+}
+
+function buildPrompt(d){
+  var lines = [
+    'Paciente: '+d.nombre+', '+d.edad+' años, '+d.genero,
+    d.genero==='mujer' ? 'Embarazo/lactancia: '+d.embarazo : '',
+    'Áreas de interés: '+d.areas.join(', '),
+    d.piel_checks.length  ? 'Problemas faciales: '+d.piel_checks.join(', ') : '',
+    d.tono                ? 'Tono de piel: '+d.tono : '',
+    d.cuerpo_zona.length  ? 'Zonas corporales: '+d.cuerpo_zona.join(', ') : '',
+    d.cuerpo_obj.length   ? 'Objetivos corporales: '+d.cuerpo_obj.join(', ') : '',
+    d.vello_zonas.length  ? 'Zonas de depilación: '+d.vello_zonas.join(', ') : '',
+    d.capilar.length      ? 'Situación capilar: '+d.capilar.join(', ') : '',
+    d.prioridad           ? 'Mayor preocupación: "'+d.prioridad+'"' : '',
+    'Actividad física: '+d.ejercicio,
+    'Nivel de estrés: '+d.estres+'/10',
+    'Urgencia de resultados: '+d.urgencia,
+    'Presupuesto mensual: '+d.presupuesto,
+    d.trat_prev.length    ? 'Tratamientos previos: '+d.trat_prev.join(', ') : 'Sin tratamientos previos',
+  ].filter(Boolean).join('\n');
+  return lines;
+}
+
+// Horario toggle
+var horarioSel = '';
+function toggleHorario(el){
+  document.querySelectorAll('#horarios-grid .ci').forEach(function(c){
+    c.classList.remove('on');
+  });
+  el.classList.add('on');
+  horarioSel = el.dataset.h;
+}
+
+// Enviar cita
+async function enviarCita(){
+  var fecha = document.getElementById('cita-fecha').value;
+  var nota  = document.getElementById('cita-nota').value.trim();
+  var err   = document.getElementById('cita-err');
+  if(!fecha || !horarioSel){ err.style.display='block'; return; }
+  err.style.display='none';
+  var btn = document.getElementById('cita-btn');
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+  var data = collectData();
+  var payload = {
+    nombre:      data.nombre,
+    email:       document.getElementById('f-email').value.trim(),
+    tel:         document.getElementById('f-tel').value.trim(),
+    edad:        data.edad,
+    genero:      data.genero,
+    embarazo:    data.embarazo,
+    areas:       data.areas.join(', '),
+    piel_checks: data.piel_checks.join(', '),
+    tono:        data.tono,
+    cuerpo_zona: data.cuerpo_zona.join(', '),
+    cuerpo_obj:  data.cuerpo_obj.join(', '),
+    vello_zonas: data.vello_zonas.join(', '),
+    capilar:     data.capilar.join(', '),
+    trat_prev:   data.trat_prev.join(', '),
+    ejercicio:   data.ejercicio,
+    estres:      data.estres,
+    urgencia:    data.urgencia,
+    presupuesto: data.presupuesto,
+    prioridad:   data.prioridad,
+    referido:    getRadioText('ref'),
+    fecha:       fecha,
+    horario:     horarioSel,
+    nota:        nota
+  };
+  try {
+    var r = await fetch('/demo/cita',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    var res = await r.json();
+    if(res.ok){
+      document.getElementById('cita-wrap').style.display='none';
+      var ok = document.createElement('div');
+      ok.style.cssText='text-align:center;padding:28px 0;animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both';
+      ok.innerHTML='<div style="font-size:48px;margin-bottom:16px">🎉</div>'
+        +'<div style="font-family:\'Caveat\',cursive;font-size:26px;font-weight:700;margin-bottom:10px;color:var(--dark)">¡Solicitud enviada!</div>'
+        +'<p style="font-size:14px;font-weight:600;color:var(--muted);line-height:1.7">Te contactaremos pronto para confirmar.<br>Revisa tu correo y WhatsApp 💌</p>';
+      document.getElementById('cita-wrap').parentNode.insertBefore(ok,document.getElementById('cita-wrap').nextSibling);
+    } else {
+      btn.textContent='Error — intenta de nuevo';
+      btn.disabled=false;
+    }
+  } catch(e){
+    btn.textContent='Error — intenta de nuevo';
+    btn.disabled=false;
+    console.error(e);
+  }
+}
+
+async function submitForm(){
+  for(var i=1;i<=TOTAL;i++) document.getElementById('card-'+i).style.display='none';
+  document.getElementById('card-success').style.display='block';
+  document.getElementById('res-loading').style.display='block';
+  document.getElementById('res-content').style.display='none';
+  document.getElementById('res-error').style.display='none';
+  document.getElementById('nav-btns').style.display='none';
+  document.getElementById('pfill').style.width='100%';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  var data = collectData();
+  document.getElementById('res-nombre').textContent = 'Para '+data.nombre;
+
+  var modelo = document.querySelector('input[name="ia-model"]:checked').value;
+  var modelNames = {claude:'✦ Claude',gemini:'◆ Gemini',groq:'▲ Llama / Groq'};
+
+  var msgs = ['Analizando tu perfil...','Revisando opciones de tratamiento...','Preparando tu evaluación...'];
+  var mi=0;
+  var msgInterval = setInterval(function(){
+    mi=(mi+1)%msgs.length;
+    document.getElementById('loading-msg').textContent=msgs[mi];
+  },2500);
+
+  try {
+    var prompt = buildPrompt(data);
+    var response = await fetch('/demo/recomendar',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({perfil:prompt,modelo:modelo})
+    });
+    clearInterval(msgInterval);
+    var result = await response.json();
+    if(result.html){
+      var badge = '<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;background:var(--blue-lt);border:2px solid var(--blue);border-radius:50px;padding:4px 12px;color:var(--accent)">'+modelNames[modelo]+'</span>';
+      document.getElementById('res-badge').innerHTML = badge;
+      result.html = result.html.replace(/```html?|```/g,'').trim();
+      document.getElementById('res-body').innerHTML = result.html;
+      document.getElementById('res-loading').style.display='none';
+      document.getElementById('res-content').style.display='block';
+    } else {
+      throw new Error(result.error||'Sin respuesta');
+    }
+  } catch(e){
+    clearInterval(msgInterval);
+    document.getElementById('res-loading').style.display='none';
+    document.getElementById('res-error').style.display='block';
+    console.error(e);
+  }
+}
+
+updateUI();
+</script>
+</body>
+</html>

@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clínica Carvajal – Cuestionario de Pre-Atención</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #f4f5ef;
+  --warm-white: #fafbf6;
+  --gold: #8fa832;
+  --gold-light: #adc93e;
+  --dark: #2d3a2e;
+  --text: #2d3a2e;
+  --muted: #7a8a6a;
+  --border: #d4dcc0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px 80px}
+
+header{text-align:center;margin-bottom:40px}
+header .logo{display:block;height:72px;width:auto;margin:0 auto 16px}
+header h1{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,4vw,38px);font-weight:300;color:var(--dark);line-height:1.15}
+header p{margin-top:10px;font-size:14px;color:var(--muted);font-weight:300;max-width:440px;margin-left:auto;margin-right:auto}
+
+.progress-wrapper{width:100%;max-width:900px;margin-bottom:32px}
+.steps-circles{display:flex;align-items:center;justify-content:space-between;position:relative}
+.steps-circles::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);transform:translateY(-50%);z-index:0}
+.step-circle{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:var(--warm-white);display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;color:var(--border);position:relative;z-index:1;transition:all .35s ease;flex-shrink:0}
+.step-circle.done{background:var(--gold);border-color:var(--gold);color:white}
+.step-circle.done::after{content:'✓';font-size:13px}
+.step-circle.done span{display:none}
+.step-circle.active{background:var(--dark);border-color:var(--dark);color:var(--gold-light);font-weight:600}
+.progress-line-fill{position:absolute;top:50%;left:0;height:1px;background:var(--gold);transform:translateY(-50%);z-index:0;transition:width .5s cubic-bezier(.4,0,.2,1);width:0%}
+
+.card{background:var(--warm-white);border:1px solid var(--border);border-radius:4px;padding:44px 52px;width:100%;max-width:900px;box-shadow:0 8px 40px rgba(45,58,46,.07)}
+@media(max-width:600px){.card{padding:28px 20px}}
+
+.step-panel{display:none;animation:fadeSlide .3s ease}
+.step-panel.active{display:block}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.step-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--dark);margin-bottom:4px}
+.step-subtitle{font-size:13px;color:var(--muted);margin-bottom:28px;font-weight:300}
+.divider{width:36px;height:1px;background:var(--gold);margin-bottom:28px}
+
+.subsection{margin-bottom:28px}
+.subsection-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--dark);margin-bottom:16px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px}
+.form-grid .full{grid-column:1/-1}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:1}}
+
+.field{display:flex;flex-direction:column;gap:5px}
+label.field-label{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);font-weight:500}
+label.field-label .req{color:var(--gold);margin-left:2px}
+
+input[type="text"],input[type="number"],input[type="email"],input[type="tel"],input[type="date"],input[type="time"],select,textarea{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:var(--text);background:transparent;border:none;border-bottom:1px solid var(--border);padding:9px 0;width:100%;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238fa832' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;cursor:pointer;padding-right:24px}
+input:focus,select:focus,textarea:focus{border-bottom-color:var(--gold)}
+textarea{resize:vertical;min-height:72px;border:1px solid var(--border);padding:10px 12px;border-radius:2px;font-size:14px}
+textarea:focus{border-color:var(--gold)}
+
+.radio-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.radio-item{display:flex;align-items:center;gap:8px;cursor:pointer;padding:9px 16px;border:1px solid var(--border);border-radius:2px;font-size:13px;font-weight:300;transition:all .2s;user-select:none}
+.radio-item:hover{border-color:var(--gold-light)}
+.radio-item input{display:none}
+.radio-dot{width:14px;height:14px;border:1px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.radio-item.selected{border-color:var(--gold);background:rgba(184,147,90,.06)}
+.radio-item.selected .radio-dot{border-color:var(--gold)}
+.radio-item.selected .radio-dot::after{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold);display:block}
+
+.check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:9px;margin-top:4px}
+.check-item{display:flex;align-items:center;gap:9px;cursor:pointer;padding:9px 13px;border:1px solid var(--border);border-radius:2px;font-size:13px;font-weight:300;transition:all .2s;user-select:none}
+.check-item:hover{border-color:var(--gold-light)}
+.check-item input{display:none}
+.check-box{width:15px;height:15px;border:1px solid var(--border);border-radius:1px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.check-item.checked{border-color:var(--gold);background:rgba(184,147,90,.06)}
+.check-item.checked .check-box{background:var(--gold);border-color:var(--gold)}
+.check-item.checked .check-box::after{content:'';width:8px;height:5px;border-left:1.5px solid white;border-bottom:1.5px solid white;transform:rotate(-45deg) translateY(-1px);display:block}
+
+.yn-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--border)}
+.yn-row:last-child{border-bottom:none}
+.yn-label{font-size:13px;font-weight:300;flex:1}
+.yn-btns{display:flex;gap:8px;flex-shrink:0}
+.yn-btn{font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;padding:6px 14px;border:1px solid var(--border);border-radius:2px;background:transparent;color:var(--muted);transition:all .2s;font-weight:500}
+.yn-btn:hover{border-color:var(--gold-light);color:var(--gold)}
+.yn-btn.active-yes{border-color:var(--gold);background:rgba(184,147,90,.1);color:var(--gold)}
+.yn-btn.active-no{border-color:var(--muted);background:rgba(140,122,104,.08);color:var(--muted)}
+
+.scale-group{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.scale-btn{width:38px;height:38px;border:1px solid var(--border);border-radius:2px;background:transparent;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--muted);transition:all .2s;font-weight:300}
+.scale-btn:hover{border-color:var(--gold-light);color:var(--gold)}
+.scale-btn.active{border-color:var(--gold);background:var(--gold);color:white}
+
+.consent-item{display:flex;align-items:flex-start;gap:13px;padding:14px;border:1px solid var(--border);border-radius:2px;margin-bottom:12px;cursor:pointer;transition:border-color .2s}
+.consent-item:hover{border-color:var(--gold-light)}
+.consent-item.checked{border-color:var(--gold);background:rgba(184,147,90,.04)}
+.consent-item input{display:none}
+.consent-check{width:18px;height:18px;border:1px solid var(--border);border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.consent-item.checked .consent-check{background:var(--gold);border-color:var(--gold)}
+.consent-item.checked .consent-check::after{content:'';width:8px;height:5px;border-left:1.5px solid white;border-bottom:1.5px solid white;transform:rotate(-45deg) translateY(-1px);display:block}
+.consent-text strong{font-size:13px;font-weight:500;display:block;margin-bottom:2px}
+.consent-text span{font-size:12px;color:var(--muted);font-weight:300}
+
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid var(--border)}
+.btn{font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;cursor:pointer;border:none;padding:13px 30px;border-radius:2px;transition:all .25s}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-outline:hover{border-color:var(--gold-light);color:var(--gold)}
+.btn-primary{background:var(--gold);color:white}
+.btn-primary:hover{background:var(--dark)}
+.step-counter{font-size:12px;color:var(--muted);letter-spacing:.08em}
+
+#success{display:none;text-align:center;padding:20px 0}
+.success-icon{width:60px;height:60px;border-radius:50%;background:rgba(143,168,50,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+#success h2{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;color:var(--dark);margin-bottom:10px}
+#success p{font-size:14px;color:var(--muted);font-weight:300;line-height:1.7;max-width:360px;margin:0 auto 28px}
+
+.conditional{display:none;margin-top:12px;padding:14px;border:1px solid var(--border);border-radius:2px;background:rgba(184,147,90,.03)}
+.conditional.visible{display:block}
+
+/* Fotos */
+.photo-hint{font-size:12px;color:var(--muted);background:rgba(143,168,50,.07);border:1px solid rgba(143,168,50,.2);border-radius:2px;padding:10px 14px;font-weight:300;margin-bottom:20px}
+.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:10px}
+@media(max-width:600px){.photo-grid{grid-template-columns:repeat(2,1fr)}}
+.photo-slot{position:relative;aspect-ratio:1;border:1.5px dashed var(--border);border-radius:4px;cursor:pointer;overflow:hidden;background:var(--cream);transition:border-color .2s,background .2s;display:flex;align-items:center;justify-content:center}
+.photo-slot:hover{border-color:var(--gold);background:rgba(143,168,50,.04)}
+.photo-slot.has-photo{border-style:solid;border-color:var(--gold);cursor:default}
+.photo-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--border);transition:color .2s;pointer-events:none}
+.photo-slot:hover .photo-placeholder{color:var(--gold)}
+.photo-placeholder span{font-size:11px;letter-spacing:.05em;text-transform:uppercase;font-weight:500}
+.photo-preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.photo-slot.has-photo .photo-preview{display:block}
+.photo-slot.has-photo .photo-placeholder{display:none}
+.photo-remove{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(45,58,46,.7);border:none;color:white;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center;line-height:1;z-index:2;transition:background .2s}
+.photo-remove:hover{background:rgba(45,58,46,.95)}
+.photo-slot.has-photo .photo-remove{display:flex}
+.photo-label{position:absolute;bottom:0;left:0;right:0;background:rgba(45,58,46,.55);color:white;font-size:10px;text-align:center;padding:4px;letter-spacing:.05em;pointer-events:none}
+.photo-slot.has-photo .photo-label{display:none}
+.photo-error{font-size:12px;color:#c0392b;min-height:18px;margin-top:4px}
+
+/* Horario: radio + condicional "Otro" */
+.horario-otro{display:none;margin-top:10px}
+.horario-otro.visible{display:block}
+
+/* Pantalla carga */
+#screen-loading{display:none;text-align:center;padding:32px 0 20px}
+.loading-spinner{width:38px;height:38px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 22px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--dark);margin-bottom:8px}
+.loading-desc{font-size:13px;color:var(--muted);font-weight:300;line-height:1.65;max-width:360px;margin:0 auto 24px}
+.loading-steps{display:flex;flex-direction:column;gap:10px;max-width:300px;margin:0 auto}
+.ls-item{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:10px;opacity:.35;transition:opacity .4s,color .4s}
+.ls-item.active{opacity:1;color:var(--gold)}
+.ls-item.done{opacity:.55;color:var(--text)}
+.ls-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<div style="width:100%;max-width:900px;padding:0 0 8px 0;margin:0 auto">
+  <a href="/" style="font-family:'DM Sans',sans-serif;font-size:11px;color:#7a8a6a;text-decoration:none;letter-spacing:.1em;display:inline-flex;align-items:center;gap:5px;transition:color .2s" onmouseover="this.style.color='#8fa832'" onmouseout="this.style.color='#7a8a6a'">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    INICIO
+  </a>
+</div>
+
+<header>
+  <img src="https://centrocarvajal.com/wp-content/uploads/2023/05/logo-carvajal-300x147.jpg" alt="Clínica Estética Carvajal" class="logo">
+  <h1>Cuestionario de<br>Pre-Atención Estética</h1>
+  <p>Completa este formulario antes de tu cita para que podamos personalizar tu atención al máximo.</p>
+</header>
+
+<div class="progress-wrapper">
+  <div class="steps-circles" id="steps-circles">
+    <div class="progress-line-fill" id="progress-fill"></div>
+  </div>
+</div>
+
+<div class="card">
+
+<!-- STEP 1: Datos Personales -->
+<div class="step-panel active" id="step-1">
+  <div class="step-title">Datos Personales</div>
+  <div class="step-subtitle">Información básica para identificarte y contactarte.</div>
+  <div class="divider"></div>
+  <div class="form-grid">
+    <div class="field full"><label class="field-label">Nombre completo <span class="req">*</span></label><input id="f-nombre" type="text" placeholder="Tu nombre y apellidos"></div>
+    <div class="field"><label class="field-label">Cédula / Pasaporte</label><input id="f-cedula" type="text" placeholder="Ej. 8-123-456"></div>
+    <div class="field full"><label class="field-label">Dirección de residencia</label><input id="f-direccion" type="text" placeholder="Ej. Calle 50, Miraflores, Panamá"></div>
+    <div class="field"><label class="field-label">Cédula / Pasaporte</label><input id="f-cedula" type="text" placeholder="Ej. 8-123-456"></div>
+    
+    <div class="field"><label class="field-label">Edad <span class="req">*</span></label><input id="f-edad" type="number" placeholder="Ej. 32" min="1" max="120"></div>
+    <div class="field"><label class="field-label">Sexo <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="sexo"><div class="radio-dot"></div>Femenino</label>
+        <label class="radio-item"><input type="radio" name="sexo"><div class="radio-dot"></div>Masculino</label>
+      </div>
+    </div>
+    <div class="field"><label class="field-label">Fecha de nacimiento</label><input id="f-fechanac" type="date"></div>
+    <div class="field"><label class="field-label">Celular <span class="req">*</span></label><input id="f-celular" type="tel" placeholder="+506 0000 0000"></div>
+    <div class="field"><label class="field-label">Correo electrónico <span class="req">*</span></label><input id="f-email" type="email" placeholder="tu@correo.com"></div>
+    <div class="field"><label class="field-label">Ocupación</label><input id="f-ocupacion" type="text" placeholder="Ej. Docente, Enfermera, Músico..."></div>
+    <div class="field"><label class="field-label">¿Trabaja actualmente? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="trabaja"><div class="radio-dot"></div>Sí</label>
+        <label class="radio-item"><input type="radio" name="trabaja"><div class="radio-dot"></div>No</label>
+      </div>
+    </div>
+    <div class="field full"><label class="field-label">Horario laboral <span class="req">*</span></label>
+      <div class="radio-group" id="horario-options">
+        <label class="radio-item"><input type="radio" name="horario_laboral" value="Mañana"><div class="radio-dot"></div>Mañana</label>
+        <label class="radio-item"><input type="radio" name="horario_laboral" value="Tarde"><div class="radio-dot"></div>Tarde</label>
+        <label class="radio-item"><input type="radio" name="horario_laboral" value="Noche"><div class="radio-dot"></div>Noche</label>
+        <label class="radio-item"><input type="radio" name="horario_laboral" value="Variable"><div class="radio-dot"></div>Variable</label>
+        <label class="radio-item" id="horario-otro-label"><input type="radio" name="horario_laboral" value="Otro"><div class="radio-dot"></div>Otro</label>
+      </div>
+      <div class="horario-otro" id="horario-otro-input">
+        <input id="f-horario-otro" type="text" placeholder="Describe tu horario habitual...">
+      </div>
+    </div>
+    <div class="field full"><label class="field-label">Nivel de actividad laboral</label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="act_laboral"><div class="radio-dot"></div>Sedentario</label>
+        <label class="radio-item"><input type="radio" name="act_laboral"><div class="radio-dot"></div>Moderado</label>
+        <label class="radio-item"><input type="radio" name="act_laboral"><div class="radio-dot"></div>Activo</label>
+      </div>
+    </div>
+    <div class="field full"><label class="field-label">Número de hijos <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="num_hijos"><div class="radio-dot"></div>0</label>
+        <label class="radio-item"><input type="radio" name="num_hijos"><div class="radio-dot"></div>1</label>
+        <label class="radio-item"><input type="radio" name="num_hijos"><div class="radio-dot"></div>2</label>
+        <label class="radio-item"><input type="radio" name="num_hijos"><div class="radio-dot"></div>3</label>
+        <label class="radio-item"><input type="radio" name="num_hijos"><div class="radio-dot"></div>4+</label>
+      </div>
+    </div>
+    <div class="field full"><label class="field-label">¿Con quién vive? <span class="req">*</span></label>
+      <div class="check-grid">
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Solo/a</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Con pareja</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Con hijos</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Con padres u otros</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Con mascotas</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Otro</label>
+      </div>
+    </div>
+    <div class="field full"><label class="field-label">Familiares en casa (relación)</label><textarea id="f-familiares" placeholder="Ej. esposo, 2 hijos menores..."></textarea></div>
+    <div class="field"><label class="field-label">¿Cuenta con ayuda en casa? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="ayuda_casa"><div class="radio-dot"></div>Sí</label>
+        <label class="radio-item"><input type="radio" name="ayuda_casa"><div class="radio-dot"></div>No</label>
+      </div>
+    </div>
+    <div class="field full"><label class="field-label">Tipo de apoyo recibido</label>
+      <div class="check-grid">
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Limpieza del hogar</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Cocina / alimentación</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Cuido de niños o adultos</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Acompañamiento diario</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Otro</label>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <div class="form-grid" style="margin-top:8px">
+    <div class="field full"><label class="field-label">¿Cómo nos conociste?</label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="como_conociste"><div class="radio-dot"></div>Internet / Google</label>
+        <label class="radio-item"><input type="radio" name="como_conociste"><div class="radio-dot"></div>Redes sociales</label>
+        <label class="radio-item"><input type="radio" name="como_conociste"><div class="radio-dot"></div>Recomendación de amigo/a</label>
+        <label class="radio-item"><input type="radio" name="como_conociste"><div class="radio-dot"></div>Paciente anterior</label>
+        <label class="radio-item"><input type="radio" name="como_conociste"><div class="radio-dot"></div>Otro</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection" style="margin-top:8px">
+    <div class="subsection-title">Contacto de Emergencia</div>
+    <div class="form-grid">
+      <div class="field full"><label class="field-label">Nombre completo <span class="req">*</span></label><input id="f-cont-nombre" type="text" placeholder="Nombre y apellidos"></div>
+      <div class="field"><label class="field-label">Relación <span class="req">*</span></label><input id="f-cont-relacion" type="text" placeholder="Ej. Madre, Esposo..."></div>
+      <div class="field"><label class="field-label">Teléfono <span class="req">*</span></label><input id="f-cont-tel" type="tel" placeholder="+506 0000 0000"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3: Condición Actual -->
+<div class="step-panel" id="step-3">
+  <div class="step-title">Condición Actual</div>
+  <div class="step-subtitle">Estado de salud general, medidas y hábitos relevantes.</div>
+  <div class="divider"></div>
+  <div class="form-grid">
+    <div class="field"><label class="field-label">Estatura (cm) <span class="req">*</span></label><input id="f-estatura" type="number" placeholder="Ej. 165"></div>
+    <div class="field"><label class="field-label">Peso (kg) <span class="req">*</span></label><input id="f-peso" type="number" placeholder="Ej. 68" step="0.1"></div>
+    <div class="field full"><label class="field-label">¿Sufre de alguna enfermedad? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="enfermedad"><div class="radio-dot"></div>Sí</label>
+        <label class="radio-item"><input type="radio" name="enfermedad"><div class="radio-dot"></div>No</label>
+      </div>
+    </div>
+    <div class="field full"><label class="field-label">Si es Sí, describa</label><textarea id="f-enfermedad-det" placeholder="Tipo de enfermedad, tiempo, tratamiento actual..."></textarea></div>
+  </div>
+
+  <div class="subsection" style="margin-top:24px">
+    <div class="subsection-title">Condiciones hormonales (solo mujeres)</div>
+    <div class="yn-row"><span class="yn-label">Actualmente embarazada</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">Periodo de lactancia</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">Síndrome de ovario poliquístico (SOP)</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">Uso de anticonceptivos hormonales</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">Menopausia</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">Perimenopausia</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">Andropausia (solo hombres)</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Hábitos</div>
+    <div class="yn-row"><span class="yn-label">Fuma <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="form-grid" style="margin:10px 0 16px"><div class="field full"><label class="field-label">Si fuma, frecuencia</label><div class="radio-group"><label class="radio-item"><input type="radio" name="fuma_frec"><div class="radio-dot"></div>Diario</label><label class="radio-item"><input type="radio" name="fuma_frec"><div class="radio-dot"></div>Ocasional</label></div></div></div>
+    <div class="yn-row"><span class="yn-label">Consume alcohol <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="form-grid" style="margin:10px 0 16px"><div class="field full"><label class="field-label">Si consume alcohol, frecuencia</label><div class="radio-group"><label class="radio-item"><input type="radio" name="alcohol_frec"><div class="radio-dot"></div>Diario</label><label class="radio-item"><input type="radio" name="alcohol_frec"><div class="radio-dot"></div>Semanal</label><label class="radio-item"><input type="radio" name="alcohol_frec"><div class="radio-dot"></div>Ocasional</label></div></div></div>
+    <div class="yn-row"><span class="yn-label">¿Toma medicamentos, vitaminas o suplementos? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="form-grid" style="margin:10px 0 0"><div class="field full"><label class="field-label">Si es Sí, especifique</label><textarea id="f-medicamentos" placeholder="Nombre del medicamento, dosis, frecuencia..."></textarea></div></div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Otras condiciones médicas</div>
+    <div class="form-grid"><div class="field full"><textarea id="f-otras-condiciones" placeholder="Otras condiciones no mencionadas anteriormente..."></textarea></div></div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Hábito intestinal</div>
+    <div class="yn-row"><span class="yn-label">¿Vas al baño todos los días? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="form-grid" style="margin-top:14px">
+      <div class="field"><label class="field-label">¿A qué hora del día?</label><div class="radio-group"><label class="radio-item"><input type="radio" name="banio_hora"><div class="radio-dot"></div>Mañana</label><label class="radio-item"><input type="radio" name="banio_hora"><div class="radio-dot"></div>Tarde</label><label class="radio-item"><input type="radio" name="banio_hora"><div class="radio-dot"></div>Noche</label></div></div>
+      <div class="field"><label class="field-label">¿Cómo es tu evacuación?</label><div class="radio-group" style="flex-direction:column;gap:6px"><label class="radio-item"><input type="radio" name="evacuacion"><div class="radio-dot"></div>Normal</label><label class="radio-item"><input type="radio" name="evacuacion"><div class="radio-dot"></div>Difícil</label><label class="radio-item"><input type="radio" name="evacuacion"><div class="radio-dot"></div>Irregular</label><label class="radio-item"><input type="radio" name="evacuacion"><div class="radio-dot"></div>Con esfuerzo</label></div></div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Hábitos de sueño</div>
+    <div class="form-grid">
+      <div class="field full"><label class="field-label">Promedio de horas por noche <span class="req">*</span></label><div class="radio-group"><label class="radio-item"><input type="radio" name="horas_sueno"><div class="radio-dot"></div>Menos de 5h</label><label class="radio-item"><input type="radio" name="horas_sueno"><div class="radio-dot"></div>5–7h</label><label class="radio-item"><input type="radio" name="horas_sueno"><div class="radio-dot"></div>7–9h</label><label class="radio-item"><input type="radio" name="horas_sueno"><div class="radio-dot"></div>Más de 9h</label></div></div>
+      <div class="field full"><label class="field-label">Calidad del sueño <span class="req">*</span></label><div class="radio-group"><label class="radio-item"><input type="radio" name="calidad_sueno"><div class="radio-dot"></div>Profundo y reparador</label><label class="radio-item"><input type="radio" name="calidad_sueno"><div class="radio-dot"></div>Interrumpido o ligero</label><label class="radio-item"><input type="radio" name="calidad_sueno"><div class="radio-dot"></div>Dificultad para conciliar</label><label class="radio-item"><input type="radio" name="calidad_sueno"><div class="radio-dot"></div>Insomnio frecuente</label></div></div>
+      <div class="field"><label class="field-label">Hora que se acuesta</label><input id="f-hora-duerme" type="time"></div>
+      <div class="field"><label class="field-label">Hora que se levanta</label><input id="f-hora-despierta" type="time"></div>
+    </div>
+    <div class="yn-row" style="margin-top:12px"><span class="yn-label">¿Siente cansancio o somnolencia durante el día? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">¿Utiliza medicamento o suplemento para dormir? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">¿Trabaja en turnos nocturnos o con cambios de horario? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Nivel de estrés</div>
+    <div class="field">
+      <label class="field-label">¿Cómo calificarías tu nivel de estrés diario? <span class="req">*</span> <span style="font-size:10px;color:var(--muted)">(1 = Muy bajo · 10 = Muy alto)</span></label>
+      <div class="scale-group" id="scale-estres">
+        <button class="scale-btn" onclick="toggleScale(this,1)">1</button>
+        <button class="scale-btn" onclick="toggleScale(this,2)">2</button>
+        <button class="scale-btn" onclick="toggleScale(this,3)">3</button>
+        <button class="scale-btn" onclick="toggleScale(this,4)">4</button>
+        <button class="scale-btn" onclick="toggleScale(this,5)">5</button>
+        <button class="scale-btn" onclick="toggleScale(this,6)">6</button>
+        <button class="scale-btn" onclick="toggleScale(this,7)">7</button>
+        <button class="scale-btn" onclick="toggleScale(this,8)">8</button>
+        <button class="scale-btn" onclick="toggleScale(this,9)">9</button>
+        <button class="scale-btn" onclick="toggleScale(this,10)">10</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4: Intolerancias Alimentarias -->
+<div class="step-panel" id="step-4">
+  <div class="step-title">Intolerancias Alimentarias</div>
+  <div class="step-subtitle">Responde Sí o No a cada síntoma para detectar posibles intolerancias.</div>
+  <div class="divider"></div>
+  <div class="yn-row"><span class="yn-label">¿Sientes hinchazón abdominal después de comer? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Tienes gases o flatulencias frecuentes? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Sufres de estreñimiento o diarrea sin causa aparente? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Notas cansancio o somnolencia después de las comidas? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Tienes dolor de cabeza o migrañas recurrentes? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Picazón, enrojecimiento o urticaria tras comer? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Congestión nasal o estornudos luego de comer? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Inflamación en articulaciones o rigidez sin explicación? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Cambios de humor, ansiedad o irritabilidad después de comer? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Tu digestión es lenta o pesada? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Dificultad para bajar de peso a pesar de comer bien? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Náuseas o malestar general con algunos alimentos? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  <div class="yn-row"><span class="yn-label">¿Antecedentes familiares de intolerancias o alergias? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+
+  <div class="subsection" style="margin-top:24px">
+    <div class="subsection-title">Síntomas por grupo de alimento</div>
+
+    <div class="yn-row"><span class="yn-label">¿Síntomas al consumir lácteos? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleSintAlim(this,'yes','sint-lacteos')">Sí</button><button class="yn-btn" onclick="toggleSintAlim(this,'no','sint-lacteos')">No</button></div></div>
+    <div id="sint-lacteos" style="display:none;padding:6px 0 10px 16px;border-bottom:1px solid var(--border)">
+      <div class="field" style="margin:0"><label class="field-label">¿Qué síntomas presenta?</label><input type="text" id="sint-lacteos-det" placeholder="Ej. hinchazón, gases, diarrea, náuseas..."></div>
+    </div>
+
+    <div class="yn-row"><span class="yn-label">¿Síntomas al consumir gluten (pan, pasta, galletas)? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleSintAlim(this,'yes','sint-gluten')">Sí</button><button class="yn-btn" onclick="toggleSintAlim(this,'no','sint-gluten')">No</button></div></div>
+    <div id="sint-gluten" style="display:none;padding:6px 0 10px 16px;border-bottom:1px solid var(--border)">
+      <div class="field" style="margin:0"><label class="field-label">¿Qué síntomas presenta?</label><input type="text" id="sint-gluten-det" placeholder="Ej. hinchazón, fatiga, dolor abdominal..."></div>
+    </div>
+
+    <div class="yn-row"><span class="yn-label">¿Síntomas con alimentos procesados o con aditivos? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleSintAlim(this,'yes','sint-procesados')">Sí</button><button class="yn-btn" onclick="toggleSintAlim(this,'no','sint-procesados')">No</button></div></div>
+    <div id="sint-procesados" style="display:none;padding:6px 0 10px 16px;border-bottom:1px solid var(--border)">
+      <div class="field" style="margin:0"><label class="field-label">¿Qué síntomas presenta?</label><input type="text" id="sint-procesados-det" placeholder="Ej. inflamación, dolor de cabeza, fatiga..."></div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 5: Preferencias Alimentarias -->
+<div class="step-panel" id="step-5">
+  <div class="step-title">Preferencias Alimentarias</div>
+  <div class="step-subtitle">Indícanos tus gustos y hábitos de alimentación.</div>
+  <div class="divider"></div>
+
+  <div class="subsection">
+    <div class="subsection-title">Proteínas favoritas</div>
+    <div class="check-grid" id="chk-proteinas">
+      <label class="check-item"><input type="checkbox" value="Pollo"><div class="check-box"></div>Pollo</label>
+      <label class="check-item"><input type="checkbox" value="Pavo"><div class="check-box"></div>Pavo</label>
+      <label class="check-item"><input type="checkbox" value="Pescado"><div class="check-box"></div>Pescado</label>
+      <label class="check-item"><input type="checkbox" value="Mariscos"><div class="check-box"></div>Mariscos</label>
+      <label class="check-item"><input type="checkbox" value="Carne de res"><div class="check-box"></div>Carne de res</label>
+      <label class="check-item"><input type="checkbox" value="Cerdo"><div class="check-box"></div>Cerdo</label>
+      <label class="check-item"><input type="checkbox" value="Huevos"><div class="check-box"></div>Huevos</label>
+      <label class="check-item"><input type="checkbox" value="Legumbres"><div class="check-box"></div>Legumbres</label>
+      <label class="check-item"><input type="checkbox" value="Tofu/Tempeh"><div class="check-box"></div>Tofu / Tempeh</label>
+    </div>
+    <div class="field" style="margin-top:14px"><label class="field-label">Proteínas que NO le gustan o desea evitar</label><input id="f-proteinas-evitar" type="text" placeholder="Ej. cerdo, mariscos..."></div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Carbohidratos favoritos</div>
+    <div class="check-grid" id="chk-carbos">
+      <label class="check-item"><input type="checkbox" value="Arroz blanco"><div class="check-box"></div>Arroz blanco</label>
+      <label class="check-item"><input type="checkbox" value="Arroz integral"><div class="check-box"></div>Arroz integral</label>
+      <label class="check-item"><input type="checkbox" value="Pasta"><div class="check-box"></div>Pasta</label>
+      <label class="check-item"><input type="checkbox" value="Avena"><div class="check-box"></div>Avena</label>
+      <label class="check-item"><input type="checkbox" value="Pan"><div class="check-box"></div>Pan</label>
+      <label class="check-item"><input type="checkbox" value="Tortillas"><div class="check-box"></div>Tortillas</label>
+      <label class="check-item"><input type="checkbox" value="Yuca"><div class="check-box"></div>Yuca</label>
+      <label class="check-item"><input type="checkbox" value="Papa"><div class="check-box"></div>Papa</label>
+      <label class="check-item"><input type="checkbox" value="Batata/Camote"><div class="check-box"></div>Batata / Camote</label>
+    </div>
+    <div class="field" style="margin-top:14px"><label class="field-label">Carbohidratos que NO le gustan o desea evitar</label><input id="f-carbos-evitar" type="text" placeholder="Ej. pan blanco, arroz..."></div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Verduras y Hortalizas</div>
+    <div class="form-grid">
+      <div class="field"><label class="field-label">Verduras que más consume</label><textarea id="f-verduras" placeholder="Ej. espinaca, zanahoria, brócoli..."></textarea></div>
+      <div class="field"><label class="field-label">Verduras que no consume o no tolera</label><textarea id="f-verduras-evitar" placeholder="Ej. coliflor, cebolla..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Frutas</div>
+    <div class="form-grid">
+      <div class="field full"><label class="field-label">Frutas que consume habitualmente</label><textarea id="f-frutas" placeholder="Ej. banano, mango, piña..."></textarea></div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Grasas saludables que consume</div>
+    <div class="check-grid">
+      <label class="check-item"><input type="checkbox"><div class="check-box"></div>Aguacate</label>
+      <label class="check-item"><input type="checkbox"><div class="check-box"></div>Aceite de oliva</label>
+      <label class="check-item"><input type="checkbox"><div class="check-box"></div>Aceite de coco</label>
+      <label class="check-item"><input type="checkbox"><div class="check-box"></div>Nueces / Almendras</label>
+      <label class="check-item"><input type="checkbox"><div class="check-box"></div>Semillas (chía, linaza)</label>
+      <label class="check-item"><input type="checkbox"><div class="check-box"></div>Mantequilla de maní</label>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Grasas o frituras que prefiere evitar</div>
+    <div class="check-grid">
+      <label class="check-item"><input type="checkbox"><div class="check-box"></div>Alimentos fritos</label>
+      <label class="check-item"><input type="checkbox"><div class="check-box"></div>Manteca / Margarina</label>
+      <label class="check-item"><input type="checkbox"><div class="check-box"></div>Aceites vegetales procesados</label>
+      <label class="check-item"><input type="checkbox"><div class="check-box"></div>Grasas trans</label>
+    </div>
+    <div class="field" style="margin-top:12px">
+      <label class="field-label">¿Por qué deseas evitarlas?</label>
+      <input id="f-grasas-evitar-porque" type="text" placeholder="Ej. digestión, salud cardiovascular, recomendación médica...">
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Postres y dulces</div>
+    <div class="form-grid">
+      <div class="field full"><label class="field-label">Postres preferidos o dulces que suele consumir</label><input id="f-postres" type="text" placeholder="Ej. chocolate, helado..."></div>
+      <div class="field full"><label class="field-label">Frecuencia de consumo <span class="req">*</span></label><div class="radio-group"><label class="radio-item"><input type="radio" name="dulces_frec"><div class="radio-dot"></div>Diario</label><label class="radio-item"><input type="radio" name="dulces_frec"><div class="radio-dot"></div>2–3 veces/semana</label><label class="radio-item"><input type="radio" name="dulces_frec"><div class="radio-dot"></div>1 vez/semana</label><label class="radio-item"><input type="radio" name="dulces_frec"><div class="radio-dot"></div>Ocasionalmente</label></div></div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Otros hábitos alimentarios</div>
+    <div class="form-grid">
+      <div class="field"><label class="field-label">¿Cuántas comidas al día? <span class="req">*</span></label><div class="radio-group"><label class="radio-item"><input type="radio" name="comidas"><div class="radio-dot"></div>1</label><label class="radio-item"><input type="radio" name="comidas"><div class="radio-dot"></div>2</label><label class="radio-item"><input type="radio" name="comidas"><div class="radio-dot"></div>3</label><label class="radio-item"><input type="radio" name="comidas"><div class="radio-dot"></div>4+</label></div></div>
+    </div>
+    <div class="yn-row"><span class="yn-label">¿Consume bebidas azucaradas? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="form-grid" style="margin-top:10px"><div class="field full"><label class="field-label">Si es Sí, ¿cuáles?</label><input id="f-bebidas-cuales" type="text" placeholder="Ej. refrescos, jugos industriales..."></div></div>
+    <div class="field" style="margin-top:16px"><label class="field-label">Observaciones adicionales sobre hábitos u objetivos</label><textarea id="f-nota-alim" placeholder="Información adicional relevante..."></textarea></div>
+  </div>
+</div>
+
+<!-- STEP 6: Alergias y Sensibilidades -->
+<div class="step-panel" id="step-6">
+  <div class="step-title">Alergias y Sensibilidades</div>
+  <div class="step-subtitle">Indica si presentas alergia o sensibilidad a alguno de los siguientes.</div>
+  <div class="divider"></div>
+  <div class="yn-row" id="arow-alg_medicamentos">
+    <span class="yn-label">Medicamentos en general</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_medicamentos')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_medicamentos')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_medicamentos" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_medicamentos" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+  <div class="yn-row" id="arow-alg_lidocaina">
+    <span class="yn-label">Lidocaína o anestésicos locales</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_lidocaina')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_lidocaina')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_lidocaina" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_lidocaina" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+  <div class="yn-row" id="arow-alg_penicilina">
+    <span class="yn-label">Penicilina u otros antibióticos</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_penicilina')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_penicilina')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_penicilina" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_penicilina" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+  <div class="yn-row" id="arow-alg_yodo">
+    <span class="yn-label">Yodopovidona (Isodine)</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_yodo')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_yodo')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_yodo" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_yodo" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+  <div class="yn-row" id="arow-alg_aines">
+    <span class="yn-label">Antiinflamatorios (ibuprofeno, naproxeno, etc.)</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_aines')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_aines')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_aines" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_aines" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+  <div class="yn-row" id="arow-alg_alimentos">
+    <span class="yn-label">Alimentos en general</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_alimentos')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_alimentos')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_alimentos" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_alimentos" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+  <div class="yn-row" id="arow-alg_mariscos">
+    <span class="yn-label">Mariscos o algas</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_mariscos')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_mariscos')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_mariscos" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_mariscos" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+  <div class="yn-row" id="arow-alg_latex">
+    <span class="yn-label">Látex</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_latex')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_latex')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_latex" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_latex" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+  <div class="yn-row" id="arow-alg_aloe">
+    <span class="yn-label">Aloe vera</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_aloe')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_aloe')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_aloe" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_aloe" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+  <div class="yn-row" id="arow-alg_fragancias">
+    <span class="yn-label">Fragancias o perfumes</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_fragancias')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_fragancias')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_fragancias" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_fragancias" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+  <div class="yn-row" id="arow-alg_otro">
+    <span class="yn-label">Otro</span>
+    <div class="yn-btns">
+      <button class="yn-btn" onclick="toggleAlergia(this,'yes','alg_otro')">Sí</button>
+      <button class="yn-btn" onclick="toggleAlergia(this,'no','alg_otro')">No</button>
+    </div>
+  </div>
+  <div id="adet-alg_otro" style="display:none;padding:6px 0 12px 16px;border-bottom:1px solid var(--border)">
+    <div class="field" style="margin:0">
+      <label class="field-label">¿Qué síntomas o reacción presenta?</label>
+      <input type="text" id="asint-alg_otro" placeholder="Ej. urticaria, edema, dificultad respiratoria...">
+    </div>
+  </div>
+</div>
+
+<!-- STEP 7: Historial Quirúrgico y Piel -->
+<div class="step-panel" id="step-7">
+  <div class="step-title">Historial Quirúrgico y Condición de la Piel</div>
+  <div class="step-subtitle">Antecedentes de cirugías y estado general de tu piel.</div>
+  <div class="divider"></div>
+
+  <div class="subsection">
+    <div class="subsection-title">Historial Quirúrgico</div>
+    <div class="yn-row"><span class="yn-label">¿Se ha realizado alguna cirugía? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="field" style="margin-top:14px"><label class="field-label">Si es Sí, describa cuál(es)</label><textarea id="f-cirugias-det" placeholder="Tipo de cirugía, año, complicaciones..."></textarea></div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Tipo de Piel</div>
+    <div class="field"><label class="field-label">¿Cómo describiría su piel? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="tipo_piel"><div class="radio-dot"></div>Normal</label>
+        <label class="radio-item"><input type="radio" name="tipo_piel"><div class="radio-dot"></div>Seca</label>
+        <label class="radio-item"><input type="radio" name="tipo_piel"><div class="radio-dot"></div>Grasa</label>
+        <label class="radio-item"><input type="radio" name="tipo_piel"><div class="radio-dot"></div>Mixta</label>
+        <label class="radio-item"><input type="radio" name="tipo_piel"><div class="radio-dot"></div>Sensible</label>
+        <label class="radio-item"><input type="radio" name="tipo_piel"><div class="radio-dot"></div>No lo sé</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Problemas específicos de piel</div>
+    <div class="field"><label class="field-label">Textura y superficie</label>
+      <div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Piel áspera</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Muy seca / descamación</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Poros dilatados</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Piel engrosada</label></div>
+    </div>
+    <div class="field" style="margin-top:12px"><label class="field-label">Oleosidad</label>
+      <div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Brillo excesivo</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Producción irregular de sebo</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Espinillas (comedones)</label></div>
+    </div>
+    <div class="field" style="margin-top:12px"><label class="field-label">Inflamación / Brotes</label>
+      <div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Acné leve</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Acné moderado</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Acné severo</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Piel inflamada</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Enrojecimiento frecuente</label></div>
+    </div>
+    <div class="field" style="margin-top:12px"><label class="field-label">Pigmentación</label>
+      <div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Manchas solares</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Melasma</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Pecas</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Hipopigmentación</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Marcas post-acné</label></div>
+    </div>
+    <div class="field" style="margin-top:12px"><label class="field-label">Envejecimiento cutáneo</label>
+      <div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Líneas finas</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Arrugas marcadas</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Flacidez facial</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Pérdida de luminosidad</label></div>
+    </div>
+    <div class="field" style="margin-top:12px"><label class="field-label">Sensibilidades</label>
+      <div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Ardor</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Picor</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Alergia a cosméticos</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Rosácea diagnosticada</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Dermatitis</label></div>
+    </div>
+    <div class="field" style="margin-top:14px"><label class="field-label">Otros problemas no mencionados</label><textarea id="f-otros-piel" placeholder="Describa cualquier otro problema de piel..."></textarea></div>
+  </div>
+</div>
+
+<!-- STEP 7b: Fotografías -->
+<div class="step-panel" id="step-7b">
+  <div class="step-title">Fotografías de Referencia</div>
+  <div class="step-subtitle">Sube hasta 4 fotos de las áreas que deseas tratar. Esto ayuda al especialista a preparar tu evaluación.</div>
+  <div class="divider"></div>
+  <div class="photo-hint">📷 Formatos aceptados: JPG, PNG, WEBP · Máximo 2 MB por imagen · Opcional</div>
+  <div class="photo-grid" id="photo-grid">
+    <div class="photo-slot" id="slot-0" onclick="triggerUpload(0)"><input type="file" id="file-0" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleFile(this,0)"><div class="photo-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="5" width="24" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="14" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M9 5l2-3h6l2 3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span>Subir foto</span></div><img class="photo-preview" id="preview-0" src="" alt=""><button class="photo-remove" id="remove-0" onclick="removePhoto(event,0)">✕</button><div class="photo-label" id="label-0">Foto 1</div></div>
+    <div class="photo-slot" id="slot-1" onclick="triggerUpload(1)"><input type="file" id="file-1" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleFile(this,1)"><div class="photo-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="5" width="24" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="14" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M9 5l2-3h6l2 3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span>Subir foto</span></div><img class="photo-preview" id="preview-1" src="" alt=""><button class="photo-remove" id="remove-1" onclick="removePhoto(event,1)">✕</button><div class="photo-label" id="label-1">Foto 2</div></div>
+    <div class="photo-slot" id="slot-2" onclick="triggerUpload(2)"><input type="file" id="file-2" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleFile(this,2)"><div class="photo-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="5" width="24" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="14" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M9 5l2-3h6l2 3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span>Subir foto</span></div><img class="photo-preview" id="preview-2" src="" alt=""><button class="photo-remove" id="remove-2" onclick="removePhoto(event,2)">✕</button><div class="photo-label" id="label-2">Foto 3</div></div>
+    <div class="photo-slot" id="slot-3" onclick="triggerUpload(3)"><input type="file" id="file-3" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleFile(this,3)"><div class="photo-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="5" width="24" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="14" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M9 5l2-3h6l2 3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span>Subir foto</span></div><img class="photo-preview" id="preview-3" src="" alt=""><button class="photo-remove" id="remove-3" onclick="removePhoto(event,3)">✕</button><div class="photo-label" id="label-3">Foto 4</div></div>
+  </div>
+  <div class="photo-error" id="photo-error"></div>
+</div>
+
+<!-- STEP 8: Evaluación Capilar y Depilación -->
+<div class="step-panel" id="step-8">
+  <div class="step-title">Evaluación Capilar</div>
+  <div class="step-subtitle">Estado del cabello y caída.</div>
+  <div class="divider"></div>
+  <div class="subsection">
+    <div class="subsection-title">Caída del Cabello</div>
+    <div class="form-grid">
+      <div class="field"><label class="field-label">¿Desde cuándo notas la caída?</label><div class="radio-group" style="flex-direction:column;gap:6px"><label class="radio-item"><input type="radio" name="caida_tiempo"><div class="radio-dot"></div>Menos de 3 meses</label><label class="radio-item"><input type="radio" name="caida_tiempo"><div class="radio-dot"></div>Entre 3 y 6 meses</label><label class="radio-item"><input type="radio" name="caida_tiempo"><div class="radio-dot"></div>Más de 6 meses</label><label class="radio-item"><input type="radio" name="caida_tiempo"><div class="radio-dot"></div>No tengo caída</label></div></div>
+      <div class="field"><label class="field-label">¿La caída es?</label><div class="radio-group" style="flex-direction:column;gap:6px"><label class="radio-item"><input type="radio" name="caida_tipo"><div class="radio-dot"></div>Difusa (toda la cabeza)</label><label class="radio-item"><input type="radio" name="caida_tipo"><div class="radio-dot"></div>Por zonas específicas</label><label class="radio-item"><input type="radio" name="caida_tipo"><div class="radio-dot"></div>No aplica</label></div></div>
+      <div class="field"><label class="field-label">Síntomas asociados</label><div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Picor</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Descamación</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Dolor</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Ninguno</label></div></div>
+      <div class="field"><label class="field-label">Factores recientes relacionados</label><div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Estrés</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Enfermedad</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Cirugía</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Cambio de medicación</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Ninguno</label></div></div>
+    </div>
+    <div class="yn-row" style="margin-top:12px"><span class="yn-label">¿Antecedentes familiares de alopecia?</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">¿Has usado tratamientos para la caída?</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Depilación y Manejo de Vello</div>
+    <div class="yn-row"><span class="yn-label">¿Deseas reducir o eliminar vello? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="form-grid" style="margin-top:14px">
+      <div class="field"><label class="field-label">Zonas de interés</label><div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Axilas</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Ingles</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Piernas</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Facial</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Pecho / Espalda</label></div></div>
+      <div class="field"><label class="field-label">Métodos previos de depilación</label><div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Láser</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Cera</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Afeitado</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Cremas</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Ninguno</label></div></div>
+    </div>
+    <div class="yn-row" style="margin-top:4px"><span class="yn-label">¿Has notado aumento reciente de vello?</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">¿Cambios hormonales recientes?</span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="field" style="margin-top:14px"><label class="field-label">Reacciones previas con depilación</label><div class="check-grid"><label class="check-item"><input type="checkbox"><div class="check-box"></div>Irritación</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Foliculitis</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Hiperpigmentación</label><label class="check-item"><input type="checkbox"><div class="check-box"></div>Ninguna</label></div></div>
+  </div>
+</div>
+
+<!-- STEP 9: Objetivos y Estética Previa -->
+<div class="step-panel" id="step-9">
+  <div class="step-title">Objetivos y Estética Previa</div>
+  <div class="step-subtitle">Tratamientos anteriores, objetivos actuales y áreas a tratar.</div>
+  <div class="divider"></div>
+
+  <div class="subsection">
+    <div class="subsection-title">Historial Estético Previo</div>
+    <div class="yn-row"><span class="yn-label">¿Ha recibido tratamientos estéticos anteriormente? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div style="margin-top:14px">
+      <div class="yn-row" id="trat-row-botox">
+        <span class="yn-label">Toxina botulínica (Botox)</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="toggleTrat(this,'yes','botox')">Sí</button>
+          <button class="yn-btn" onclick="toggleTrat(this,'no','botox')">No</button>
+        </div>
+      </div>
+      <div id="trat-det-botox" style="display:none;padding:8px 0 12px 16px;border-bottom:1px solid var(--border)">
+        <div class="form-grid" style="margin:0">
+          <div class="field"><label class="field-label">Última sesión</label><input type="text" id="trat-fecha-botox" placeholder="Ej. hace 6 meses, marzo 2025..."></div>
+          <div class="field"><label class="field-label">Zona tratada</label><input type="text" id="trat-zona-botox" placeholder="Ej. frente, abdomen, labios..."></div>
+        </div>
+      </div>
+      <div class="yn-row" id="trat-row-rellenos">
+        <span class="yn-label">Rellenos dérmicos (ácido hialurónico)</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="toggleTrat(this,'yes','rellenos')">Sí</button>
+          <button class="yn-btn" onclick="toggleTrat(this,'no','rellenos')">No</button>
+        </div>
+      </div>
+      <div id="trat-det-rellenos" style="display:none;padding:8px 0 12px 16px;border-bottom:1px solid var(--border)">
+        <div class="form-grid" style="margin:0">
+          <div class="field"><label class="field-label">Última sesión</label><input type="text" id="trat-fecha-rellenos" placeholder="Ej. hace 6 meses, marzo 2025..."></div>
+          <div class="field"><label class="field-label">Zona tratada</label><input type="text" id="trat-zona-rellenos" placeholder="Ej. frente, abdomen, labios..."></div>
+        </div>
+      </div>
+      <div class="yn-row" id="trat-row-hilos">
+        <span class="yn-label">Hilos tensores</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="toggleTrat(this,'yes','hilos')">Sí</button>
+          <button class="yn-btn" onclick="toggleTrat(this,'no','hilos')">No</button>
+        </div>
+      </div>
+      <div id="trat-det-hilos" style="display:none;padding:8px 0 12px 16px;border-bottom:1px solid var(--border)">
+        <div class="form-grid" style="margin:0">
+          <div class="field"><label class="field-label">Última sesión</label><input type="text" id="trat-fecha-hilos" placeholder="Ej. hace 6 meses, marzo 2025..."></div>
+          <div class="field"><label class="field-label">Zona tratada</label><input type="text" id="trat-zona-hilos" placeholder="Ej. frente, abdomen, labios..."></div>
+        </div>
+      </div>
+      <div class="yn-row" id="trat-row-peeling">
+        <span class="yn-label">Peeling químico</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="toggleTrat(this,'yes','peeling')">Sí</button>
+          <button class="yn-btn" onclick="toggleTrat(this,'no','peeling')">No</button>
+        </div>
+      </div>
+      <div id="trat-det-peeling" style="display:none;padding:8px 0 12px 16px;border-bottom:1px solid var(--border)">
+        <div class="form-grid" style="margin:0">
+          <div class="field"><label class="field-label">Última sesión</label><input type="text" id="trat-fecha-peeling" placeholder="Ej. hace 6 meses, marzo 2025..."></div>
+          <div class="field"><label class="field-label">Zona tratada</label><input type="text" id="trat-zona-peeling" placeholder="Ej. frente, abdomen, labios..."></div>
+        </div>
+      </div>
+      <div class="yn-row" id="trat-row-laser">
+        <span class="yn-label">Láser facial / corporal</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="toggleTrat(this,'yes','laser')">Sí</button>
+          <button class="yn-btn" onclick="toggleTrat(this,'no','laser')">No</button>
+        </div>
+      </div>
+      <div id="trat-det-laser" style="display:none;padding:8px 0 12px 16px;border-bottom:1px solid var(--border)">
+        <div class="form-grid" style="margin:0">
+          <div class="field"><label class="field-label">Última sesión</label><input type="text" id="trat-fecha-laser" placeholder="Ej. hace 6 meses, marzo 2025..."></div>
+          <div class="field"><label class="field-label">Zona tratada</label><input type="text" id="trat-zona-laser" placeholder="Ej. frente, abdomen, labios..."></div>
+        </div>
+      </div>
+      <div class="yn-row" id="trat-row-microblading">
+        <span class="yn-label">Microblading o micropigmentación</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="toggleTrat(this,'yes','microblading')">Sí</button>
+          <button class="yn-btn" onclick="toggleTrat(this,'no','microblading')">No</button>
+        </div>
+      </div>
+      <div id="trat-det-microblading" style="display:none;padding:8px 0 12px 16px;border-bottom:1px solid var(--border)">
+        <div class="form-grid" style="margin:0">
+          <div class="field"><label class="field-label">Última sesión</label><input type="text" id="trat-fecha-microblading" placeholder="Ej. hace 6 meses, marzo 2025..."></div>
+          <div class="field"><label class="field-label">Zona tratada</label><input type="text" id="trat-zona-microblading" placeholder="Ej. frente, abdomen, labios..."></div>
+        </div>
+      </div>
+      <div class="yn-row" id="trat-row-mesoterapia">
+        <span class="yn-label">Mesoterapia</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="toggleTrat(this,'yes','mesoterapia')">Sí</button>
+          <button class="yn-btn" onclick="toggleTrat(this,'no','mesoterapia')">No</button>
+        </div>
+      </div>
+      <div id="trat-det-mesoterapia" style="display:none;padding:8px 0 12px 16px;border-bottom:1px solid var(--border)">
+        <div class="form-grid" style="margin:0">
+          <div class="field"><label class="field-label">Última sesión</label><input type="text" id="trat-fecha-mesoterapia" placeholder="Ej. hace 6 meses, marzo 2025..."></div>
+          <div class="field"><label class="field-label">Zona tratada</label><input type="text" id="trat-zona-mesoterapia" placeholder="Ej. frente, abdomen, labios..."></div>
+        </div>
+      </div>
+      <div class="yn-row" id="trat-row-radiofrecuencia">
+        <span class="yn-label">Radiofrecuencia</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="toggleTrat(this,'yes','radiofrecuencia')">Sí</button>
+          <button class="yn-btn" onclick="toggleTrat(this,'no','radiofrecuencia')">No</button>
+        </div>
+      </div>
+      <div id="trat-det-radiofrecuencia" style="display:none;padding:8px 0 12px 16px;border-bottom:1px solid var(--border)">
+        <div class="form-grid" style="margin:0">
+          <div class="field"><label class="field-label">Última sesión</label><input type="text" id="trat-fecha-radiofrecuencia" placeholder="Ej. hace 6 meses, marzo 2025..."></div>
+          <div class="field"><label class="field-label">Zona tratada</label><input type="text" id="trat-zona-radiofrecuencia" placeholder="Ej. frente, abdomen, labios..."></div>
+        </div>
+      </div>
+      <div class="yn-row" id="trat-row-criolipolisis">
+        <span class="yn-label">Criolipólisis</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="toggleTrat(this,'yes','criolipolisis')">Sí</button>
+          <button class="yn-btn" onclick="toggleTrat(this,'no','criolipolisis')">No</button>
+        </div>
+      </div>
+      <div id="trat-det-criolipolisis" style="display:none;padding:8px 0 12px 16px;border-bottom:1px solid var(--border)">
+        <div class="form-grid" style="margin:0">
+          <div class="field"><label class="field-label">Última sesión</label><input type="text" id="trat-fecha-criolipolisis" placeholder="Ej. hace 6 meses, marzo 2025..."></div>
+          <div class="field"><label class="field-label">Zona tratada</label><input type="text" id="trat-zona-criolipolisis" placeholder="Ej. frente, abdomen, labios..."></div>
+        </div>
+      </div>
+      <div class="yn-row" id="trat-row-otro_estetico">
+        <span class="yn-label">Otro tratamiento estético</span>
+        <div class="yn-btns">
+          <button class="yn-btn" onclick="toggleTrat(this,'yes','otro_estetico')">Sí</button>
+          <button class="yn-btn" onclick="toggleTrat(this,'no','otro_estetico')">No</button>
+        </div>
+      </div>
+      <div id="trat-det-otro_estetico" style="display:none;padding:8px 0 12px 16px;border-bottom:1px solid var(--border)">
+        <div class="form-grid" style="margin:0">
+          <div class="field"><label class="field-label">Última sesión</label><input type="text" id="trat-fecha-otro_estetico" placeholder="Ej. hace 6 meses, marzo 2025..."></div>
+          <div class="field"><label class="field-label">Zona tratada</label><input type="text" id="trat-zona-otro_estetico" placeholder="Ej. frente, abdomen, labios..."></div>
+        </div>
+      </div>
+    </div>
+    <div class="yn-row" style="margin-top:4px"><span class="yn-label">¿Actualmente está en tratamiento con láser? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div id="laser-det-wrap" style="display:none;padding:6px 0 12px 0">
+      <div class="field"><label class="field-label">Por favor dar más detalles</label><input type="text" id="f-laser-det" placeholder="Tipo de láser, clínica, frecuencia..."></div>
+    </div>
+    <div class="yn-row"><span class="yn-label">¿Ha tenido complicaciones con algún tratamiento estético previo? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div id="complic-det-wrap" style="display:none;padding:6px 0 12px 0">
+      <div class="field"><label class="field-label">Por favor dar más detalles</label><input type="text" id="f-complic-det" placeholder="Tipo de reacción, tratamiento recibido..."></div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Área de Interés y Expectativas</div>
+    <div class="field"><label class="field-label">Áreas FACIALES a tratar <span class="req">*</span></label>
+      <div class="check-grid">
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Arrugas / líneas</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Manchas</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Flacidez facial</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Acné o cicatrices</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Ojeras o bolsas</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Contorno facial</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Poros dilatados</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Textura de la piel</label>
+      </div>
+    </div>
+    <div class="field" style="margin-top:14px"><label class="field-label">Áreas CORPORALES a tratar</label>
+      <div class="check-grid">
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Grasa localizada</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Celulitis</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Flacidez corporal</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Estrías</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Várices o arañitas</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Exceso de vello</label>
+        <label class="check-item"><input type="checkbox"><div class="check-box"></div>Otro</label>
+      </div>
+    </div>
+    <div class="form-grid" style="margin-top:16px">
+      <div class="field full"><label class="field-label">¿Cuál es su PRIORIDAD principal? <span class="req">*</span></label><input id="f-prioridad" type="text" placeholder="Ej. eliminar manchas del rostro..."></div>
+      <div class="field full"><label class="field-label">¿Qué expectativas tiene del tratamiento? <span class="req">*</span></label><textarea id="f-expectativas" placeholder="Describe qué resultado esperas..."></textarea></div>
+      <div class="field full">
+        <label class="field-label">Satisfacción actual con el área a tratar <span class="req">*</span> <span style="font-size:10px;color:var(--muted)">(1 = Muy insatisfecho · 10 = Muy satisfecho)</span></label>
+        <div class="scale-group" id="scale-satisfaccion">
+          <button class="scale-btn" onclick="toggleScale(this,1)">1</button>
+          <button class="scale-btn" onclick="toggleScale(this,2)">2</button>
+          <button class="scale-btn" onclick="toggleScale(this,3)">3</button>
+          <button class="scale-btn" onclick="toggleScale(this,4)">4</button>
+          <button class="scale-btn" onclick="toggleScale(this,5)">5</button>
+          <button class="scale-btn" onclick="toggleScale(this,6)">6</button>
+          <button class="scale-btn" onclick="toggleScale(this,7)">7</button>
+          <button class="scale-btn" onclick="toggleScale(this,8)">8</button>
+          <button class="scale-btn" onclick="toggleScale(this,9)">9</button>
+          <button class="scale-btn" onclick="toggleScale(this,10)">10</button>
+        </div>
+      </div>
+    </div>
+    <div class="yn-row" style="margin-top:4px"><span class="yn-label">¿Entiende que pueden necesitarse múltiples sesiones? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  </div>
+</div>
+
+<!-- STEP 10: Estilo de Vida y Antecedentes -->
+<div class="step-panel" id="step-10">
+  <div class="step-title">Estilo de Vida y Antecedentes</div>
+  <div class="step-subtitle">Hábitos del sol, cuidado de la piel, actividad física y antecedentes familiares.</div>
+  <div class="divider"></div>
+
+  <div class="subsection">
+    <div class="subsection-title">Exposición Solar y Cuidado Facial</div>
+    <div class="form-grid">
+      <div class="field full"><label class="field-label">Exposición solar <span class="req">*</span></label><div class="radio-group"><label class="radio-item"><input type="radio" name="sol"><div class="radio-dot"></div>Mínima</label><label class="radio-item"><input type="radio" name="sol"><div class="radio-dot"></div>Moderada</label><label class="radio-item"><input type="radio" name="sol"><div class="radio-dot"></div>Alta</label></div></div>
+    </div>
+    <div class="yn-row"><span class="yn-label">¿Usa protector solar diariamente? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleSolar(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleSolar(this,'no')">No</button></div></div>
+    <div id="solar-det-wrap" style="display:none;margin-top:12px">
+      <div class="form-grid">
+        <div class="field"><label class="field-label">Marca o tipo</label><input id="f-protector-marca" type="text" placeholder="Ej. Heliocare, La Roche-Posay, Isdin..."></div>
+        <div class="field"><label class="field-label">Factor de protección (FPS)</label><input id="f-spf" type="text" placeholder="Ej. SPF 50, SPF 50+..."></div>
+        <div class="field"><label class="field-label">Hora de aplicación</label><input id="f-protector-hora" type="text" placeholder="Ej. 7am, antes de salir..."></div>
+        <div class="field"><label class="field-label">¿Reaplica durante el día? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="reaplica_solar"><div class="radio-dot"></div>Sí</label>
+            <label class="radio-item"><input type="radio" name="reaplica_solar"><div class="radio-dot"></div>No</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="yn-row"><span class="yn-label">¿Realiza rutina diaria de cuidado facial o corporal? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleRutina(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleRutina(this,'no')">No</button></div></div>
+    <div id="rutina-det-wrap" style="display:none;margin-top:12px">
+      <div class="form-grid">
+        <div class="field full"><label class="field-label">Rutina de la mañana (productos y orden)</label><textarea id="f-rutina-manana" placeholder="Ej. limpiador, sérum vitamina C, hidratante, SPF..."></textarea></div>
+        <div class="field full"><label class="field-label">Rutina de la noche (productos y orden)</label><textarea id="f-rutina-noche" placeholder="Ej. limpiador, retinol, crema reparadora..."></textarea></div>
+      </div>
+      <div class="field" style="margin-top:12px"><label class="field-label">Rutina actual incluye <span class="req">*</span></label>
+        <div class="check-grid">
+          <label class="check-item"><input type="checkbox"><div class="check-box"></div>Limpieza facial diaria</label>
+          <label class="check-item"><input type="checkbox"><div class="check-box"></div>Hidratación</label>
+          <label class="check-item"><input type="checkbox"><div class="check-box"></div>Retinol o ácidos</label>
+          <label class="check-item"><input type="checkbox"><div class="check-box"></div>Tratamientos dermatológicos</label>
+        </div>
+      </div>
+      <div class="form-grid" style="margin-top:14px">
+        <div class="field full"><label class="field-label">Productos cosméticos de uso frecuente</label><textarea id="f-productos" placeholder="Maquillaje, cremas, sueros, tónicos que usa habitualmente..."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Actividad Física</div>
+    <div class="field"><label class="field-label">Nivel de actividad física <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="act_fisica"><div class="radio-dot"></div>Sedentario</label>
+        <label class="radio-item"><input type="radio" name="act_fisica"><div class="radio-dot"></div>Ligero (1–2/sem)</label>
+        <label class="radio-item"><input type="radio" name="act_fisica"><div class="radio-dot"></div>Moderado (3–4/sem)</label>
+        <label class="radio-item"><input type="radio" name="act_fisica"><div class="radio-dot"></div>Intenso (5+/sem)</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">Antecedentes Familiares y Contraindicaciones</div>
+    <div class="yn-row"><span class="yn-label">¿En su familia hay historia de alguna enfermedad relevante? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">¿Tienes alergias a medicamentos o productos tópicos? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">¿Has tenido infecciones cutáneas en zonas a tratar? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+    <div class="yn-row"><span class="yn-label">¿Tienes marcapasos, implantes metálicos o dispositivos médicos? <span style="color:var(--gold)">*</span></span><div class="yn-btns"><button class="yn-btn" onclick="toggleYN(this,'yes')">Sí</button><button class="yn-btn" onclick="toggleYN(this,'no')">No</button></div></div>
+  </div>
+  <div class="subsection" style="margin-top:8px">
+    <div class="subsection-title">Antecedentes Familiares</div>
+    <div class="form-grid">
+      <div class="field full"><label class="field-label">¿Algún familiar directo con enfermedades relevantes?</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="antecedentes_fam"><div class="radio-dot"></div>Sí</label>
+          <label class="radio-item"><input type="radio" name="antecedentes_fam"><div class="radio-dot"></div>No</label>
+        </div>
+      </div>
+      <div class="field full" id="antecedentes-det-wrap" style="display:none">
+        <label class="field-label">¿Cuáles? (diabetes, cáncer, enfermedades cardíacas, etc.)</label>
+        <textarea id="f-antecedentes-det" placeholder="Ej. Padre con diabetes tipo 2, madre con hipotiroidismo..."></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 11: Declaración y Consentimiento -->
+<div class="step-panel" id="step-11">
+  <div class="step-title">Declaración y Consentimiento</div>
+  <div class="step-subtitle">Para finalizar, confirma los siguientes puntos marcando cada uno.</div>
+  <div class="divider"></div>
+  <label class="consent-item"><input type="checkbox"><div class="consent-check"></div><div class="consent-text"><strong>Información verídica y completa <span style="color:var(--gold)">*</span></strong><span>Declaro que toda la información proporcionada en este cuestionario es verídica y completa.</span></div></label>
+  <label class="consent-item"><input type="checkbox"><div class="consent-check"></div><div class="consent-text"><strong>Riesgo de ocultar información <span style="color:var(--gold)">*</span></strong><span>Comprendo que ocultar información médica puede poner en riesgo mi salud y afectar los resultados del tratamiento.</span></div></label>
+  <label class="consent-item"><input type="checkbox"><div class="consent-check"></div><div class="consent-text"><strong>Compromiso de informar cambios <span style="color:var(--gold)">*</span></strong><span>Me comprometo a informar al profesional sobre cualquier cambio en mi estado de salud.</span></div></label>
+  <label class="consent-item"><input type="checkbox"><div class="consent-check"></div><div class="consent-text"><strong>Personalización de tratamientos <span style="color:var(--gold)">*</span></strong><span>Entiendo que los tratamientos estéticos se personalizan según cada paciente y que los resultados pueden variar.</span></div></label>
+  <label class="consent-item"><input type="checkbox"><div class="consent-check"></div><div class="consent-text"><strong>Autorización de contacto <span style="color:var(--gold)">*</span></strong><span>Autorizo a la clínica a contactarme para seguimiento y recordatorios de citas.</span></div></label>
+  <div class="form-grid" style="margin-top:24px">
+    <div class="field"><label class="field-label">Fecha de envío <span class="req">*</span></label><input type="date" id="fecha-envio"></div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="screen-loading">
+  <div class="loading-spinner"></div>
+  <div class="loading-title">Procesando tu información</div>
+  <div class="loading-desc">Estamos generando tu plan personalizado con inteligencia artificial. Esto puede tardar entre 5 y 10 minutos según la cantidad y tipo de información — por favor no cierres esta ventana.</div>
+  <div class="loading-steps">
+    <div class="ls-item active" id="ls-1"><div class="ls-dot"></div>Enviando tu formulario al equipo</div>
+    <div class="ls-item" id="ls-2"><div class="ls-dot"></div>Analizando tus objetivos con IA</div>
+    <div class="ls-item" id="ls-3"><div class="ls-dot"></div>Generando tu plan personalizado</div>
+    <div class="ls-item" id="ls-4"><div class="ls-dot"></div>Enviando plan al especialista</div>
+    <div id="ls-timer" style="font-size:11px;color:#9aaa8a;margin-top:12px;text-align:center">⏱ 0s transcurridos...</div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div id="success">
+  <div class="success-icon">
+    <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><path d="M6 15L12 21L24 9" stroke="#8fa832" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <h2>¡Gracias por confiar en nosotros!</h2>
+  <p>Tu cuestionario fue recibido exitosamente. Nuestro equipo revisará tu información y el plan personalizado generado para ti. En breve nos pondremos en contacto para coordinar tu primera consulta.</p>
+  <div style="background:rgba(143,168,50,.08);border:1px solid rgba(143,168,50,.25);border-radius:2px;padding:14px 18px;font-size:13px;color:var(--muted);text-align:left;max-width:380px;margin:0 auto 24px;line-height:1.7">
+    <strong style="color:var(--text);display:block;margin-bottom:6px">¿Tienes preguntas?</strong>
+    📞 Tel: 263-8134 &amp; 209-4284<br>
+    📱 @centrocarvajal
+  </div>
+</div>
+
+<!-- NAV -->
+<div id="model-selector-bar" style="width:100%;max-width:900px;margin-bottom:12px;display:none">
+  <div style="background:#fff;border:1px solid #d4dcc0;border-radius:4px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div>
+      <div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#7a8a6a;font-weight:500;margin-bottom:4px">Modelo de IA</div>
+      <div style="font-size:12px;color:#2d3a2e">Selecciona con qué IA quieres generar el plan</div>
+    </div>
+    <div style="display:flex;gap:10px">
+<select id="modelo-select" onchange="setModeloSelect(this.value)"
+        style="padding:9px 36px 9px 0;border:none;border-bottom:1px solid var(--border);font-size:14px;font-family:inherit;color:var(--text);background:transparent;cursor:pointer;outline:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%238fa832%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 4px center;width:100%">
+          <option value="">— Selecciona una IA —</option>
+          <option value="claude">✦ Claude</option>
+          <option value="gemini">◆ Gemini</option>
+          <option value="groq">▲ Groq</option>
+        </select>
+        <div id="modelo-warning" style="display:none;margin-top:6px;font-size:11px;color:#c62828;font-weight:500">⚠ Debes seleccionar una IA</div>
+    </div>
+  </div>
+</div>
+
+<div class="nav" id="nav-bar">
+  <span class="step-counter" id="step-counter">Paso 1 de 11</span>
+  <div style="display:flex;gap:12px">
+    <button class="btn btn-outline" id="btn-prev" onclick="changeStep(-1)" style="display:none">Anterior</button>
+    <button class="btn btn-primary" id="btn-next" onclick="changeStep(1)">Continuar</button>
+  </div>
+</div>
+
+</div><!-- /card -->
+
+<script>
+let current = 1;
+const total = 11;
+const stepIds = ['step-1','step-3','step-4','step-5','step-6','step-7','step-7b','step-8','step-9','step-10','step-11'];
+
+function realStepId(n){ return stepIds[n-1] || 'step-'+n; }
+
+function buildLabels(){
+  const container = document.getElementById('steps-circles');
+  for(let i=1;i<=total;i++){
+    const c=document.createElement('div');
+    c.className='step-circle'+(i===1?' active':'');
+    c.id='lbl-'+i;
+    c.innerHTML='<span>'+i+'</span>';
+    container.appendChild(c);
+  }
+}
+
+function updateUI(){
+  const pct=total>1?((current-1)/(total-1))*100:0;
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('step-counter').textContent='Paso '+current+' de '+total;
+  document.getElementById('btn-prev').style.display=current>1?'inline-block':'none';
+  document.getElementById('btn-next').textContent=current===total?'Enviar':'Continuar';
+  for(let i=1;i<=total;i++){
+    const el=document.getElementById('lbl-'+i);
+    el.className=i<current?'step-circle done':i===current?'step-circle active':'step-circle';
+  }
+}
+
+function goToStep(n){
+  document.getElementById(realStepId(current)).classList.remove('active');
+  current=n;
+  document.getElementById(realStepId(current)).classList.add('active');
+  updateUI();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function changeStep(dir){
+  if(dir===1&&current===total){submitForm();return;}
+  goToStep(current+dir);
+}
+
+function toggleYN(btn,type){
+  const group=btn.closest('.yn-btns');
+  group.querySelectorAll('.yn-btn').forEach(b=>b.classList.remove('active-yes','active-no'));
+  btn.classList.add(type==='yes'?'active-yes':'active-no');
+}
+
+function toggleScale(btn,val){
+  const group=btn.closest('.scale-group');
+  group.querySelectorAll('.scale-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  btn.dataset.val=val;
+}
+
+function getScaleValue(groupId){
+  const active=document.querySelector('#'+groupId+' .scale-btn.active');
+  return active?active.textContent.trim():'';
+}
+
+// Horario "Otro" toggle
+document.querySelectorAll('input[name="horario_laboral"]').forEach(radio=>{
+  radio.addEventListener('change',function(){
+    const otroDiv=document.getElementById('horario-otro-input');
+    otroDiv.style.display=this.value==='Otro'?'block':'none';
+    otroDiv.classList.toggle('visible',this.value==='Otro');
+  });
+});
+
+function initCheckboxes(){
+  document.querySelectorAll('.check-item').forEach(item=>{
+    item.addEventListener('click',function(){
+      const cb=this.querySelector('input[type="checkbox"]');
+      cb.checked=!cb.checked;
+      this.classList.toggle('checked',cb.checked);
+    });
+  });
+  document.querySelectorAll('.consent-item').forEach(item=>{
+    item.addEventListener('click',function(){
+      const cb=this.querySelector('input[type="checkbox"]');
+      cb.checked=!cb.checked;
+      this.classList.toggle('checked',cb.checked);
+    });
+  });
+  document.querySelectorAll('.radio-item').forEach(item=>{
+    item.addEventListener('click',function(){
+      const name=this.querySelector('input').name;
+      document.querySelectorAll('.radio-item input[name="'+name+'"]').forEach(r=>{
+        r.closest('.radio-item').classList.remove('selected');
+      });
+      this.querySelector('input').checked=true;
+      this.classList.add('selected');
+    });
+  });
+}
+
+// ── Photo upload ──
+const MAX_SIZE=2*1024*1024;
+const ALLOWED=['image/jpeg','image/png','image/webp'];
+const photoFiles=[null,null,null,null];
+
+function triggerUpload(idx){
+  if(document.getElementById('slot-'+idx).classList.contains('has-photo'))return;
+  document.getElementById('file-'+idx).click();
+}
+function handleFile(input,idx){
+  const file=input.files[0];
+  const errEl=document.getElementById('photo-error');
+  errEl.textContent='';
+  if(!file)return;
+  if(!ALLOWED.includes(file.type)){errEl.textContent='Formato no permitido en Foto '+(idx+1)+'. Solo JPG, PNG o WEBP.';input.value='';return;}
+  if(file.size>MAX_SIZE){errEl.textContent='La Foto '+(idx+1)+' supera los 2 MB.';input.value='';return;}
+  photoFiles[idx]=file;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('preview-'+idx).src=e.target.result;
+    document.getElementById('slot-'+idx).classList.add('has-photo');
+  };
+  reader.readAsDataURL(file);
+}
+function removePhoto(e,idx){
+  e.stopPropagation();
+  photoFiles[idx]=null;
+  document.getElementById('file-'+idx).value='';
+  document.getElementById('preview-'+idx).src='';
+  document.getElementById('slot-'+idx).classList.remove('has-photo');
+  document.getElementById('photo-error').textContent='';
+}
+
+// ── YN map helper ──
+function getYNValue(container, labelText){
+  if(!container)return'No respondido';
+  let found='No respondido';
+  container.querySelectorAll('.yn-row').forEach(row=>{
+    const lbl=row.querySelector('.yn-label').textContent.replace(/\*/g,'').trim();
+    if(lbl.toLowerCase().includes(labelText.toLowerCase())){
+      const ay=row.querySelector('.active-yes');
+      const an=row.querySelector('.active-no');
+      found=ay?'Sí':(an?'No':'No respondido');
+    }
+  });
+  return found;
+}
+
+function getCheckedValues(containerId){
+  const container=document.getElementById(containerId)||document.querySelector(containerId);
+  if(!container)return[];
+  return [...container.querySelectorAll('.check-item.checked')].map(i=>{
+    const inp=i.querySelector('input[type="checkbox"]');
+    return inp&&inp.value?inp.value:i.textContent.trim();
+  });
+}
+
+// ── collectData — mapea exactamente lo que app.py necesita ──
+function collectData(){
+  const s3=document.getElementById('step-3');
+  const s4=document.getElementById('step-4');
+  const s6=document.getElementById('step-6');
+  const s9=document.getElementById('step-9');
+  const s10=document.getElementById('step-10');
+
+  // Horario laboral: radio o campo libre
+  const horarioRadio=document.querySelector('input[name="horario_laboral"]:checked');
+  let horarioLaboral='';
+  if(horarioRadio){
+    horarioLaboral=horarioRadio.value==='Otro'
+      ?(document.getElementById('f-horario-otro').value||'Otro')
+      :horarioRadio.value;
+  }
+
+  // Proteínas (checkboxes con value)
+  const proteinasSelec=getCheckedValues('chk-proteinas').join(', ');
+  const proteinasEvitar=document.getElementById('f-proteinas-evitar').value||'';
+
+  // Carbohidratos
+  const carbosSelec=getCheckedValues('chk-carbos').join(', ');
+  const carbosEvitar=document.getElementById('f-carbos-evitar').value||'';
+
+  // Verduras y frutas
+  const verduras=document.getElementById('f-verduras').value||'';
+  const verdurasEvitar=document.getElementById('f-verduras-evitar').value||'';
+  const frutas=document.getElementById('f-frutas').value||'';
+
+  // Alimentos evitar (unir los tres)
+  const alimentosEvitar=[proteinasEvitar,carbosEvitar,verdurasEvitar].filter(Boolean).join(', ');
+
+  // Intolerancias lacteos/gluten/procesados desde step-4
+  const intolLacteos=getYNValue(s4,'lácteos');
+  const intolGluten=getYNValue(s4,'gluten');
+  const intolProcesados=getYNValue(s4,'procesados');
+  const intolerancias=[];
+  if(intolLacteos==='Sí')intolerancias.push('Lacteos');
+  if(intolGluten==='Sí')intolerancias.push('Gluten');
+  if(intolProcesados==='Sí')intolerancias.push('Procesados');
+
+  // Síntomas digestivos desde step-4
+  const sintomasMap={
+    'hinchazon_abdominal':'hinchazón abdominal',
+    'gases':'gases o flatulencias',
+    'estrenimiento':'estreñimiento o diarrea',
+    'cansancio_comidas':'cansancio o somnolencia después de las comidas',
+    'digestion_lenta':'digestión es lenta',
+    'nauseas':'náuseas o malestar'
+  };
+  const sintomasDigestivos=[];
+  Object.entries(sintomasMap).forEach(([key,label])=>{
+    if(getYNValue(s4,label)==='Sí')sintomasDigestivos.push(key);
+  });
+
+  // Alergias desde step-6 con síntomas
+  const alergiasActivas=[];
+  const alergiasDetalle={};
+  const alergiaKeys=[
+    ['alg_medicamentos','Medicamentos'],
+    ['alg_lidocaina','Lidocaína'],
+    ['alg_penicilina','Penicilina'],
+    ['alg_yodo','Yodo/Isodine'],
+    ['alg_aines','AINEs'],
+    ['alg_alimentos','Alimentos'],
+    ['alg_mariscos','Mariscos/Algas'],
+    ['alg_latex','Látex'],
+    ['alg_aloe','Aloe vera'],
+    ['alg_fragancias','Fragancias'],
+    ['alg_otro','Otro'],
+  ];
+  alergiaKeys.forEach(([key,nombre])=>{
+    const det=document.getElementById('adet-'+key);
+    if(det&&det.style.display!=='none'){
+      const sint=document.getElementById('asint-'+key)?document.getElementById('asint-'+key).value||'':'';
+      alergiasActivas.push(nombre);
+      alergiasDetalle[nombre]=sint;
+    }
+  });
+
+  // Contraindications
+  const contra={
+    'Embarazo':        getYNValue(s3,'embarazada'),
+    'Lactancia':       getYNValue(s3,'lactancia'),
+    'Anticonceptivos': getYNValue(s3,'anticonceptivos'),
+    'SOP':             getYNValue(s3,'ovario poliquístico'),
+    'Menopausia':      getYNValue(s3,'menopausia'),
+    'Tabaquismo':      getYNValue(s3,'fuma'),
+    'Alergia lidocaina':  getYNValue(document.getElementById('step-6'),'lidocaína'),
+    'Alergia penicilina': getYNValue(document.getElementById('step-6'),'penicilina'),
+    'Alergia yodo':       getYNValue(document.getElementById('step-6'),'yodopovidona'),
+    'Alergia AINEs':      getYNValue(document.getElementById('step-6'),'antiinflamatorios'),
+    'Alergia latex':      getYNValue(document.getElementById('step-6'),'látex'),
+  };
+
+  // Historial estético con fecha y zona
+  const tratKeys=[
+    ['botax','Toxina botulínica (Botox)','Botox'],
+    ['rellenos','Rellenos dérmicos (ácido hialurónico)','Rellenos'],
+    ['hilos','Hilos tensores','Hilos PDO'],
+    ['peeling','Peeling químico','Peeling'],
+    ['laser','Láser facial / corporal','Laser'],
+    ['microblading','Microblading o micropigmentación','Microblading'],
+    ['mesoterapia','Mesoterapia','Mesoterapia'],
+    ['radiofrecuencia','Radiofrecuencia','Radiofrecuencia'],
+    ['criolipolisis','Criolipólisis','Criolipólisis'],
+    ['otro_estetico','Otro tratamiento estético','Otro'],
+  ];
+  const historialEstetico=[];
+  const historialDetalle={};
+  tratKeys.forEach(([key,label,nombre])=>{
+    const det=document.getElementById('trat-det-'+key);
+    if(det&&det.style.display!=='none'){
+      const fecha=document.getElementById('trat-fecha-'+key)?document.getElementById('trat-fecha-'+key).value||'':'';
+      const zona=document.getElementById('trat-zona-'+key)?document.getElementById('trat-zona-'+key).value||'':'';
+      historialEstetico.push(nombre);
+      historialDetalle[nombre]={fecha,zona};
+    }
+  });
+
+  // Rutina facial
+  const rutinaManana=document.getElementById('f-rutina-manana').value||'';
+  const rutinaNoche=document.getElementById('f-rutina-noche').value||'';
+
+  // Piel problemas (checkboxes step-7)
+  const problemasPiel=getCheckedValues('step-7');
+  // Áreas faciales y corporales step-9
+  const areasFacialesEl=s9?s9.querySelector('.subsection:nth-of-type(2) .check-grid'):null;
+  const areasCorporalesEl=s9?s9.querySelectorAll('.check-grid')[1]:null;
+  const areasFaciales=areasFacialesEl?[...areasFacialesEl.querySelectorAll('.check-item.checked')].map(i=>i.textContent.trim()):[];
+  const areasCorporales=areasCorporalesEl?[...areasCorporalesEl.querySelectorAll('.check-item.checked')].map(i=>i.textContent.trim()):[];
+
+  // Bebidas azucaradas
+  const bebidasYN=getYNValue(document.getElementById('step-5'),'bebidas azucaradas');
+  const bebidasCuales=document.getElementById('f-bebidas-cuales').value||'';
+  const bebidas=bebidasYN==='Sí'?(bebidasCuales||'Sí'):'No';
+
+  // Sueño
+  const horasSueno=document.querySelector('input[name="horas_sueno"]:checked');
+  const calidadSueno=document.querySelector('input[name="calidad_sueno"]:checked');
+  const sueno=(horasSueno?horasSueno.closest('.radio-item').textContent.trim():'')
+    +' '+(calidadSueno?calidadSueno.closest('.radio-item').textContent.trim():'');
+
+  // IMC
+  const est=document.getElementById('f-estatura').value||'';
+  const pes=document.getElementById('f-peso').value||'';
+  let imc='No registrado';
+  if(est&&pes){try{imc=(parseFloat(pes)/Math.pow(parseFloat(est)/100,2)).toFixed(1);}catch(e){}}
+
+  return {
+    // Identificación
+    nombre:         document.getElementById('f-nombre').value||'',
+    cedula:         document.getElementById('f-cedula')?document.getElementById('f-cedula').value||'':'',
+    direccion:      document.getElementById('f-direccion')?document.getElementById('f-direccion').value||'':'',
+    edad:           document.getElementById('f-edad').value||'',
+    fechaNacimiento: document.getElementById('f-fechanac')?document.getElementById('f-fechanac').value||'':'',
+    sexo:           (document.querySelector('input[name="sexo"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+    email:          document.getElementById('f-email').value||'',
+    celular:        document.getElementById('f-celular').value||'',
+    ocupacion:      document.getElementById('f-ocupacion').value||'',
+    horarioLaboral: horarioLaboral,
+    actLaboral:     (document.querySelector('input[name="act_laboral"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+    numHijos:       (document.querySelector('input[name="num_hijos"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+    comoConociste:  (document.querySelector('input[name="como_conociste"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+    fecha:          new Date().toLocaleDateString('es-CR',{day:'numeric',month:'long',year:'numeric'}),
+
+    // Contacto emergencia
+    contactoEmergencia: document.getElementById('f-cont-nombre').value||'',
+    contactoRelacion:   document.getElementById('f-cont-relacion').value||'',
+    contactoTel:        document.getElementById('f-cont-tel').value||'',
+
+    // Medidas
+    estatura: est,
+    peso:     pes,
+    imc:      imc,
+
+    // Salud
+    condicionSistemica: (()=>{
+      const enf=document.querySelector('input[name="enfermedad"]:checked');
+      if(!enf)return'Sin enfermedades';
+      const val=enf.closest('.radio-item').textContent.trim();
+      return val==='Sí'?(document.getElementById('f-enfermedad-det').value||'Sí'):'Sin enfermedades';
+    })(),
+    condiciones:   document.getElementById('f-otras-condiciones').value||'',
+    medicamentos:  document.getElementById('f-medicamentos').value||'',
+    cirugias: (()=>{
+      const cir=getYNValue(document.getElementById('step-7'),'cirugía');
+      return cir==='Sí'?(document.getElementById('f-cirugias-det').value||'Sí'):'Ninguna';
+    })(),
+    alergias:        alergiasActivas.length?alergiasActivas.join(', '):'Ninguna',
+    alergiasDetalle: alergiasDetalle,
+    contraindications: contra,
+
+    // Hábitos
+    fuma:    (()=>{ const f=getYNValue(s3,'fuma'); const frec=document.querySelector('input[name="fuma_frec"]:checked'); return f==='Sí'?('Sí'+(frec?' - '+frec.closest('.radio-item').textContent.trim():'')):'No'; })(),
+    alcohol: getYNValue(document.getElementById('step-5'),'alcohol'),
+
+    // Sueño
+    sueno:          sueno.trim(),
+    horaDespierta:  document.getElementById('f-hora-despierta').value||'',
+    horaDuerme:     document.getElementById('f-hora-duerme').value||'',
+    cansancioDia:   getYNValue(s3,'cansancio o somnolencia durante el día'),
+
+    // Piel
+    pielTipo:            (document.querySelector('input[name="tipo_piel"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+    pielProblemas:       problemasPiel,
+    rutinaManana:        rutinaManana,
+    rutinaNoche:         rutinaNoche,
+    rutinaFacial:        rutinaManana||rutinaNoche?(rutinaManana+' | '+rutinaNoche):'No tiene rutina facial',
+    productosFrecuentes: document.getElementById('f-productos').value||'',
+    solar:               (document.querySelector('input[name="sol"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+    spf:                 document.getElementById('f-spf').value||'',
+
+    // Actividad física
+    actFisica: (document.querySelector('input[name="act_fisica"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+
+    // Objetivos
+    areasFaciales:    areasFaciales,
+    areasCorporales:  areasCorporales,
+    prioridad:        document.getElementById('f-prioridad').value||'',
+    expectativas:     document.getElementById('f-expectativas').value||'',
+    satisfaccion:     getScaleValue('scale-satisfaccion'),
+    historialEstetico: historialEstetico,
+    historialDetalle:  historialDetalle,
+    laserActivo:      getYNValue(s9,'actualmente está en tratamiento con láser'),
+
+    // Alimentación
+    intolerancias:       intolerancias,
+    sintLacteos:         document.getElementById('sint-lacteos')&&document.getElementById('sint-lacteos').style.display!=='none' ? (document.getElementById('sint-lacteos-det').value||'Sí') : 'No',
+    sintGluten:          document.getElementById('sint-gluten')&&document.getElementById('sint-gluten').style.display!=='none' ? (document.getElementById('sint-gluten-det').value||'Sí') : 'No',
+    sintProcesados:      document.getElementById('sint-procesados')&&document.getElementById('sint-procesados').style.display!=='none' ? (document.getElementById('sint-procesados-det').value||'Sí') : 'No',
+    sintomasDigestivos:  sintomasDigestivos,
+    proteinas:           proteinasSelec,
+    carbohidratos:       carbosSelec,
+    verduras:            verduras,
+    frutas:              frutas,
+    alimentosEvitar:     alimentosEvitar,
+    postres:             document.getElementById('f-postres').value||'',
+    bebidas:             bebidas,
+    notasAlimentacion:   document.getElementById('f-nota-alim').value||'',
+
+    // Nuevos campos
+    nivelEstres:        getScaleValue('scale-estres'),
+    numHijosVal:        (document.querySelector('input[name="num_hijos"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+
+    // Condiciones ginecológicas / contraindicaciones detalladas
+    embarazo:           getYNValue(s3,'embarazada'),
+    lactancia:          getYNValue(s3,'lactancia'),
+    anticonceptivos:    getYNValue(s3,'anticonceptivos'),
+    sop:                getYNValue(s3,'ovario poliquístico'),
+    menopausia:         getYNValue(s3,'menopausia'),
+    perimenopausia:     getYNValue(s3,'perimenopausia'),
+
+    // Alergias detalladas
+    alergia_lidocaina:  getYNValue(document.getElementById('step-6'),'lidocaína'),
+    alergia_penicilina: getYNValue(document.getElementById('step-6'),'penicilina'),
+    alergia_yodo:       getYNValue(document.getElementById('step-6'),'yodopovidona'),
+    alergia_aines:      getYNValue(document.getElementById('step-6'),'antiinflamatorios'),
+    alergia_latex:      getYNValue(document.getElementById('step-6'),'látex'),
+    alergia_aloe:       getYNValue(document.getElementById('step-6'),'aloe'),
+    alergia_fragancias: getYNValue(document.getElementById('step-6'),'fragancias'),
+
+    // Hábitos digestivos
+    evacuacion:         (document.querySelector('input[name="evacuacion"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+
+    // Solar detallado
+    usaProtectorSolar:  document.getElementById('solar-det-wrap')&&document.getElementById('solar-det-wrap').style.display!=='none' ? 'Sí' : 'No',
+    marcaSpf:           document.getElementById('f-spf')?document.getElementById('f-spf').value||'':'',
+    protectorMarca:     document.getElementById('f-protector-marca')?document.getElementById('f-protector-marca').value||'':'',
+    protectorHora:      document.getElementById('f-protector-hora')?document.getElementById('f-protector-hora').value||'':'',
+    reaplicaSolar:      (document.querySelector('input[name="reaplica_solar"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+
+    // Rutina
+    tieneRutina:        document.getElementById('rutina-det-wrap')&&document.getElementById('rutina-det-wrap').style.display!=='none' ? 'Sí' : 'No',
+
+    // Historial estético detalles adicionales
+    laserActualDet:     document.getElementById('f-laser-det')?document.getElementById('f-laser-det').value||'':'',
+    complicacionesDet:  document.getElementById('f-complic-det')?document.getElementById('f-complic-det').value||'':'',
+
+    // Grasas a evitar
+    grasasEvitar:       getCheckedValues('step-5').filter(v=>['Alimentos fritos','Manteca / Margarina','Aceites vegetales procesados','Grasas trans'].includes(v)),
+    grasasEvitarPorque: document.getElementById('f-grasas-evitar-porque')?document.getElementById('f-grasas-evitar-porque').value||'':'',
+
+    // Antecedentes familiares
+    antecedentesFam:    (document.querySelector('input[name="antecedentes_fam"]:checked')||{closest:()=>({textContent:''})}).closest('.radio-item').textContent.trim(),
+    antecedentesFamDet: document.getElementById('f-antecedentes-det')?document.getElementById('f-antecedentes-det').value||'':'',
+
+    notasStaff: '',
+  };
+}
+
+function submitForm(){
+  if (!window._modeloSel) {
+    const warn = document.getElementById('modelo-warning');
+    const sel  = document.getElementById('modelo-select');
+    if (warn) { warn.style.display='block'; }
+    if (sel)  { sel.style.borderColor='#c62828'; sel.focus(); sel.scrollIntoView({behavior:'smooth',block:'center'}); }
+    return;
+  }
+  const consents=document.querySelectorAll('#step-11 .consent-item input[type="checkbox"]');
+  if(![...consents].every(c=>c.checked)){
+    alert('Por favor acepta todas las declaraciones de consentimiento para continuar.');
+    return;
+  }
+  document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('nav-bar').style.display='none';
+  document.getElementById('progress-fill').style.width='100%';
+  document.getElementById('screen-loading').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  animateLoadingSteps();
+
+  const fd=new FormData();
+  fd.append('data',JSON.stringify(collectData()));
+  photoFiles.forEach((file,i)=>{ if(file)fd.append('foto_'+(i+1),file,file.name); });
+
+  fd.append('modelo', window._modeloSel);
+  fetch('/enviar',{method:'POST',body:fd})
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.jobId){
+        pollStatus(data.jobId);
+      } else {
+        showThanks();
+      }
+    })
+    .catch(()=>showThanks());
+}
+
+function pollStatus(jobId){
+  let secs=0;
+  const ticker=setInterval(()=>{
+    secs++;
+    const m=Math.floor(secs/60);
+    const s=secs%60;
+    const t=m>0?m+'min '+String(s).padStart(2,'0')+'s':s+'s';
+    const el=document.getElementById('ls-timer');
+    if(el) el.textContent='⏱ '+t+' transcurridos...';
+  },1000);
+
+  const poll=setInterval(async()=>{
+    try{
+      const r=await fetch('/status?job='+jobId);
+      const data=await r.json();
+      if(data.status==='working'){
+        if(data.msg){
+          const ls2=document.getElementById('ls-2');
+          const ls3=document.getElementById('ls-3');
+          if(data.msg.includes('1/3')){
+            ls2.className='ls-item done';
+            ls3.className='ls-item active';
+            ls3.querySelector('div.ls-dot').nextSibling.textContent=' '+data.msg;
+          } else if(data.msg.includes('2/3')){
+            ls3.className='ls-item active';
+            ls3.querySelector('div.ls-dot').nextSibling.textContent=' '+data.msg;
+          } else if(data.msg.includes('3/3')){
+            ls3.className='ls-item active';
+            ls3.querySelector('div.ls-dot').nextSibling.textContent=' '+data.msg;
+          }
+        }
+        return;
+      }
+      if(data.status==='done'||data.status==='error'){
+        clearInterval(poll);
+        clearInterval(ticker);
+        showThanks();
+      }
+    }catch(e){clearInterval(poll);clearInterval(ticker);showThanks();}
+  },4000);
+}
+
+function showThanks(){
+  document.getElementById('screen-loading').style.display='none';
+  document.getElementById('success').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function animateLoadingSteps(){
+  document.getElementById('ls-1').className='ls-item done';
+  document.getElementById('ls-2').className='ls-item done';
+  document.getElementById('ls-3').className='ls-item active';
+}
+
+document.getElementById('fecha-envio').valueAsDate=new Date();
+
+// Toggle protector solar
+function toggleSolar(btn, val) {
+  const row = btn.closest('.yn-btns');
+  row.querySelectorAll('.yn-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const wrap = document.getElementById('solar-det-wrap');
+  if (wrap) wrap.style.display = val === 'yes' ? 'block' : 'none';
+}
+
+// Toggle rutina diaria
+function toggleRutina(btn, val) {
+  const row = btn.closest('.yn-btns');
+  row.querySelectorAll('.yn-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const wrap = document.getElementById('rutina-det-wrap');
+  if (wrap) wrap.style.display = val === 'yes' ? 'block' : 'none';
+}
+
+// Toggle láser activo detalle
+document.addEventListener('DOMContentLoaded', function() {
+  // Observar clicks en yn-row de láser y complicaciones
+  document.querySelectorAll('.yn-row').forEach(row => {
+    const label = row.querySelector('.yn-label');
+    if (!label) return;
+    const txt = label.textContent.toLowerCase();
+    if (txt.includes('láser') && txt.includes('actualmente')) {
+      row.querySelectorAll('.yn-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const wrap = document.getElementById('laser-det-wrap');
+          if (wrap) wrap.style.display = this.textContent.trim() === 'Sí' ? 'block' : 'none';
+        });
+      });
+    }
+    if (txt.includes('complicaciones')) {
+      row.querySelectorAll('.yn-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const wrap = document.getElementById('complic-det-wrap');
+          if (wrap) wrap.style.display = this.textContent.trim() === 'Sí' ? 'block' : 'none';
+        });
+      });
+    }
+  });
+});
+
+// Toggle síntomas por grupo de alimento
+function toggleSintAlim(btn, val, wrapId) {
+  const row = btn.closest('.yn-btns');
+  row.querySelectorAll('.yn-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const wrap = document.getElementById(wrapId);
+  if (wrap) wrap.style.display = val === 'yes' ? 'block' : 'none';
+}
+
+// Toggle síntomas en alergias
+function toggleAlergia(btn, val, key) {
+  const row = btn.closest('.yn-btns');
+  row.querySelectorAll('.yn-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const det = document.getElementById('adet-' + key);
+  if (det) det.style.display = val === 'yes' ? 'block' : 'none';
+}
+
+// Toggle fecha+zona en historial estético
+function toggleTrat(btn, val, key) {
+  // Comportamiento normal de toggleYN
+  const row = btn.closest('.yn-btns');
+  row.querySelectorAll('.yn-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // Mostrar/ocultar detalle
+  const det = document.getElementById('trat-det-' + key);
+  if (det) det.style.display = val === 'yes' ? 'block' : 'none';
+}
+
+// Toggle antecedentes familiares
+document.querySelectorAll('input[name="antecedentes_fam"]').forEach(r => {
+  r.addEventListener('change', function() {
+    const wrap = document.getElementById('antecedentes-det-wrap');
+    if (wrap) wrap.style.display = this.closest('.radio-item').textContent.trim() === 'Sí' ? 'block' : 'none';
+  });
+});
+
+// Mostrar/ocultar detalle antecedentes familiares
+document.querySelectorAll('input[name="antecedentes_fam"]').forEach(r => {
+  r.addEventListener('change', function() {
+    const wrap = document.getElementById('antecedentes-det-wrap');
+    if (wrap) wrap.style.display = this.closest('.radio-item').textContent.trim() === 'Sí' ? 'block' : 'none';
+  });
+});
+buildLabels();
+initCheckboxes();
+updateUI();
+
+window._modeloSel = '';  // vacío — obliga a seleccionar
+
+function setModeloSelect(m) {
+  window._modeloSel = m;
+  const warn = document.getElementById('modelo-warning');
+  const sel  = document.getElementById('modelo-select');
+  if (warn) warn.style.display = m ? 'none' : 'block';
+  if (sel)  sel.style.borderColor = m ? '#8fa832' : 'var(--border)';
+}
+function setModelo(m) {
+  window._modeloSel = m;
+}
+
+// Show model selector on last step
+const _origUpdateUI = updateUI;
+updateUI = function() {
+  _origUpdateUI();
+  const bar = document.getElementById('model-selector-bar');
+  if (bar) bar.style.display = current === total ? 'block' : 'none';
+};
+</script>
+</body>
+</html>

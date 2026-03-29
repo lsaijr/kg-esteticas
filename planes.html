@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Centro Carvajal · Planes Generados</title>
+<style>
+:root{
+  --dark:#1a1410;--olive:#8fa832;--olive-light:rgba(143,168,50,.1);
+  --gold:#b8935a;--cream:#f4f5ef;--white:#fff;--gray:#6b7280;
+  --border:rgba(143,168,50,.2);--red:#dc2626;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--cream);color:var(--dark);min-height:100vh}
+
+/* ── LOGIN ── */
+#login-screen{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:20px;
+}
+.login-box{
+  background:var(--white);border-radius:12px;padding:44px 40px;
+  max-width:400px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.1);
+  text-align:center;
+}
+.login-logo{margin:0 auto 20px}
+.login-box h2{font-size:22px;font-weight:600;color:var(--dark);margin-bottom:6px}
+.login-box p{font-size:13px;color:var(--gray);margin-bottom:28px}
+.login-field{
+  width:100%;padding:13px 16px;border:1px solid #d4dcc0;
+  border-radius:8px;font-size:14px;margin-bottom:14px;
+  font-family:inherit;outline:none;transition:border-color .2s;
+}
+.login-field:focus{border-color:var(--olive)}
+.login-btn{
+  width:100%;padding:14px;background:var(--dark);color:var(--cream);
+  border:none;border-radius:8px;font-size:14px;font-weight:500;
+  cursor:pointer;font-family:inherit;transition:background .2s;
+}
+.login-btn:hover{background:#2d3a2e}
+.login-error{
+  display:none;background:#fef2f2;border:1px solid #fecaca;
+  border-radius:6px;padding:10px 14px;font-size:13px;color:var(--red);
+  margin-bottom:14px;text-align:left;
+}
+
+/* ── APP SHELL ── */
+#app{display:none;min-height:100vh;flex-direction:column}
+
+/* Topbar */
+.topbar{
+  background:var(--dark);padding:14px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.topbar-logo{
+  width:36px;height:36px;border-radius:50%;
+  border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:Georgia,serif;font-size:12px;color:var(--gold);font-weight:600;
+}
+.topbar-title{
+  font-size:15px;font-weight:600;color:var(--white);
+}
+.topbar-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-count{
+  background:var(--olive-light);border:1px solid var(--border);
+  border-radius:20px;padding:4px 12px;
+  font-size:12px;font-weight:600;color:var(--olive);
+}
+.logout-btn{
+  background:transparent;border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.5);border-radius:6px;padding:6px 12px;
+  font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s;
+}
+.logout-btn:hover{border-color:rgba(255,255,255,.4);color:var(--white)}
+
+/* Main content */
+.main{flex:1;padding:28px;max-width:1200px;margin:0 auto;width:100%}
+
+/* Toolbar */
+.toolbar{
+  display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap;
+}
+.search-wrap{position:relative;flex:1;min-width:220px}
+.search-input{
+  width:100%;padding:10px 16px 10px 38px;
+  border:1px solid #d4dcc0;border-radius:8px;font-size:13px;
+  font-family:inherit;outline:none;background:var(--white);
+  transition:border-color .2s;
+}
+.search-input:focus{border-color:var(--olive)}
+.search-icon{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  color:var(--gray);font-size:15px;pointer-events:none;
+}
+.filter-select{
+  padding:10px 14px;border:1px solid #d4dcc0;border-radius:8px;
+  font-size:13px;font-family:inherit;background:var(--white);
+  outline:none;cursor:pointer;color:var(--dark);
+}
+.refresh-btn{
+  padding:10px 16px;background:var(--white);border:1px solid #d4dcc0;
+  border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;
+  color:var(--dark);transition:all .2s;display:flex;align-items:center;gap:6px;
+}
+.refresh-btn:hover{border-color:var(--olive);color:var(--olive)}
+.refresh-btn.spinning svg{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Stats bar */
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;
+}
+.stat-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);
+  border-radius:10px;padding:16px 20px;
+}
+.stat-val{font-size:24px;font-weight:700;color:var(--dark);margin-bottom:2px}
+.stat-label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.8px}
+.stat-card.olive .stat-val{color:var(--olive)}
+.stat-card.gold .stat-val{color:var(--gold)}
+
+/* Plans grid */
+.plans-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:16px;
+}
+
+/* Plan card */
+.plan-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.07);
+  border-radius:10px;overflow:hidden;transition:box-shadow .2s,transform .15s;
+}
+.plan-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.1);transform:translateY(-2px)}
+
+.card-header{
+  background:var(--dark);padding:14px 18px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+}
+.card-nombre{
+  font-size:15px;font-weight:600;color:var(--white);
+  line-height:1.3;flex:1;
+}
+.card-modelo{
+  font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px;
+  text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;margin-top:2px;
+}
+.modelo-claude{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
+.modelo-gemini{background:rgba(26,115,232,.3);color:#93c5fd}
+.modelo-groq{background:rgba(245,80,54,.3);color:#fca5a5}
+.modelo-otro{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)}
+
+.card-body{padding:16px 18px}
+.card-meta{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.card-meta-row{
+  display:flex;align-items:center;gap:7px;
+  font-size:12px;color:var(--gray);
+}
+.card-meta-row svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
+.card-meta-row strong{color:var(--dark)}
+
+.card-actions{display:flex;gap:8px}
+.btn-ver{
+  flex:1;padding:9px;background:var(--olive-light);
+  border:1px solid var(--border);border-radius:6px;
+  font-size:12px;font-weight:600;color:var(--olive);
+  text-decoration:none;text-align:center;
+  transition:all .2s;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.btn-ver:hover{background:var(--olive);color:var(--white);border-color:var(--olive)}
+.btn-editar{
+  flex:1;padding:9px;background:#f0f9e8;
+  border:1px solid rgba(143,168,50,.3);border-radius:6px;
+  font-size:12px;font-weight:600;color:#5a7a1a;
+  text-decoration:none;text-align:center;
+  transition:all .2s;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.btn-editar:hover{background:#2d3a2e;color:var(--white);border-color:#2d3a2e}
+
+/* Empty / loading */
+.state-box{
+  text-align:center;padding:80px 20px;color:var(--gray);
+  grid-column:1/-1;
+}
+.state-box .icon{font-size:48px;margin-bottom:16px}
+.state-box h3{font-size:18px;color:var(--dark);margin-bottom:8px}
+.state-box p{font-size:13px;line-height:1.6;max-width:340px;margin:0 auto}
+
+/* Skeleton */
+.skeleton{
+  background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s infinite;
+  border-radius:6px;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{
+  background:var(--white);border:1px solid rgba(0,0,0,.07);
+  border-radius:10px;overflow:hidden;
+}
+.skel-header{height:68px;background:#2d2d2d}
+.skel-body{padding:16px 18px}
+.skel-line{height:12px;margin-bottom:8px}
+.skel-actions{display:flex;gap:8px;margin-top:14px}
+.skel-btn{height:36px;flex:1;border-radius:6px}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--dark);color:var(--white);
+  padding:12px 20px;border-radius:8px;font-size:13px;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);
+  transform:translateY(100px);opacity:0;
+  transition:all .3s;z-index:999;
+  display:flex;align-items:center;gap:8px;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-left:3px solid var(--olive)}
+.toast.error{border-left:3px solid var(--red)}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="login-screen">
+  <div class="login-box">
+    <svg class="login-logo" width="48" height="48" viewBox="0 0 48 48" fill="none">
+      <circle cx="24" cy="24" r="22" stroke="#b8935a" stroke-width="1.5"/>
+      <text x="24" y="29" text-anchor="middle" fill="#b8935a" font-family="Georgia,serif" font-size="14" font-weight="600">CC</text>
+    </svg>
+    <h2>Centro Carvajal</h2>
+    <p>Panel de administración · Planes generados</p>
+    <div class="login-error" id="login-error">Contraseña incorrecta. Inténtalo de nuevo.</div>
+    <input type="password" class="login-field" id="login-pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Ingresar</button>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">CC</div>
+      <div>
+        <div class="topbar-title">Planes Generados</div>
+        <div class="topbar-sub">Centro Carvajal · Panel de Administración</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-count" id="total-count">— planes</div>
+      <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Stats -->
+    <div class="stats" id="stats-bar" style="display:none">
+      <div class="stat-card">
+        <div class="stat-val" id="stat-total">—</div>
+        <div class="stat-label">Planes totales</div>
+      </div>
+      <div class="stat-card olive">
+        <div class="stat-val" id="stat-mes">—</div>
+        <div class="stat-label">Este mes</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-val" id="stat-claude">—</div>
+        <div class="stat-label">Con Claude</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-otros">—</div>
+        <div class="stat-label">Gemini / Groq</div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search-input" placeholder="Buscar por nombre de paciente..." oninput="filtrarPlanes()">
+      </div>
+      <select class="filter-select" id="filter-modelo" onchange="filtrarPlanes()">
+        <option value="">Todos los modelos</option>
+        <option value="claude">Claude</option>
+        <option value="gemini">Gemini</option>
+        <option value="groq">Groq</option>
+      </select>
+      <select class="filter-select" id="filter-orden" onchange="filtrarPlanes()">
+        <option value="desc">Más recientes primero</option>
+        <option value="asc">Más antiguos primero</option>
+      </select>
+      <button class="refresh-btn" id="refresh-btn" onclick="cargarPlanes()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Actualizar
+      </button>
+    </div>
+
+    <!-- Grid -->
+    <div class="plans-grid" id="plans-grid">
+      <!-- Skeletons mientras carga -->
+      <div class="skel-card"><div class="skel-header"></div><div class="skel-body"><div class="skeleton skel-line" style="width:70%"></div><div class="skeleton skel-line" style="width:50%"></div><div class="skeleton skel-line" style="width:60%"></div><div class="skel-actions"><div class="skeleton skel-btn"></div><div class="skeleton skel-btn"></div></div></div></div>
+      <div class="skel-card"><div class="skel-header"></div><div class="skel-body"><div class="skeleton skel-line" style="width:65%"></div><div class="skeleton skel-line" style="width:45%"></div><div class="skeleton skel-line" style="width:55%"></div><div class="skel-actions"><div class="skeleton skel-btn"></div><div class="skeleton skel-btn"></div></div></div></div>
+      <div class="skel-card"><div class="skel-header"></div><div class="skel-body"><div class="skeleton skel-line" style="width:75%"></div><div class="skeleton skel-line" style="width:55%"></div><div class="skeleton skel-line" style="width:50%"></div><div class="skel-actions"><div class="skeleton skel-btn"></div><div class="skeleton skel-btn"></div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Auth ────────────────────────────────────────────────────
+let token = sessionStorage.getItem('cc_token') || '';
+
+async function doLogin() {
+  const pass = document.getElementById('login-pass').value.trim();
+  if (!pass) return;
+  const r    = await fetch('/api/login', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({password: pass})
+  });
+  const data = await r.json();
+  if (data.ok) {
+    token = data.token;
+    sessionStorage.setItem('cc_token', token);
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.getElementById('login-error').style.display = 'none';
+    cargarPlanes();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-pass').focus();
+  }
+}
+
+function doLogout() {
+  token = '';
+  sessionStorage.removeItem('cc_token');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-pass').value = '';
+}
+
+// Auto-login si ya hay token
+if (token) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  cargarPlanes();
+}
+
+// ── Datos ────────────────────────────────────────────────────
+let todosLosPlanes = [];
+
+async function cargarPlanes() {
+  const btn = document.getElementById('refresh-btn');
+  btn.classList.add('spinning');
+
+  try {
+    const r    = await fetch('/api/planes', {
+      headers: {'X-Token': token}
+    });
+    if (r.status === 401) { doLogout(); return; }
+    const data = await r.json();
+    todosLosPlanes = data.planes || [];
+    actualizarStats();
+    filtrarPlanes();
+    document.getElementById('stats-bar').style.display = 'grid';
+  } catch(e) {
+    mostrarToast('Error al cargar planes', 'error');
+  } finally {
+    btn.classList.remove('spinning');
+  }
+}
+
+function actualizarStats() {
+  const total  = todosLosPlanes.length;
+  const ahora  = new Date();
+  const mes    = todosLosPlanes.filter(p => {
+    if (!p.fecha_raw) return false;
+    const f = new Date(p.fecha_raw);
+    return f.getMonth() === ahora.getMonth() && f.getFullYear() === ahora.getFullYear();
+  }).length;
+  const claude = todosLosPlanes.filter(p => p.modelo === 'claude').length;
+  const otros  = total - claude;
+
+  document.getElementById('stat-total').textContent  = total;
+  document.getElementById('stat-mes').textContent     = mes;
+  document.getElementById('stat-claude').textContent  = claude;
+  document.getElementById('stat-otros').textContent   = otros;
+  document.getElementById('total-count').textContent  = `${total} plan${total !== 1 ? 'es' : ''}`;
+}
+
+function filtrarPlanes() {
+  const q      = document.getElementById('search-input').value.toLowerCase();
+  const modelo = document.getElementById('filter-modelo').value;
+  const orden  = document.getElementById('filter-orden').value;
+
+  let lista = todosLosPlanes.filter(p => {
+    const matchQ = !q || p.nombre.toLowerCase().includes(q);
+    const matchM = !modelo || p.modelo === modelo;
+    return matchQ && matchM;
+  });
+
+  if (orden === 'asc') lista = lista.slice().reverse();
+
+  renderPlanes(lista);
+}
+
+function renderPlanes(lista) {
+  const grid = document.getElementById('plans-grid');
+
+  if (!lista.length) {
+    grid.innerHTML = `<div class="state-box">
+      <div class="icon">📋</div>
+      <h3>No hay planes</h3>
+      <p>No se encontraron planes con los filtros actuales.</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = lista.map(p => {
+    const modeloClass = {claude:'modelo-claude', gemini:'modelo-gemini', groq:'modelo-groq'}[p.modelo] || 'modelo-otro';
+    const modeloLabel = (p.modelo || 'IA').charAt(0).toUpperCase() + (p.modelo || 'ia').slice(1);
+    const borrador_url = `/borrador/${p.job_id}`;
+    return `<div class="plan-card">
+      <div class="card-header">
+        <div class="card-nombre">${esc(p.nombre)}</div>
+        <span class="card-modelo ${modeloClass}">${modeloLabel}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div class="card-meta-row">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>${esc(p.fecha)}</span>
+          </div>
+          <div class="card-meta-row">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="word-break:break-all;font-size:11px;color:#aaa">${esc(p.nombre_archivo)}</span>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a href="${esc(p.url)}" target="_blank" class="btn-ver">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Ver plan
+          </a>
+          <a href="${esc(borrador_url)}" target="_blank" class="btn-editar">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Editar borrador
+          </a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function mostrarToast(msg, tipo='success') {
+  const t = document.getElementById('toast');
+  t.textContent = (tipo === 'success' ? '✓ ' : '✕ ') + msg;
+  t.className = `toast ${tipo} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
