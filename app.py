@@ -3080,5 +3080,271 @@ def email_plan(nombre, html_url, fecha):
     return f'<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="background:#f0e8de;padding:20px;font-family:sans-serif"><div style="max-width:600px;margin:0 auto;background:#fff;border:1px solid #ddd"><div style="background:#1a1410;padding:20px 24px"><div style="color:#b8935a;font-size:11px;letter-spacing:3px;text-transform:uppercase">Centro Carvajal · Plan Generado</div><div style="color:#fff;font-size:18px;margin-top:4px">{nombre}</div><div style="color:rgba(255,255,255,0.4);font-size:11px;margin-top:2px">{fecha}</div></div><div style="padding:24px"><p style="font-size:13px;color:#3d2e20;margin-bottom:16px">El plan personalizado de <strong>{nombre}</strong> ha sido generado exitosamente.</p><div style="text-align:center;margin:20px 0"><a href="{html_url}" style="background:#b8935a;color:#fff;padding:14px 32px;border-radius:4px;text-decoration:none;font-size:14px;font-weight:500">Ver Plan Completo</a></div><p style="font-size:11px;color:#999;text-align:center">O copia este link: {html_url}</p></div><div style="background:#1a1410;padding:12px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.3)">Centro Carvajal · centrocarvajal.com</div></div></body></html>'
 
 
+# ════════════════════════════════════════════════════════════
+# MÓDULO DULCE DETALLE — esteticas.enmerida.mx/dulce-detalle
+# ════════════════════════════════════════════════════════════
+
+DD_MAIL = os.environ.get('DD_MAIL', os.environ.get('DEMO_MAIL', 'isai.josue@gmail.com'))
+
+DULCE_CATALOGO = """
+CATÁLOGO DULCE DETALLE MÉRIDA 2026
+(Costo de envío NO incluido en ningún producto)
+
+=== DESAYUNOS ===
+- Presentación Básica — $280: Croissant de jamón de pavo y queso manchego, jugo del Valle, galleta, pretzel, etiqueta de ocasión.
+- Chapata Básico — $280: Chapata de jamón con queso manchego, orejitas de hojaldre, chiles en raja, jugo.
+- Fit Básico — $300: Fruta picada o croissant jamón/queso, jugo, yogurt, galletas, pretzel, granola.
+- Box Sabritas — $320: Papas Sabritas, jugo, croissant jamón/queso, galletas, pretzels, chiles jalapeños. Caja cartón con etiqueta vinil.
+- Charola Fit Básico — $340: Fruta picada, yogurt Oikos, granola, bebida energizante sin azúcar, agua, café Starbucks, pretzels.
+- Box Ligero Mini / Desayuno Ligero Mini — $380: Croissant jamón/queso, fruta picada, jugo, pretzels, galletas, agua.
+- Box Sabritas Krispy Kreme — $420: Croissant jamón/queso, dona Krispy Kreme, Sabritas, jugo, KitKat, galleta.
+- Ligero Mini con Pastel — $460: Croissant jamón/queso, fruta picada, café frío, pastel mini, pretzels, galletas.
+- Charola Sabritas Feliz Cumpleaños — $460: Croissant jamón/queso, Sabritas, pastel individual, jugo, galletas, pretzels.
+- Batman Mini con Pastel — $480: Diseño Batman, vaso de colección, croissant jamón/queso, jugo, Sabritas, galletas, pretzels, pastel mini.
+- Snoopy Mini con Pastel — $480: Diseño Snoopy, vaso de colección, croissant jamón/queso, jugo, Sabritas, galletas, pretzels, pastel mini.
+- Astromelia Mini con Girasol — $520: Croissant jamón/queso, café frío, muffin, galletas, pretzels — con arreglo floral de astromelia y girasol.
+- Chapata Special — $520: Chapata jamón/queso, orejitas de hojaldre, Ferreros (8 pzas), pretzels en frasco, café Starbucks, jugo, cubiertos.
+- Astromelia — $580: Chapata jamón/queso, yogurt con fruta, orejitas, pretzels, jugo, cubiertos, taza con arreglo de astromelias.
+- Chapata Black — $580: Chapata jamón/queso, pretzels en frasco, orejitas, Ferreros (8 pzas), café Starbucks, jugo, café frío, cubiertos.
+- Romántico Black — $680: Chapata jamón/queso, ensalada frutas con yogurt/granola, pretzels, orejitas, jugo, café frío, cubiertos, base cerámica con 5 rosas rojas, charola de madera con etiqueta vinil.
+- Isabella — $720: Chapata jamón/queso, arreglo floral rosas rojas + follaje, pretzels en frasco, orejitas, Ferreros (8 pzas), café Starbucks, jugo, café frío, cubiertos.
+- Ligero Mini Premium — $880: Charola doble piso, arreglo floral 7 rosas o 2 girasoles, jugo, café frío, fruta picada, croissant jamón/queso, galletas, pretzels, KitKat. Etiqueta doble vinil.
+
+=== BOX Y REGALOS ===
+- Box Snoopy — $380: Croissant jamón/queso, vaso de colección Snoopy, jugo, galletas, pretzels.
+- Box Corazón Compartido — $520: Croissant dulce fresa/Nutella + croissant salado jamón/queso, fresas, uvas, mini Nutella, galletas, pretzels, orejitas, pistaches, almendras, Ferreros.
+- Box Starbucks — $520: Croissant jamón/queso Starbucks, bebida gasificada, Ferreros (8 pzas), KitKat, Waffle Starbucks.
+- Box Starbucks y Rosas — $780: Arreglo floral rosas + astromelias, Agua Perrier, Waffle Starbucks, croissant jamón/queso, vaso reutilizable.
+
+=== CANASTAS ===
+- Canasta Desayuno Ligero Mini — $580: Canasta mimbre, arreglo floral, fruta picada (manzana, fresa, uva, papaya), jugo, croissant jamón/queso, galletas, pretzels.
+- Canasta Starbucks Mini — $680: Croissant jamón/queso, café americano, dona Krispy Kreme, bebida gasificada, vaso de colección, arreglo floral girasol o 3 rosas.
+- Canasta Starbucks Grande — $920: Croissant jamón/queso, fruta con yogurt, Ferreros (8 pzas), bebida gasificada, vaso Starbucks, Waffle Starbucks, arreglo floral girasol o 3 rosas.
+
+=== CHAROLAS (DESAYUNO) ===
+- Charola Love Chocolates — $580: Ferreros, 2 Kinder Delice, vaso Snoopy, Pulparindo, KitKat, Crunch, Paleta Payaso — con arreglo floral de rosas.
+- Charola Starbucks Mini — $520: Croissant jamón/queso, café americano Starbucks, vaso de colección, bebida gasificada, dona Krispy Kreme, galletas, pretzels.
+- Charola 6 Donas Krispy Kreme — $620: 6 donas glaseadas Krispy Kreme, bebida saborizada, café americano, galletas, pretzels, croissant jamón/queso, Ferreros (8 pzas).
+- Charola Love Desayuno — $680: Arreglo floral 3 rosas + follaje, croissant jamón/queso, Cocacola lata, vaso Snoopy, galletas, pretzels.
+- Charola de Frutas Premium — $1,100: Al menos 8 frutas de temporada en charola doble piso edición limitada, arreglo floral 7 rosas o 2 girasoles, etiquetas vinil.
+
+=== FLORES Y ARREGLOS FLORALES ===
+- Flor en Base de Cartón — $160
+- Girasol con Astromelias y Tulia — $280
+- Paquete Liss Girasol — $480
+- Cinco Rosas y Tulia — $520
+- Globo con Rosas y Mariposas — $580
+- Corazón Doble Girasol y Astromelias — $580
+- Rosas y Café Starbucks — $580
+- Corazón de Ferreros y Rosas — $680
+- Letra con Rosas y Chocolates — $720
+- Corazón Rosas, Fresas y Chocolates — $720
+- Corazón con Rosas y KitKat — $780
+- Ramo de 24 Rosas Rosadas — $780
+- Ramo Buchón 100 Rosas Rojas — $3,200
+
+=== QUESOS Y CARNES FRÍAS ===
+- Quesos y Carnes Frías Mini — $380
+- Charola Carnes Frías y Quesos — $520
+- Corazón de Madera con Carnes Frías — $620
+- Tabla Corazón con Vino — $720
+- Charola Carnes Frías y Cerveza — $820
+- Charola de Carnes y Quesos — $920
+- Carnes Frías Premium — $1,200
+- Carnes Frías Premium y Rosas — $1,300
+
+=== CHELAS, BOTELLAS Y BEBIDAS ===
+- Cervezas y Botanas Mini — $420
+- Charola Chelas y Botanas en Frascos — $620
+- Box Cervezas Artesanales y Botanas — $680
+- Charola Cervezas Artesanales — $880
+- Tequila Don Julio y Botanas — $1,400
+- Buchanans con Botanas — $1,800
+- Tapete Rosas, Chocolates y Buchanan's — $2,600
+"""
+
+DULCE_PROMPT_BASE = (
+    'Eres una asesora de regalos de Dulce Detalle Mérida — un negocio de desayunos sorpresa, flores, charcutería y arreglos frutales. '
+    'Tu forma de comunicarte es cálida, cercana y genuina, como una amiga que te ayuda a elegir el regalo perfecto. '
+    'Hablas de "tú". Usas el nombre de la persona. '
+    '\n\nTONO — LA REGLA MÁS IMPORTANTE: '
+    'Responde EXACTAMENTE al nivel emocional que el cliente expresó en su contexto. '
+    'Si escribió poco o fue neutral → respuesta práctica, enfocada en el producto. '
+    'Si fue emotivo y detallado → acompañar ese tono con calidez genuina. '
+    'NUNCA asumas sentimientos que el cliente no expresó. '
+    '\n\nRECUERDA SIEMPRE: el cliente está eligiendo un regalo para OTRA PERSONA. '
+    '\n\nEVITA ABSOLUTAMENTE: '
+    '"no dudes en contactarnos", "estamos a tu disposición", exclamaciones excesivas, lenguaje corporativo. '
+    '\n\nESTRUCTURA: '
+    '1. Abre con el nombre y una frase que demuestre que leíste su caso específico. '
+    '2. Lista los productos recomendados — nombre en negrita + por qué encaja. '
+    '3. Cierra con una invitación simple a coordinar la entrega. '
+    '\n\nFORMATO HTML — solo estas etiquetas: <p>, <strong>, <ul>, <li>. '
+    'NO uses markdown, NO asteriscos. NO menciones precios. '
+    f'\n\nCATÁLOGO DISPONIBLE:\n{DULCE_CATALOGO}'
+)
+
+
+@app.route('/dulce-detalle')
+def dulce_detalle():
+    with open(os.path.join(os.path.dirname(__file__), 'formulario-dulce-detalle.html'), encoding='utf-8') as f:
+        return f.read()
+
+
+@app.route('/dulce-detalle/recomendar', methods=['POST'])
+def dulce_recomendar():
+    """Proxy multi-modelo para el formulario Dulce Detalle."""
+    try:
+        data   = request.get_json(force=True)
+        perfil = data.get('perfil', '')
+        modelo = data.get('modelo', 'claude')
+        if not perfil:
+            return jsonify({'error': 'Sin datos de perfil'}), 400
+
+        user_msg = f'Por favor genera una recomendación personalizada para este cliente:\n\n{perfil}'
+
+        if modelo == 'claude':
+            resp = req.post(
+                'https://api.anthropic.com/v1/messages',
+                headers={
+                    'x-api-key': CLAUDE_KEY,
+                    'anthropic-version': '2023-06-01',
+                    'content-type': 'application/json'
+                },
+                json={
+                    'model': 'claude-haiku-4-5-20251001',
+                    'max_tokens': 900,
+                    'system': DULCE_PROMPT_BASE,
+                    'messages': [{'role': 'user', 'content': user_msg}]
+                },
+                timeout=30
+            )
+            resp.raise_for_status()
+            texto = resp.json()['content'][0]['text']
+
+        elif modelo == 'gemini':
+            resp = req.post(
+                f'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_KEY}',
+                json={
+                    'contents': [{'parts': [{'text': DULCE_PROMPT_BASE + '\n\n' + user_msg}]}],
+                    'generationConfig': {'maxOutputTokens': 900, 'temperature': 0.7}
+                },
+                timeout=30
+            )
+            resp.raise_for_status()
+            texto = resp.json()['candidates'][0]['content']['parts'][0]['text']
+
+        else:
+            resp = req.post(
+                'https://api.groq.com/openai/v1/chat/completions',
+                headers={'Authorization': f'Bearer {GROQ_KEY}', 'Content-Type': 'application/json'},
+                json={
+                    'model': 'llama3-70b-8192',
+                    'max_tokens': 900,
+                    'messages': [
+                        {'role': 'system', 'content': DULCE_PROMPT_BASE},
+                        {'role': 'user', 'content': user_msg}
+                    ]
+                },
+                timeout=30
+            )
+            resp.raise_for_status()
+            texto = resp.json()['choices'][0]['message']['content']
+
+        texto = htmllib.unescape(texto)
+        texto = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', texto)
+        texto = re.sub(r'\*(.+?)\*', r'<em>\1</em>', texto)
+
+        return jsonify({'html': texto})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/dulce-detalle/cita', methods=['POST'])
+def dulce_cita():
+    """Recibe solicitud de pedido y envía correo de notificación."""
+    try:
+        import resend as resend_lib
+        resend_lib.api_key = RESEND_KEY
+
+        d = request.get_json(force=True)
+        nombre      = d.get('nombre', '')
+        whatsapp    = d.get('whatsapp', '')
+        email       = d.get('email', '')
+        fecha       = d.get('fecha_entrega', 'No especificada')
+        direccion   = d.get('direccion', 'No especificada')
+        notas       = d.get('notas', '')
+        para        = d.get('para', '')
+        motivo      = d.get('motivo', '')
+        tipo_regalo = d.get('tipo_regalo', '')
+        presupuesto = d.get('presupuesto', '')
+
+        cuerpo_negocio = f"""
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px">
+  <div style="background:#fff0f3;border:2px solid #f9a8b8;border-radius:16px;padding:20px 24px;margin-bottom:20px">
+    <h2 style="font-size:22px;color:#2d2020;margin:0 0 4px">🎁 Nueva solicitud de pedido</h2>
+    <p style="color:#9a7070;font-size:13px;margin:0">Dulce Detalle · esteticas.enmerida.mx/dulce-detalle</p>
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:14px">
+    <tr><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;color:#9a7070;width:140px">👤 Nombre</td><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;font-weight:600">{nombre}</td></tr>
+    <tr><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;color:#9a7070">📱 WhatsApp</td><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;font-weight:600">{whatsapp}</td></tr>
+    <tr><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;color:#9a7070">✉️ Correo</td><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;font-weight:600">{email}</td></tr>
+    <tr><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;color:#9a7070">🎁 Para quién</td><td style="padding:10px 0;border-bottom:1px solid #f9c6d0">{para}</td></tr>
+    <tr><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;color:#9a7070">🎉 Motivo</td><td style="padding:10px 0;border-bottom:1px solid #f9c6d0">{motivo}</td></tr>
+    <tr><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;color:#9a7070">🛍️ Tipo regalo</td><td style="padding:10px 0;border-bottom:1px solid #f9c6d0">{tipo_regalo}</td></tr>
+    <tr><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;color:#9a7070">💛 Presupuesto</td><td style="padding:10px 0;border-bottom:1px solid #f9c6d0">{presupuesto}</td></tr>
+    <tr><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;color:#9a7070">📅 Entrega</td><td style="padding:10px 0;border-bottom:1px solid #f9c6d0">{fecha}</td></tr>
+    <tr><td style="padding:10px 0;border-bottom:1px solid #f9c6d0;color:#9a7070">📍 Dirección</td><td style="padding:10px 0;border-bottom:1px solid #f9c6d0">{direccion}</td></tr>
+    <tr><td style="padding:10px 0;color:#9a7070">📝 Notas</td><td style="padding:10px 0">{notas or '—'}</td></tr>
+  </table>
+</div>
+"""
+
+        cuerpo_cliente = f"""
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px">
+  <div style="text-align:center;margin-bottom:24px">
+    <div style="font-size:36px;margin-bottom:8px">🌸</div>
+    <h2 style="font-family:Georgia,serif;font-size:24px;color:#2d2020;margin:0 0 6px">¡Hola, {nombre}!</h2>
+    <p style="color:#9a7070;font-size:14px;margin:0">Recibimos tu solicitud en Dulce Detalle Mérida</p>
+  </div>
+  <div style="background:#fff0f3;border:2px solid #f9a8b8;border-radius:16px;padding:18px 22px;margin-bottom:20px">
+    <p style="font-size:14px;color:#2d2020;line-height:1.7;margin:0">
+      Gracias por confiar en nosotros para este regalo especial.
+      Nos pondremos en contacto contigo pronto al <strong>{whatsapp}</strong> para coordinar todos los detalles.
+    </p>
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:14px">
+    <tr><td style="padding:8px 0;border-bottom:1px solid #f9c6d0;color:#9a7070;width:120px">🎁 Para quién</td><td style="padding:8px 0;border-bottom:1px solid #f9c6d0">{para}</td></tr>
+    <tr><td style="padding:8px 0;border-bottom:1px solid #f9c6d0;color:#9a7070">🎉 Motivo</td><td style="padding:8px 0;border-bottom:1px solid #f9c6d0">{motivo}</td></tr>
+    <tr><td style="padding:8px 0;border-bottom:1px solid #f9c6d0;color:#9a7070">📅 Entrega</td><td style="padding:8px 0;border-bottom:1px solid #f9c6d0">{fecha}</td></tr>
+  </table>
+  <div style="text-align:center;margin-top:28px;padding-top:20px;border-top:2px dashed #f9c6d0">
+    <p style="font-size:13px;color:#9a7070;margin:0">Dulce Detalle · Corporativo de Regalos · Mérida, Yucatán</p>
+  </div>
+</div>
+"""
+
+        resend_lib.Emails.send({
+            'from': MAIL_FROM,
+            'to': [DD_MAIL],
+            'subject': f'🎁 Nuevo pedido — {nombre} ({motivo})',
+            'html': cuerpo_negocio
+        })
+
+        if email:
+            resend_lib.Emails.send({
+                'from': MAIL_FROM,
+                'to': [email],
+                'subject': '🌸 Recibimos tu solicitud — Dulce Detalle Mérida',
+                'html': cuerpo_cliente
+            })
+
+        return jsonify({'ok': True})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
