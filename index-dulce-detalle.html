@@ -4,7 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dulce Detalle Mérida — Desayunos Sorpresa & Regalos</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<meta name="description" content="Desayunos sorpresa, flores, canastas y regalos en Mérida, Yucatán. Entrega mismo día. Elige el regalo perfecto con ayuda de IA — Dulce Detalle.">
+
+<!-- Preconnect fonts + Cloudinary -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+<!-- Fonts no-bloqueantes -->
+<link rel="preload" as="image" href="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/desayuno-ligero-mini" fetchpriority="high">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <style>
 :root {
   --cream: #fdf6ee;
@@ -15,7 +24,7 @@
   --gold-lt: #fdf3e3;
   --dark: #1e1410;
   --mid: #5a3d35;
-  --muted: #9e7e78;
+  --muted: #7a5c56;
   --white: #ffffff;
   --border: #ecddd5;
   --green: #7aab8a;
@@ -159,7 +168,7 @@ nav {
   background: linear-gradient(to top, rgba(30,20,16,.75) 0%, transparent 55%);
 }
 .cat-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px 20px; color: white; }
-.cat-info h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.cat-info h3, .cat-info-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 4px; color: white; }
 .cat-info span { font-size: 12px; opacity: .75; font-weight: 500; }
 .cat-tag {
   position: absolute; top: 14px; left: 14px;
@@ -516,6 +525,7 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
 </nav>
 
 <!-- HERO -->
+<main>
 <section class="hero">
   <div class="hero-left">
     <div class="hero-eyebrow">🌸 Mérida, Yucatán · Entrega mismo día</div>
@@ -542,10 +552,10 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
   </div>
   <div class="hero-right">
     <div class="hero-img-grid">
-      <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/desayuno-ligero-mini" alt="Desayuno">
-      <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/canasta-starbucks-mini" alt="Canasta">
-      <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/rosas-papel-koreano" alt="Flores">
-      <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/corazon-carnes-vino-mini" alt="Quesos">
+      <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/desayuno-ligero-mini" alt="Desayuno" width="600" height="600" fetchpriority="high">
+      <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/canasta-starbucks-mini" alt="Canasta" width="600" height="600">
+      <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/rosas-papel-koreano" alt="Flores" width="600" height="600">
+      <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/corazon-carnes-vino-mini" alt="Quesos" width="600" height="600">
     </div>
     <div class="hero-overlay"></div>
   </div>
@@ -561,7 +571,7 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
       <div class="cat-overlay"></div>
       <div class="cat-tag">Más pedidos</div>
       <div class="cat-info">
-        <h3>Desayunos Sorpresa</h3>
+        <p class="cat-info-title">Desayunos Sorpresa</p>
         <span>Desde $280</span>
       </div>
     </div>
@@ -569,7 +579,7 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
       <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/fiesta-chocolate" alt="Canastas" loading="lazy">
       <div class="cat-overlay"></div>
       <div class="cat-info">
-        <h3>Canastas & Cajas</h3>
+        <p class="cat-info-title">Canastas & Cajas</p>
         <span>Desde $460</span>
       </div>
     </div>
@@ -577,7 +587,7 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
       <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/astromelia" alt="Flores" loading="lazy">
       <div class="cat-overlay"></div>
       <div class="cat-info">
-        <h3>Flores & Arreglos</h3>
+        <p class="cat-info-title">Flores & Arreglos</p>
         <span>Desde $160</span>
       </div>
     </div>
@@ -585,7 +595,7 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
       <img src="https://res.cloudinary.com/dqrzhfo1u/image/upload/f_auto,q_auto,w_600,h_600,c_fill,g_center/dulce-detalle/productos/letra-quesos-carnes" alt="Quesos" loading="lazy">
       <div class="cat-overlay"></div>
       <div class="cat-info">
-        <h3>Quesos & Botanas</h3>
+        <p class="cat-info-title">Quesos & Botanas</p>
         <span>Desde $580</span>
       </div>
     </div>
@@ -649,7 +659,7 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
 
         <div class="frow-2">
           <div class="frow">
-            <label class="flabel">¿Para quién? <span class="req">*</span></label>
+            <label class="flabel" for="f-para">¿Para quién? <span class="req">*</span></label>
             <div class="select-wrap">
               <select id="f-para">
                 <option value="">— Elige —</option>
@@ -667,7 +677,7 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
             <div class="ferr" id="err-para">Selecciona para quién</div>
           </div>
           <div class="frow">
-            <label class="flabel">Motivo <span class="req">*</span></label>
+            <label class="flabel" for="f-motivo">Motivo <span class="req">*</span></label>
             <div class="select-wrap">
               <select id="f-motivo">
                 <option value="">— Elige —</option>
@@ -689,7 +699,7 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
         </div>
 
         <div class="frow">
-          <label class="flabel">Tipo de regalo <span class="req">*</span></label>
+          <label class="flabel" for="f-tipo">Tipo de regalo <span class="req">*</span></label>
           <div class="select-wrap">
             <select id="f-tipo">
               <option value="">— Elige —</option>
@@ -716,7 +726,7 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
         </div>
 
         <div class="frow">
-          <label class="flabel">Cuéntanos más <span class="req">*</span></label>
+          <label class="flabel" for="f-contexto">Cuéntanos más <span class="req">*</span></label>
           <textarea id="f-contexto" placeholder="Ej: Le encanta el café, es muy detallista, quiero que se sienta especial desde que abra la puerta..."></textarea>
           <div class="ferr" id="err-contexto">Escribe algo para personalizar mejor</div>
         </div>
@@ -744,19 +754,19 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
 
         <div class="frow-2">
           <div class="frow">
-            <label class="flabel">Tu nombre <span class="req">*</span></label>
+            <label class="flabel" for="f-nombre">Tu nombre <span class="req">*</span></label>
             <input type="text" id="f-nombre" placeholder="Ej: María">
             <div class="ferr" id="err-nombre">Escribe tu nombre</div>
           </div>
           <div class="frow">
-            <label class="flabel">WhatsApp <span class="req">*</span></label>
+            <label class="flabel" for="f-wa">WhatsApp <span class="req">*</span></label>
             <input type="tel" id="f-wa" placeholder="999 123 4567">
             <div class="ferr" id="err-wa">Escribe tu WhatsApp</div>
           </div>
         </div>
 
         <div class="frow">
-          <label class="flabel">Correo electrónico <span class="req">*</span></label>
+          <label class="flabel" for="f-email">Correo electrónico <span class="req">*</span></label>
           <input type="email" id="f-email" placeholder="tu@correo.com">
           <div class="ferr" id="err-email">Escribe un correo válido</div>
         </div>
@@ -890,6 +900,8 @@ footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 60px 80p
     <span>Hecho con 🌸 en Mérida</span>
   </div>
 </footer>
+
+</main>
 
 <!-- WhatsApp Float -->
 <a class="wa-float" href="https://wa.me/529991234567" target="_blank" title="WhatsApp">💬</a>
