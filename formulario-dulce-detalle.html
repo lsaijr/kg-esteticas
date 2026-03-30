@@ -286,6 +286,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
       <button class="model-btn sel" id="m-claude" onclick="setModel('claude')">🤖 Claude</button>
       <button class="model-btn" id="m-gemini" onclick="setModel('gemini')">✨ Gemini</button>
       <button class="model-btn" id="m-groq" onclick="setModel('groq')">⚡ Llama · Groq</button>
+      <button class="model-btn" id="m-openrouter" onclick="setModel('openrouter')">🟢 Nvidia · OR</button>
     </div>
   </div>
 
@@ -399,7 +400,7 @@ function validate(step){
 function showErr(id,show){document.getElementById(id).classList.toggle('show',show);}
 function selectOne(el,gid){document.querySelectorAll('#'+gid+' .ci').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');}
 function selectPres(el,val){document.querySelectorAll('#pres-grid .ppill').forEach(p=>p.classList.remove('sel'));el.classList.add('sel');selectedPres=val;}
-function setModel(m){selectedModel=m;['claude','gemini','groq'].forEach(x=>document.getElementById('m-'+x).classList.toggle('sel',x===m));}
+function setModel(m){selectedModel=m;['claude','gemini','groq','openrouter'].forEach(x=>document.getElementById('m-'+x).classList.toggle('sel',x===m));}
 
 function setTheme(t){
   const themes={
@@ -454,8 +455,8 @@ async function enviar(){
     html=html.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
     html=html.replace(/\*(.+?)\*/g,'<em>$1</em>');
     document.getElementById('res-body').innerHTML=html;
-    const badges={claude:'🤖 Claude · Anthropic',gemini:'✨ Gemini · Google',groq:'⚡ Llama · Groq'};
-    const colors={claude:'background:#ebf8ff;border-color:#90cdf4;color:#2b6cb0',gemini:'background:#f0fff4;border-color:#9ae6b4;color:#276749',groq:'background:#faf5ff;border-color:#d6bcfa;color:#553c9a'};
+    const badges={claude:'🤖 Claude · Anthropic',gemini:'✨ Gemini · Google',groq:'⚡ Llama · Groq',openrouter:'🟢 Nvidia · OpenRouter'};
+    const colors={claude:'background:#ebf8ff;border-color:#90cdf4;color:#2b6cb0',gemini:'background:#f0fff4;border-color:#9ae6b4;color:#276749',groq:'background:#faf5ff;border-color:#d6bcfa;color:#553c9a',openrouter:'background:#f0fff0;border-color:#76c442;color:#276027'};
     document.getElementById('res-badge').innerHTML=`<span class="modelo-badge" style="${colors[selectedModel]}">${badges[selectedModel]}</span>`;
     document.getElementById('res-wrap').style.display='block';
     setTimeout(()=>document.getElementById('res-wrap').scrollIntoView({behavior:'smooth'}),100);

@@ -13,7 +13,8 @@ app = Flask(__name__)
 # ── Config desde variables de entorno ────────────────────────
 CLAUDE_KEY  = os.environ.get('CLAUDE_KEY', '')
 GEMINI_KEY  = os.environ.get('GEMINI_KEY', '')
-GROQ_KEY    = os.environ.get('GROQ_KEY', '')
+GROQ_KEY         = os.environ.get('GROQ_KEY', '')
+OPENROUTER_KEY   = os.environ.get('OPENROUTER_KEY', '')
 RESEND_KEY  = os.environ.get('RESEND_KEY', '')
 MAIL_CC         = [m.strip() for m in os.environ.get('MAIL_CC','').split(',') if m.strip()]
 ADMIN_PASSWORD  = os.environ.get('ADMIN_PASSWORD', 'carvajal2026')
@@ -80,7 +81,7 @@ def demo_recomendar():
             '3. Lista los tratamientos recomendados — nombre del tratamiento en negrita y una frase concreta sobre qué resultado puede esperar esta persona en particular. '
             '4. Cierra con una invitación a agendar su consulta, transmitiendo que en ese espacio podrán profundizar y resolver todas sus dudas.'
         )
-        if modelo == 'groq':
+        if modelo in ('groq', 'openrouter'):
             sys_prompt = base_prompt + (
                 ' IMPORTANTE: sé detallada y muy personalizada, pero mantén un tono cercano y natural — nada de lenguaje corporativo ni frases de manual. '
                 'Integra datos reales del perfil de forma orgánica en el texto: edad, nivel de estrés, actividad física, historial de tratamientos. '
@@ -134,6 +135,18 @@ def demo_recomendar():
             if 'choices' in j and j['choices']:
                 return jsonify({'html': j['choices'][0]['message']['content']})
             return jsonify({'error': 'Sin respuesta de Groq', 'detail': j}), 500
+
+        # ── OpenRouter ────────────────────────────────────
+        elif modelo == 'openrouter':
+            r = req.post('https://openrouter.ai/api/v1/chat/completions',
+                headers={'Content-Type':'application/json','Authorization':f'Bearer {OPENROUTER_KEY}'},
+                json={'model':'nousresearch/hermes-3-llama-3.1-405b:free','max_tokens':800,
+                      'messages':[{'role':'system','content':sys_prompt},{'role':'user','content':user_msg}]},
+                timeout=30)
+            j = r.json()
+            if 'choices' in j and j['choices']:
+                return jsonify({'html': j['choices'][0]['message']['content']})
+            return jsonify({'error': 'Sin respuesta de OpenRouter', 'detail': j}), 500
 
         return jsonify({'error': f'Modelo desconocido: {modelo}'}), 400
 
@@ -3210,7 +3223,7 @@ def dulce_recomendar():
         user_msg = f'Por favor genera una recomendación personalizada para este cliente:\n\n{perfil}'
 
         # ── Prompt diferenciado por modelo ───────────────────
-        if modelo == 'groq':
+        if modelo in ('groq', 'openrouter'):
             sys_prompt = DULCE_PROMPT_BASE + (
                 ' IMPORTANTE: sé muy específico y detallado — no te quedes en generalidades. '
                 'Integra orgánicamente los datos reales del perfil: para quién es, el motivo, y especialmente el contexto adicional que escribió el cliente. '
@@ -3262,7 +3275,7 @@ def dulce_recomendar():
             resp.raise_for_status()
             texto = resp.json()['candidates'][0]['content']['parts'][0]['text']
 
-        else:
+        elif modelo == 'groq':
             resp = req.post(
                 'https://api.groq.com/openai/v1/chat/completions',
                 headers={'Authorization': f'Bearer {GROQ_KEY}', 'Content-Type': 'application/json'},
@@ -3278,6 +3291,26 @@ def dulce_recomendar():
             )
             resp.raise_for_status()
             texto = resp.json()['choices'][0]['message']['content']
+
+        elif modelo == 'openrouter':
+            resp = req.post(
+                'https://openrouter.ai/api/v1/chat/completions',
+                headers={'Authorization': f'Bearer {OPENROUTER_KEY}', 'Content-Type': 'application/json'},
+                json={
+                    'model': 'nousresearch/hermes-3-llama-3.1-405b:free',
+                    'max_tokens': 900,
+                    'messages': [
+                        {'role': 'system', 'content': sys_prompt},
+                        {'role': 'user', 'content': user_msg}
+                    ]
+                },
+                timeout=30
+            )
+            resp.raise_for_status()
+            texto = resp.json()['choices'][0]['message']['content']
+
+        else:
+            return jsonify({'error': f'Modelo desconocido: {modelo}'}), 400
 
         texto = htmllib.unescape(texto)
         texto = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', texto)
