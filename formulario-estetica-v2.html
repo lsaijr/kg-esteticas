@@ -996,6 +996,7 @@ body.tema-oscuro .s-badge { border-radius: 6px !important; }
       <label class="ri"><input type="radio" name="ia-model" value="claude"><div class="rf"><span class="em">✦</span>Claude — Anthropic<div class="dt"></div></div></label>
       <label class="ri"><input type="radio" name="ia-model" value="gemini"><div class="rf"><span class="em">◆</span>Gemini — Google<div class="dt"></div></div></label>
       <label class="ri"><input type="radio" name="ia-model" value="groq"><div class="rf"><span class="em">▲</span>Llama — Groq<div class="dt"></div></div></label>
+      <label class="ri"><input type="radio" name="ia-model" value="openrouter"><div class="rf"><span class="em">◉</span>Hermes 3 — OpenRouter<div class="dt"></div></div></label>
     </div>
   </div>
   <p class="nota" style="margin-top:16px">🔒 Al enviar aceptas que procesemos tus datos para generar tu evaluación. No compartimos tu información con terceros.</p>
@@ -1362,7 +1363,7 @@ async function submitForm(){
   document.getElementById('res-nombre').textContent = 'Para '+data.nombre;
 
   var modelo = document.querySelector('input[name="ia-model"]:checked').value;
-  var modelNames = {claude:'✦ Claude',gemini:'◆ Gemini',groq:'▲ Llama / Groq'};
+  var modelNames = {claude:'✦ Claude',gemini:'◆ Gemini',groq:'▲ Llama / Groq',openrouter:'◉ Hermes 3 / OpenRouter'};
 
   var msgs = ['Analizando tu perfil...','Revisando opciones de tratamiento...','Preparando tu evaluación...'];
   var mi=0;

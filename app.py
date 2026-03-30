@@ -81,7 +81,7 @@ def demo_recomendar():
             '3. Lista los tratamientos recomendados — nombre del tratamiento en negrita y una frase concreta sobre qué resultado puede esperar esta persona en particular. '
             '4. Cierra con una invitación a agendar su consulta, transmitiendo que en ese espacio podrán profundizar y resolver todas sus dudas.'
         )
-        if modelo in ('groq', 'openrouter'):
+        if modelo == 'groq':
             sys_prompt = base_prompt + (
                 ' IMPORTANTE: sé detallada y muy personalizada, pero mantén un tono cercano y natural — nada de lenguaje corporativo ni frases de manual. '
                 'Integra datos reales del perfil de forma orgánica en el texto: edad, nivel de estrés, actividad física, historial de tratamientos. '
@@ -90,6 +90,17 @@ def demo_recomendar():
                 'Cada tratamiento merece 2-3 oraciones — qué hace, por qué encaja específicamente con este perfil y qué resultado concreto puede esperar esta persona. '
                 'Cierra con una sola oración natural invitando a agendar, sin preguntas retóricas. '
                 'Máximo 450 palabras.'
+            )
+        elif modelo == 'openrouter':
+            sys_prompt = base_prompt + (
+                ' IMPORTANTE: Eres un modelo con gran capacidad de razonamiento y comprensión contextual — úsala. '
+                'Lee el perfil completo antes de escribir y construye una respuesta que demuestre que entendiste la situación específica de esta persona. '
+                'Integra de forma natural: nombre, edad, preocupaciones principales, historial de tratamientos, nivel de estrés y actividad física. '
+                'Tono: cálido y profesional — como una especialista que realmente escuchó al cliente, no como un sistema generando texto. '
+                'Nunca menciones el presupuesto ni uses frases corporativas como "no dudes en contactarnos", "estamos a tu disposición" o "el mejor curso de acción". '
+                'Cada tratamiento: 2-3 oraciones explicando qué hace, por qué encaja con ESTE perfil específico y qué resultado concreto puede esperar. '
+                'Cierra con una sola oración natural invitando a agendar — sin preguntas retóricas ni despedidas formales. '
+                'Máximo 500 palabras. Cada oración debe aportar valor real.'
             )
         else:
             sys_prompt = base_prompt + ' Máximo 300 palabras. Cada frase debe aportar valor concreto — nada de relleno.'
