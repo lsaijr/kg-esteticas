@@ -153,11 +153,13 @@ def demo_recomendar():
                 headers={'Content-Type':'application/json','Authorization':f'Bearer {OPENROUTER_KEY}'},
                 json={'model':'nousresearch/hermes-3-llama-3.1-405b:free','max_tokens':800,
                       'messages':[{'role':'system','content':sys_prompt},{'role':'user','content':user_msg}]},
-                timeout=30)
+                timeout=60)
             j = r.json()
+            print(f'[demo/openrouter] status={r.status_code} response={json.dumps(j)[:400]}')
             if 'choices' in j and j['choices']:
                 return jsonify({'html': j['choices'][0]['message']['content']})
-            return jsonify({'error': 'Sin respuesta de OpenRouter', 'detail': j}), 500
+            error_msg = j.get('error', {}).get('message', 'Sin respuesta de OpenRouter')
+            return jsonify({'error': f'OpenRouter: {error_msg}', 'detail': j}), 500
 
         return jsonify({'error': f'Modelo desconocido: {modelo}'}), 400
 
@@ -3315,10 +3317,15 @@ def dulce_recomendar():
                         {'role': 'user', 'content': user_msg}
                     ]
                 },
-                timeout=30
+                timeout=60
             )
-            resp.raise_for_status()
-            texto = resp.json()['choices'][0]['message']['content']
+            j_or = resp.json()
+            print(f'[dulce/openrouter] status={resp.status_code} response={json.dumps(j_or)[:400]}')
+            if 'choices' in j_or and j_or['choices']:
+                texto = j_or['choices'][0]['message']['content']
+            else:
+                error_msg = j_or.get('error', {}).get('message', 'Sin respuesta')
+                return jsonify({'error': f'OpenRouter: {error_msg}', 'detail': j_or}), 500
 
         else:
             return jsonify({'error': f'Modelo desconocido: {modelo}'}), 400
